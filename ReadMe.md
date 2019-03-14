@@ -206,7 +206,6 @@ API HOST: **https://www.mxc.com**
 | market       | string   |  √   |  交易对   |
 | interval     | string   |  √   |  时间间隔(分钟制:1m,5m,15m,30m,60m,小时制:1h,天制:1d,月制:1M)|
 | startTime    | long     |  √   |  起始时间 |
-| endTime      | long     |  √   |  结束时间 |
 | limit        | long     |  √   |  返回条数 |
 
 **返回值说明**
