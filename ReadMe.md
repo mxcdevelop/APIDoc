@@ -35,7 +35,7 @@ API HOST: **https://www.mxc.com**
 * GET [/open/api/v1/data/depth](#获取深度信息) 获取深度信息
 * GET [/open/api/v1/data/history](#获取单个币种成交记录信息) 获取单个币种成交记录信息
 * GET [/open/api/v1/data/ticker](#获取市场行情信息) 获取市场行情信息
-
+* GET [/open/api/v1/data/klines](#获取市场k线信息) 获取市场k线信息
 私有接口：
 
 * GET [/open/api/v1/private/account/info](#获取账户资产信息) 获取账户资产信息
@@ -192,6 +192,50 @@ API HOST: **https://www.mxc.com**
 **示例**
 
 [python](#获取市场行情信息-python-demo)
+
+----
+
+##### **获取市场k线信息**
+
+* GET `/open/api/v1/data/klines`
+
+**请求参数**
+
+| 参数        | 类型   |  是否必须   |  说明   |
+| :--------:   | :-----:  |  :-----:  |  :-----:  |
+| market       | string   |  √   |  交易对   |
+| interval     | string   |  √   |  时间间隔(分钟制:1m,5m,15m,30m,60m,小时制:1h,天制:1d,月制:1M)|
+| startTime    | long     |  √   |  起始时间 |
+| endTime      | long     |  √   |  结束时间 |
+| limit        | long     |  √   |  返回条数 |
+
+**返回值说明**
+
+```json
+[
+  [
+  1552518000000,  开始时间
+  "0.02700818",   开盘价
+  "0.02701826",   收盘价
+  "0.02703995",   最高价  
+  "0.02699879",   最低价
+  "4147.5086",    成交量
+  "112.05043000089" 计价货币成交量
+  ],
+]
+```
+| 返回值       |  说明   |
+| :--------:  | :-----:  |
+| time        |  开始时间   |
+| open        |  开盘价   |
+| close       |  收盘价   |
+| high        |  最高价   |
+| low         |  最低价   |
+| vol         |  成交量   |
+| amount      |  计价货币成交量   |
+
+
+
 
 > #### 私有接口
 
