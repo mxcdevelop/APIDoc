@@ -312,4 +312,26 @@ public class Api {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
+    
+    /**
+     * 获取K线数据
+     * market 市场名
+     * interval 时间间隔
+     * startTime 起始时间(秒级) 当前时间毫秒数/1000
+     * limit 返回数据条数
+     * @throws Exception
+     */
+    @Test
+    public void getKline() throws Exception{
+        String market = "EOS_ETH";
+        String interval = "1m";
+        Long startTime = new Date().getTime()/1000;
+        int limit = 1000;
+        URL url = new URL(KLINE + "?market="+market+"&interval="+interval+"&startTime="+startTime+"&limit="+limit);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 }
