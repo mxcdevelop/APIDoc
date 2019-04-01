@@ -41,6 +41,7 @@ API HOST: **https://www.mxc.com**
 
 * GET [/open/api/v1/private/account/info](#获取账户资产信息) 获取账户资产信息
 * GET [/open/api/v1/private/current/orders](#获取当前委托信息) 获取当前委托信息
+* GET [/open/api/v1/private/order](#获取委托单信息) 获取委托单信息
 * POST [/open/api/v1/private/order](#下单) 下单
 * DELETE [/open/api/v1/private/order](#取消订单) 取消订单
 * GET [/open/api/v1/private/orders](#查询账号历史成交) 查询账号历史成交
