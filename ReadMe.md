@@ -63,7 +63,16 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': ['btc_usdt', ... ,'btc_eos'], 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': [
+        'btc_usdt', 
+        ... ,
+        'btc_eos'], 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -88,7 +97,19 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': {'EOS_BTC': {'priceScale': 8, 'quantityScale': 8, 'minAmount': 0.0, 'buyFeeRate': 0.001, 'sellFeeRate': 0.001}, ...}, 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': {
+     'EOS_BTC': {'priceScale': 8, 
+                 'quantityScale': 8, 
+                 'minAmount': 0.0, 
+                 'buyFeeRate': 0.001, 
+                 'sellFeeRate': 0.001}, 
+          ...
+          }, 
+ 'msg': 'OK'}
+```
 
 **返回值说明**
 
@@ -119,7 +140,16 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': {'asks': [{'price': '3802.8', 'quantity': '0.999'}, ...], 'bids': [{'price': '3802.35', 'quantity': '0.487573'}, ...]}, 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': 
+     {
+     'asks': [{'price': '3802.8', 'quantity': '0.999'}, ...], 
+     'bids': [{'price': '3802.35', 'quantity': '0.487573'}, ...]
+     }, 
+ 'msg': 'OK'}
+```
 
 **返回值说明**
 
@@ -146,7 +176,17 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': [{'tradeTime': '2019-02-26 17:38:45.993', 'tradePrice': '3806.42', 'tradeQuantity': '0.011905', 'tradeType': '2'}, ...], 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': [
+        {'tradeTime': '2019-02-26 17:38:45.993', 
+         'tradePrice': '3806.42', 
+         'tradeQuantity': '0.011905', 
+         'tradeType': '2'}, 
+         ...], 
+ 'msg': 'OK'}
+```
 
 **返回值说明**
 
@@ -175,7 +215,21 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': {'volume': '6643.760303', 'high': '3867.25', 'low': '3764.95', 'buy': '3808.85', 'sell': '3809.44', 'open': '3788.47', 'last': '3809.3'}, 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': {
+    'volume': '6643.760303', 
+    'high': '3867.25', 
+    'low': '3764.95', 
+    'buy': '3808.85', 
+    'sell': '3809.44', 
+    'open': '3788.47', 
+    'last': '3809.3'
+          }, 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -235,7 +289,11 @@ API HOST: **https://www.mxc.com**
 | vol         |  成交量   |
 | amount      |  计价货币成交量   |
 
+**示例**
 
+[python](#获取市场K线信息-python-demo)
+
+----
 
 ## **获取账户资产信息**
 
@@ -285,7 +343,23 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': [{'id': '5feb364f-xxxx-xxxx-xxxx-f34c93f4ddfa', 'market': 'EOS_ETH', 'price': '0.0251', 'status': '1', 'totalQuantity': '99.9999', 'tradedQuantity': '0.0000', 'tradedAmount': '0', 'createTime': '2019-02-26 14:50:22', 'type': 1}, ...], 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': [
+     {'id': '5feb364f-xxxx-xxxx-xxxx-f34c93f4ddfa', 
+      'market': 'EOS_ETH', 
+      'price': '0.0251', 
+      'status': '1', 
+      'totalQuantity': '99.9999', 
+      'tradedQuantity': '0.0000', 
+      'tradedAmount': '0', 
+      'createTime': '2019-02-26 14:50:22', 
+      'type': 1}, 
+      ...], 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -324,8 +398,13 @@ API HOST: **https://www.mxc.com**
 | sign          | string   |  √   |  请求签名   |
 
 **返回值**
-
-{'code': 200, 'data': 'd66cce2e-xxxx-xxxx-xxxx-cf080e0d8aae', 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': 'd66cce2e-xxxx-xxxx-xxxx-cf080e0d8aae', 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -355,7 +434,13 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': None, 'msg': 'OK'}
+```text
+{
+ 'code': 200, 
+ 'data': None, 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -385,8 +470,23 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': [{'id': 'd66cce2e-017e-4066-a379-cf080e0d8aae', 'market': 'EOS_ETH', 'price': '0.025100000000000000', 'status': '1', 'totalQuantity': '99.999900000000000000', 'tradedQuantity': '0.000000000000000000', 'tradedAmount': '0.000000000000000000', 'createTime': '2019-02-26 18:21:13.0', 'type': 1}, ...], 'msg': 'OK'}
-
+```text
+{
+ 'code': 200, 
+ 'data': [
+     {'id': 'd66cce2e-017e-4066-a379-cf080e0d8aae', 
+      'market': 'EOS_ETH', 
+      'price': '0.025100000000000000', 
+      'status': '1', 
+      'totalQuantity': '99.999900000000000000', 
+      'tradedQuantity': '0.000000000000000000', 
+      'tradedAmount': '0.000000000000000000', 
+      'createTime': '2019-02-26 18:21:13.0', 
+      'type': 1}, 
+      ...], 
+ 'msg': 'OK'
+}
+```
 
 **返回值说明**
 
@@ -467,6 +567,19 @@ print(response.json())
 symbol = 'BTC_USDT'
 params = {'market': symbol}
 url = ROOT_URL + '/open/api/v1/data/ticker'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
+```
+
+> ###### 获取市场K线信息 python demo
+
+```python
+symbol = 'BTC_USDT'
+params = {'market': symbol,
+          'interval': '1m',
+          'startTime': st,
+          'limit': 1000}
+url = ROOT_URL + '/open/api/v1/data/kline'
 response = requests.request('GET', url, params=params, headers=headers)
 print(response.json())
 ```
