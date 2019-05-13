@@ -23,6 +23,10 @@
 >
 >将`api_key`，`req_time`和`sign`三个参数放入请求中并发送请求
 
+注意：
+* 公共接口请加入请求头，否则会返回403
+
+* POST请求请将参数放入params，放入body会返回401
 
 ----
 
@@ -44,6 +48,7 @@ API HOST: **https://www.mxc.com**
 * POST [/open/api/v1/private/order](#下单) 下单
 * DELETE [/open/api/v1/private/order](#取消订单) 取消订单
 * GET [/open/api/v1/private/orders](#查询账号历史成交) 查询账号历史成交
+* GET [/open/api/v1/private/order](#查询订单状态) 查询订单状态
 
 ---
 
@@ -63,7 +68,16 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': ['btc_usdt', ... ,'btc_eos'], 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": [
+        "btc_usdt",
+        "eth_usdt"
+    ],
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -88,7 +102,28 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': {'EOS_BTC': {'priceScale': 8, 'quantityScale': 8, 'minAmount': 0.0, 'buyFeeRate': 0.001, 'sellFeeRate': 0.001}, ...}, 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": {
+        "ETC_BTC": {
+            "priceScale": 6,
+            "quantityScale": 2,
+            "minAmount": 0.0001,
+            "buyFeeRate": 0.002,
+            "sellFeeRate": 0.002
+        },
+        "BTC_USDT": {
+            "priceScale": 2,
+            "quantityScale": 6,
+            "minAmount": 0.1,
+            "buyFeeRate": 0.002,
+            "sellFeeRate": 0.002
+        }
+    },
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -119,7 +154,34 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': {'asks': [{'price': '3802.8', 'quantity': '0.999'}, ...], 'bids': [{'price': '3802.35', 'quantity': '0.487573'}, ...]}, 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": {
+        "asks": [
+            {
+                "price": "7061.82",
+                "quantity": "2.759119"
+            },
+            {
+                "price": "7062.4",
+                "quantity": "0.01764"
+            }
+        ],
+        "bids": [
+            {
+                "price": "7061.8",
+                "quantity": "0.160269"
+            },
+            {
+                "price": "7059.68",
+                "quantity": "0.26862"
+            }
+        ]
+    },
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -146,7 +208,26 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': [{'tradeTime': '2019-02-26 17:38:45.993', 'tradePrice': '3806.42', 'tradeQuantity': '0.011905', 'tradeType': '2'}, ...], 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "tradeTime": "2019-05-13 14:12:58.787",
+            "tradePrice": "7051.04",
+            "tradeQuantity": "0.0189",
+            "tradeType": "1"
+        },
+        {
+            "tradeTime": "2019-05-13 14:12:58.494",
+            "tradePrice": "7051.04",
+            "tradeQuantity": "0.023551",
+            "tradeType": "1"
+        }
+    ],
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -171,11 +252,25 @@ API HOST: **https://www.mxc.com**
 
 | 参数        | 类型   |  是否必须   |  说明   |
 | :--------:   | :-----:  |  :-----:  |  :-----:  |
-| market        | string   |  √   |  交易对   |
+| market        | string   |  ×   |  交易对   |
 
 **返回值**
 
-{'code': 200, 'data': {'volume': '6643.760303', 'high': '3867.25', 'low': '3764.95', 'buy': '3808.85', 'sell': '3809.44', 'open': '3788.47', 'last': '3809.3'}, 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": {
+        "volume": "29821.449121",
+        "high": "7512.22",
+        "low": "6791.23",
+        "buy": "7054.5",
+        "sell": "7054.95",
+        "open": "7304.1",
+        "last": "7054.46"
+    },
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -206,23 +301,44 @@ API HOST: **https://www.mxc.com**
 | market       | string   |  √   |  交易对   |
 | interval     | string   |  √   |  时间间隔(分钟制:1m，5m，15m，30m，60m。小时制:1h，天制:1d，月制:1M)|
 | startTime    | long     |  √   |  起始时间(单位秒,毫秒数/1000 ) |
-| limit        | long     |  √   |  返回条数 |
+| limit        | long     |  ×   |  返回条数 |
 
 **返回值说明**
 
-```text
-[
-  [
-    
-    1552637940,       # 开始时间 (单位秒,毫秒数/1000 )
-    "0.02700818",        # 开盘价
-    "0.02701826",        # 收盘价
-    "0.02703995",        # 最高价  
-    "0.02699879",        # 最低价
-    "4147.5086",         # 成交量
-    "112.05043000089"    # 计价货币成交量
-  ],
-]
+```json
+{
+    "code": 200,
+    "data": [
+        [
+            1557728040,
+            "7054.7",
+            "7056.26",
+            "7056.29",
+            "7054.16",
+            "9.817734",
+            "69264.52975125"
+        ],
+        [
+            1557728100,
+            "7056.26",
+            "7042.17",
+            "7056.98",
+            "7042.16",
+            "23.694823",
+            "167007.92840231"
+        ],
+        [
+            1557728160,
+            "7042.95",
+            "7037.11",
+            "7043.27",
+            "7036.53",
+            "22.510102",
+            "158461.98283462"
+        ]
+    ],
+    "msg": "OK"
+}
 ```
 
 | 返回值       |  说明   |
@@ -235,7 +351,11 @@ API HOST: **https://www.mxc.com**
 | vol         |  成交量   |
 | amount      |  计价货币成交量   |
 
+**示例**
 
+[python](#获取市场K线信息-python-demo)
+
+----
 
 ## **获取账户资产信息**
 
@@ -251,8 +371,18 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'ETH': {'frozen': '5.12501497', 'available': '12.65392852'}, 'EOS': {'frozen': '0', 'available': '288.2285'}}
-
+```json
+{
+    "BTC": {
+        "frozen": "0",
+        "available": "130440.28790112"
+    },
+    "ETH": {
+        "frozen": "27.6511928",
+        "available": "12399653.86856669"
+    }
+}
+```
 
 **返回值说明**
 
@@ -285,7 +415,36 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': [{'id': '5feb364f-xxxx-xxxx-xxxx-f34c93f4ddfa', 'market': 'EOS_ETH', 'price': '0.0251', 'status': '1', 'totalQuantity': '99.9999', 'tradedQuantity': '0.0000', 'tradedAmount': '0', 'createTime': '2019-02-26 14:50:22', 'type': 1}, ...], 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "4921e6be-cfb9-4058-89d3-afbeb6be7d78",
+            "market": "MX_ETH",
+            "price": "0.439961",
+            "status": "1",
+            "totalQuantity": "2",
+            "tradedQuantity": "0",
+            "tradedAmount": "0",
+            "createTime": "2019-05-13 14:31:11",
+            "type": 1
+        },
+        {
+            "id": "6170091f-c977-49bf-baa8-b643c70452c7",
+            "market": "MX_ETH",
+            "price": "0.4399605",
+            "status": "1",
+            "totalQuantity": "1",
+            "tradedQuantity": "0",
+            "tradedAmount": "0",
+            "createTime": "2019-05-13 14:30:51",
+            "type": 1
+        }
+    ],
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -325,7 +484,13 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': 'd66cce2e-xxxx-xxxx-xxxx-cf080e0d8aae', 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": "de5a6819-5456-45da-9e51-ee258dd34422",
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -355,7 +520,13 @@ API HOST: **https://www.mxc.com**
 
 **返回值**
 
-{'code': 200, 'data': None, 'msg': 'OK'}
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -382,11 +553,40 @@ API HOST: **https://www.mxc.com**
 | trade_type            | string   |  √   |  交易类型，1/2 (买/卖)   |
 | page_num          | integer   |  √   |  页数   |
 | page_size             | integer   |  √   |  每页大小   |
+| sign          | string   |  √   |  请求签名   |
 
 **返回值**
 
-{'code': 200, 'data': [{'id': 'd66cce2e-017e-4066-a379-cf080e0d8aae', 'market': 'EOS_ETH', 'price': '0.025100000000000000', 'status': '1', 'totalQuantity': '99.999900000000000000', 'tradedQuantity': '0.000000000000000000', 'tradedAmount': '0.000000000000000000', 'createTime': '2019-02-26 18:21:13.0', 'type': 1}, ...], 'msg': 'OK'}
-
+```json
+{
+    "code": 200,
+    "data": [
+        {
+            "id": "f5718b8a-8f93-4880-8e95-281fe28efb91",
+            "market": "OMG_ETH",
+            "price": "0.011546000000000000",
+            "status": "2",
+            "totalQuantity": "46.520000000000000000",
+            "tradedQuantity": "46.520000000000000000",
+            "tradedAmount": "0.537119920000000000",
+            "createTime": "2019-04-26 16:37:47.0",
+            "type": 1
+        },
+        {
+            "id": "845fdde0-6837-4d56-af8c-e43d72495cc1",
+            "market": "OMG_ETH",
+            "price": "0.011543000000000000",
+            "status": "2",
+            "totalQuantity": "7.920000000000000000",
+            "tradedQuantity": "7.920000000000000000",
+            "tradedAmount": "0.091420560000000000",
+            "createTime": "2019-04-26 11:05:42.0",
+            "type": 1
+        }
+    ],
+    "msg": "OK"
+}
+```
 
 **返回值说明**
 
@@ -404,6 +604,61 @@ API HOST: **https://www.mxc.com**
 
 
 [python](#查询账号历史成交-python-demo)
+
+----
+
+## **查询订单状态**
+
+* GET `/open/api/v1/private/order`
+
+**请求参数**
+
+| 参数        | 类型   |  是否必须   |  说明   |
+| :--------:   | :-----:  |  :-----:  |  :-----:  |
+| api_key         | string   |  √   |  您的api key   |
+| req_time          | string   |  √   |  请求时间戳   |
+| market          | string   |  √   |  交易对   |
+| trade_no            | string   |  √   |  订单id，如果有多个，用英文逗号分隔，一次最多查询20个   |
+| sign          | string   |  √   |  请求签名   |
+
+**返回值**
+
+```json
+{
+    "code": 200,
+    "data": {
+        "id": "f5718b8a-8f93-4880-8e95-281fe28efb91",
+        "market": "OMG_ETH",
+        "price": "0.011546",
+        "status": "2",
+        "totalQuantity": "46.52",
+        "tradedQuantity": "46.52",
+        "tradedAmount": "0.53711992",
+        "createTime": "2019-04-26 16:37:47",
+        "type": 1
+    },
+    "msg": "OK"
+}
+```
+
+**返回值说明**
+
+| 返回值        |  说明   |
+| :--------:   | :-----:  |
+| id        |  订单id   |
+| market        |  交易对   |
+| price        |  下单价格   |
+| status        |  订单状态，1:未成交 2:已成交 3:部分成交 4:已撤单 5:部分撤单   |
+| totalQuantity        |  订单总量   |
+| tradedQuantity        |  成交总量   |
+| tradedAmount        |  成交量（计价货币）   |
+| createTime        |  下单时间   |
+| type        |  交易类型：1/2 (买/卖)   |
+
+**示例**
+
+
+[python](#查询订单状态-python-demo)
 
 ----
 
@@ -467,6 +722,20 @@ print(response.json())
 symbol = 'BTC_USDT'
 params = {'market': symbol}
 url = ROOT_URL + '/open/api/v1/data/ticker'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
+```
+
+> ###### 获取市场K线信息 python demo
+
+```python
+import time
+symbol = 'BTC_USDT'
+params = {'market': symbol,
+          'interval': '1m',
+          'startTime': int(time.time() / 60) * 60 - 60 * 5,
+          'limit': 5}
+url = ROOT_URL + '/open/api/v1/data/kline'
 response = requests.request('GET', url, params=params, headers=headers)
 print(response.json())
 ```
@@ -563,6 +832,21 @@ params = {'api_key': API_KEY,
           'page_size': 70}
 params.update({'sign': sign(params)})
 url = ROOT_URL + '/open/api/v1/private/orders'
+response = requests.request('GET', url, params=params)
+print(response.json())
+```
+
+> ###### 查询订单状态 python demo
+
+```python
+symbol = 'EOS_ETH'
+trade_no = 'f5718b8a-8f93-4880-8e95-281fe28efb91'
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_no': trade_no}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/order'
 response = requests.request('GET', url, params=params)
 print(response.json())
 ```
