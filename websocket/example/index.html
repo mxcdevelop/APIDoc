@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>websocket api</title>
+        <script src="https://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+        <script type="text/javascript" src="socket.io.js"></script>
+        <style>
+            body {
+                padding: 20px;
+            }
+
+            #console {
+                height: 1024px;
+                width: 2500px;
+                overflow: auto;
+            }
+
+            .username-msg {
+                color: orange;
+            }
+
+            .connect-msg {
+                color: green;
+            }
+
+            .disconnect-msg {
+                color: red;
+            }
+
+            .send-msg {
+                color: #888
+            }
+        </style>
+    </head>
+    <body>
+        <h1>websocket api</h1>
+        <br/>
+        <div class="well form-inline" onsubmit="return false;">
+            <span>公共接口</span>
+            <button type="button" onClick="connection()" class="btn">接入websocket</button>
+            <button type="button" onClick="getSymbol()" class="btn">币种信息</button>
+            <button type="button" onClick="getDepth()" class="btn">获取币种深度</button>
+            <button type="button" onClick="getKline()" class="btn">获取全量K线</button>
+            <button type="button" onClick="subKline()" class="btn">订阅增量K线</button>
+            <button type="button" onClick="getDeal()" class="btn">获取成交记录</button>
+            <button type="button" onClick="subSymbol()" class="btn">订阅交易对信息</button>
+            <button type="button" onClick="sendDisconnect()" class="btn">Disconnect</button>
+        </div>
+        <div class="well form-inline" onsubmit="return false;">
+            <span>私有接口</span>
+            <button type="button" onClick="login()" class="btn">OpenApi登录</button>
+            <button type="button" onclick="getTriggerOrders()" class="btn">获取订单推送</button>
+        </div>
+        <div id="console" class="well"></div>
+    </body>
+    <script type="text/javascript">
+        var socket
+
+        function connection() {
+            socket = io('wss://www.mxc.com', {
+                transports: ['websocket', 'polling'],
+                timeout: 60000,
+                reconnectionDelay: 500
+            });
+            socket.on('connect', function () {
+                output('<span class="connect-msg">连接成功</span>');
+            });
+
+            socket.on('rs.symbol', function (data) {
+                output('币种信息<span class="username-msg">' + JSON.stringify(data) + ' </span>');
+            });
+            socket.on('rs.depth', function (data) {
+                output('币种深度信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            });
+            socket.on('rs.kline', function (data) {
+                output('全量K线数据<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            });
+            socket.on('push.kline', function (data) {
+                output('增量K线数据<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            });
+            socket.on('rs.deal', function (data) {
+                output('成交记录<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            })
+
+            socket.on('push.symbol', function (data) {
+                output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            })
+
+            socket.on('rs.orders', function () {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
+            });
+
+            socket.on('push.personal.order',function () {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
+            })
+
+            socket.on('disconnect', function () {
+                output('<span class="disconnect-msg">The client has disconnected! </span>');
+            });
+
+
+            socket.on('rs.error.msg', function (data) {
+                output('<span class="disconnect-msg"> ' + JSON.stringify(data) + ' </span>');
+            });
+            socket.on('rs.trigger.orders', function (data) {
+                output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            })
+            socket.on('push.personal.order',function (data) {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
+            })
+
+        }
+
+        function sendDisconnect() {
+            socket.disconnect();
+        }
+
+        var a = true;
+
+        function getSymbol() {
+            socket.emit('get.symbol', {"symbol": "ETH_USDT"});
+        }
+
+        function getDepth() {
+            socket.emit('get.depth', {"symbol": "VDS_USDT"});
+        }
+
+        function getKline() {
+            socket.emit("get.kline", {
+                "symbol": "VDS_USDT",
+                "interval": "Min30",
+                "start": 1561107500000,
+                "end": 1561453160000
+            });
+        }
+
+        function subKline() {
+            socket.emit("sub.kline", {"symbol": "VDS_USDT", "interval": "Min30"});
+        }
+
+        function getDeal() {
+            socket.emit("get.deal", {"symbol": "VDS_USDT"});
+        }
+
+        function subSymbol() {
+            socket.emit('sub.symbol', {"symbol": "VDS_USDT"});
+        }
+
+        function getTriggerOrders() {
+            socket.emit('get.trigger.orders', {"symbol": "FDS_USDT", "token": "757f589b7026e7565546585ac3b28490"})
+        }
+
+        function login() {
+            socket.emit('sub.personal', {
+                "api_key": "mxcD0VxnC0KnJnZbSE",
+                "sign": "b8d2ff6432798ef858782d7fd109ab41",
+                "req_time": "1561433613583"
+            });
+        }
+
+        function output(message) {
+            var element = $("<div>" + message + "</div>");
+            $('#console').append(element);
+            $("#console").scrollTop($('#console')[0].scrollHeight);
+        }
+    </script>
+</html>
