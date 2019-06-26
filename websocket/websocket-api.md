@@ -6,52 +6,6 @@ WSS接口Base url: wss://www.mxc.com/
 
 ##	公共接口：
 ----
-### 币种信息
-
-获取币种信息
-
-**Stream**  
-Request:	**get.symbol**  
-Response:	**rs.symbol**  
-**Request Payload:**
-```javascript
-{
-    "symbol":"VDS_USDT"// 交易对
-}
-```
-**Response Payload:**  
-```javascript
-{
-    "market":"USDT",
-    "currency":"ETH",
-    "fullName":"Ethereum",
-    "priceScale":2,
-    "quantityScale":5,
-    "sort":3,
-    "suggest":1,
-    "icon":"F201904021431026806xaLWK30i3vnWd",
-    "type":"MAIN",
-    "beforeOrderSide":"none",
-    "presaleEnable":0,
-    "presalePrice":0,
-    "presaleMemberId":"",
-    "fly":true,
-    "rate":0.0183,
-    "url":"https://coinmarketcap.com/zh/currencies/ethereum/",
-    "note":"Ethereum（以太坊）是一个平台和一种编程语言，使开发人员能够建立和发布下一代分布式应用。 Ethereum可以用来编程，分散，担保和交易任何事物：投票，域名，金融交易所，众筹，公司管理， 合同和大部分的协议，知识产权，还有得益于硬件集成的智能资产。",
-    "noteEn":"Ethereum (Ethernet Square) is a platform and a programming language that enables developers to build and deploy the next generation of distributed applications. & Nbsp; Ethereum can be used to program, distributed, secured transactions and any thing: voting, domain names, financial & nbsp Exchange, crowdfunding, corporate governance,; most of the contracts and agreements, intellectual property rights, as well as benefit from the integration of hardware intelligence assets.",
-    "c":314.05,
-    "o":308.38,
-    "h":316.5,
-    "l":307.28,
-    "q":188999.65972,
-    "a":59123779.63
-}
-```
-
-----
-
-## 公共接口
 
 ###	K线
 
@@ -230,18 +184,20 @@ request **sub.personal**
 **Request Payload:** 
 ```javascript 
 {
-    "api_key": "mxcD0VxnC0KnJnZbSE",	//申请的API Key	
+    "api_key": "api_key",	//申请的API Key	
     "sign": "b8d2ff6432798ef858782d7fd109ab41",	//签名,签名规则  把api_key、req_time用私钥做一个签名,参考python或者java的Sample
     "req_time": "1561433613583"			//当前时间的时间搓
 }
 
 
 ```
-**Response Payload**  
+
 
 获取订阅私有接口数据的错误信息
 
 response **rs.error.msg** 
+
+**Response Payload**  
 
 ```javascript
 {
@@ -251,7 +207,10 @@ response **rs.error.msg**
 ```
 
 response **push.personal.order**  
-如果数据里面全部为0那么代表订单可能已经成交或者撤单.请通过open api获取订单信息
+如果数据里面全部为0那么代表订单撤单.请通过open api获取订单信息
+
+**Response Payload**  
+
 ```javascript
 {
     "symbol":"ETH_USDT",
