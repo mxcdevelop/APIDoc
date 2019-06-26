@@ -87,12 +87,21 @@
             socket.on('push.symbol', function (data) {
                 output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
             })
-            socket.on('rs.trigger.orders', function (data) {
-                output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
+
+            socket.on('rs.orders', function () {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
+            });
+
+            socket.on('push.personal.order',function () {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
             })
+
             socket.on('disconnect', function () {
                 output('<span class="disconnect-msg">The client has disconnected! </span>');
             });
+
+
+
         }
 
         var personalSocket
@@ -109,6 +118,15 @@
             personalSocket.on('disconnect', function () {
                 output('<span class="disconnect-msg">The personal client has disconnected! </span>');
             });
+            personalSocket.on('rs.error.msg', function (data) {
+                output('<span class="disconnect-msg"> ' + JSON.stringify(data) + ' </span>');
+            });
+            personalSocket.on('rs.trigger.orders', function (data) {
+                output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
+            })
+            personalSocket.on('push.personal.order',function (data) {
+                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
+            })
         }
 
 
