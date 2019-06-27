@@ -50,7 +50,6 @@
         <div class="well form-inline" onsubmit="return false;">
             <span>私有接口</span>
             <button type="button" onClick="login()" class="btn">OpenApi登录</button>
-            <button type="button" onclick="getTriggerOrders()" class="btn">获取订单推送</button>
         </div>
         <div id="console" class="well"></div>
     </body>
@@ -103,9 +102,7 @@
             socket.on('rs.error.msg', function (data) {
                 output('<span class="disconnect-msg"> ' + JSON.stringify(data) + ' </span>');
             });
-            socket.on('rs.trigger.orders', function (data) {
-                output('交易信息<span class="username-msg">' + JSON.stringify(data) + '</span>');
-            })
+            
             socket.on('push.personal.order',function (data) {
                 output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
             })
@@ -147,9 +144,6 @@
             socket.emit('sub.symbol', {"symbol": "VDS_USDT"});
         }
 
-        function getTriggerOrders() {
-            socket.emit('get.trigger.orders', {"symbol": "FDS_USDT", "token": "757f589b7026e7565546585ac3b28490"})
-        }
 
         function login() {
             socket.emit('sub.personal', {
