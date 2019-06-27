@@ -1,7 +1,7 @@
 # ![MXC logo](https://www.mxc.com/assets/images/site-logo.png "MXC logo")Web Socket API for MXC (2019-06-25)
 
-#	基本信息
-----
+#	基本信息  
+
 WSS接口Base url: wss://www.mxc.com/
 
 ##	公共接口：
