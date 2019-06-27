@@ -102,10 +102,6 @@
             socket.on('rs.error.msg', function (data) {
                 output('<span class="disconnect-msg"> ' + JSON.stringify(data) + ' </span>');
             });
-            
-            socket.on('push.personal.order',function (data) {
-                output('<span class="disconnect-msg">' + JSON.stringify(data) + '</span>');
-            })
 
         }
 
