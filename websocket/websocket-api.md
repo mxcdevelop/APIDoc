@@ -170,6 +170,35 @@ response **push.symbol**
 }
 ```
 
+----
+#### 获取交易对深度(全量)
+
+**Stream**:  
+request **get.depth**  
+response **rs.depth**  
+**Request Payload:** 
+```javascript 
+{
+    "symbol":"AO_USDT"  //交易对
+}
+```
+**Response Payload**
+```javascript
+{
+    "asks":[                   //卖单
+        {
+            "p":1,             //价格
+            "q":67990.27       //数量
+        }
+    ],
+    "bids":[                //买单
+        {
+            "p":0.0004,        //价格
+            "q":78414.35       //数量
+        }
+    ]
+}
+```
 
 ----
 
@@ -195,7 +224,11 @@ request **sub.personal**
 
 获取订阅私有接口数据的错误信息
 
+<<<<<<< HEAD
+response **rs.error.msg** 
+=======
 response **rs.error** 
+>>>>>>> b9d2b55538c95fd38373d7cd57f100e93732214c
 
 **Response Payload**  
 

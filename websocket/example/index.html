@@ -98,8 +98,7 @@
                 output('<span class="disconnect-msg">The client has disconnected! </span>');
             });
 
-
-            socket.on('rs.error.msg', function (data) {
+            socket.on('rs.error', function (data) {
                 output('<span class="disconnect-msg"> ' + JSON.stringify(data) + ' </span>');
             });
 
