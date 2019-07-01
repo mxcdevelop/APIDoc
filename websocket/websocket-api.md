@@ -224,11 +224,8 @@ request **sub.personal**
 
 获取订阅私有接口数据的错误信息
 
-<<<<<<< HEAD
-response **rs.error.msg** 
-=======
+
 response **rs.error** 
->>>>>>> b9d2b55538c95fd38373d7cd57f100e93732214c
 
 **Response Payload**  
 
