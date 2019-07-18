@@ -45,7 +45,6 @@ API HOST: **https://www.mxc.com**
 
 * GET [/open/api/v1/private/account/info](#获取账户资产信息) 获取账户资产信息
 * GET [/open/api/v1/private/current/orders](#获取当前委托信息) 获取当前委托信息
-* GET [/open/api/v1/private/order](#获取委托单信息) 获取委托单信息
 * POST [/open/api/v1/private/order](#下单) 下单
 * DELETE [/open/api/v1/private/order](#取消订单) 取消订单
 * GET [/open/api/v1/private/orders](#查询账号历史成交) 查询账号历史成交
@@ -464,42 +463,6 @@ API HOST: **https://www.mxc.com**
 **示例**
 
 [python](#获取当前委托信息-python-demo)
-
-----
-
-## **获取委托单信息**
-
-* GET `/open/api/v1/private/order`
-
-** 请求参数
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| market          | string   |  √   |  交易对   |
-| req_time            | string   |  √   |  请求时间戳   |
-| trade_no            | String   |  √   |  请求单号,多个订单号用`,`号分割  |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-**单个查询**
-{"code":200,"data":{"id":"18840447-xxxx-xxxx-xxxx-503738c4cbec","market":"EOS_ETH","price":"1","status":"2","totalQuantity":"10","tradedQuantity":"10","tradedAmount":"10","createTime":"2019-04-01 10:42:17","type":1},"msg":"OK"}
-
-**多个查询**
-{"code":200,"data":[{"id":"0ae05eb8-f02b-413a-a3e3-2b2e6877d52d","market":"EOS_ETH","price":"1","status":"2","totalQuantity":"105","tradedQuantity":"105","tradedAmount":"105","createTime":"2019-04-01 10:45:02","type":1},{"id":"18840447-9439-4af6-af64-503738c4cbec","market":"EOS_ETH","price":"1","status":"2","totalQuantity":"10","tradedQuantity":"10","tradedAmount":"10","createTime":"2019-04-01 10:42:17","type":1},{"id":"a8969fc8-64b7-4f33-8916-97654648a39c","market":"EOS_ETH","price":"1","status":"2","totalQuantity":"10","tradedQuantity":"10","tradedAmount":"10","createTime":"2019-04-01 10:42:26","type":1}],"msg":"OK"}
-
-**返回值说明**
-
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| id        |  订单id   |
-| market        |  交易对   |
-| price        |  挂单价   |
-| status        |  订单状态，1:未成交 2:已成交 3:部分成交 4:已撤单 5:部分撤单   |
-| totalQuantity        |  挂单总量   |
-| tradedQuantity        |  挂单成交量   |
-| tradedAmount        |  挂单成交量(计价币)   |
-| createTime        |  订单创建时间   |
-| type        |  订单类型1/2 (买/卖)   |
 
 ----
 
