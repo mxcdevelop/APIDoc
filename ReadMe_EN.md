@@ -37,21 +37,21 @@ API HOST: **https://www.mxc.com**
 
 Public Interface：
 
-* GET [/open/api/v1/data/markets](#Obtain market list information) Obtain market list information
-* GET [/open/api/v1/data/markets_info](#Obtain Trading Pair Information) Obtain Trading Pair Information
-* GET [/open/api/v1/data/depth](#Obtain Depth Information) Obtain depth information
-* GET [/open/api/v1/data/history](#Obtain transaction history of a type of token) Obtain transaction history of a type of token
-* GET [/open/api/v1/data/ticker](#Obtain market information) Obtain market information
-* GET [/open/api/v1/data/kline](#Obtain marketing K-line information) Obtain marketing K-line information
+* GET [/open/api/v1/data/markets](#obtain-market-list-information) Obtain market list information
+* GET [/open/api/v1/data/markets_info](#obtain-trading-pair-information) Obtain Trading Pair Information
+* GET [/open/api/v1/data/depth](#obtain-depth-information) Obtain depth information
+* GET [/open/api/v1/data/history](#obtain-transaction-history-of-a-type-of-token) Obtain transaction history of a type of token
+* GET [/open/api/v1/data/ticker](#obtain-market-information) Obtain market information
+* GET [/open/api/v1/data/kline](#obtain-marketing-k-line-information) Obtain marketing K-line information
 
 私有接口：
 
-* GET [/open/api/v1/private/account/info](#Obtain account assets information) Obtain account assets information
-* GET [/open/api/v1/private/current/orders](#Obtain current orders information) Obtain current orders information
-* POST [/open/api/v1/private/order](#Place Order) Place order
-* DELETE [/open/api/v1/private/order](#Cancel Order) Cancel order
-* GET [/open/api/v1/private/orders](#Query history transactions) Query history transactions
-* GET [/open/api/v1/private/order](#Check the status of order) Query order status
+* GET [/open/api/v1/private/account/info](#obtain-account-assets-information) Obtain account assets information
+* GET [/open/api/v1/private/current/orders](#obtain-current-orders-information) Obtain current orders information
+* POST [/open/api/v1/private/order](#place-order) Place order
+* DELETE [/open/api/v1/private/order](#cancel-order) Cancel order
+* GET [/open/api/v1/private/orders](#query-history-transactions) Query history transactions
+* GET [/open/api/v1/private/order](#check-the-status-of-order) Check the status of order
 
 ---
 
