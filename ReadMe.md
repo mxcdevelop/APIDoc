@@ -1,38 +1,94 @@
 # MXC API
 
+* 本篇列出REST接口的baseurl:
+    **https://www.mxc.ceo**
+    **https://www.mxc.co** 
+    **https://www.mxcio.co**
+* 所有接口的响应都是JSON格式
+* 公共接口请加入请求头，否则会返回403
+* GET方法的接口, 参数必须在query string中发送.
+* POST和 DELETE 方法的接口, 参数也需要在query string中发送， 不能放request body中发送，否则会返回401
+* 对参数的顺序不做要求。
 - - - - - -
 
 ## API简介
 
 欢迎使用MXC API，API分为[公共接口](#公共接口)和[私有接口](#私有接口)，你可以使用公共接口查询行情数据，并使用私有接口进行交易。
 
-对于私有接口，为了防止请求在网络传输过程中被篡改，您需要使用您的API Key做签名认证，以保证我们收到的请求为您本人发出。一个合法的MXC签名是将所有参数名按字母顺序排列，用&连接各参数，再加上您的api_secret，做MD5生成签名。需将签名放入参数sign中。
->以`获取账户资产信息`接口为例，需要传的参数包括`api_key`，`req_time`和`sign`共三个，除去`sign`之外的参数都需要参与签名。
->
->如果您的`api_key`为`mmmyyyaaapppiiikkkeeeyyy`，您的`api_secret`为`ssseeecccrrreeettt`，当前的十位的时间戳为`1234567890`。
->
->首先将需要签名的参数按照参数名进行排序(首先比较所有参数名的第一个字母，按英文字母顺序排列，若遇到相同首字母，则看第二个字母，以此类推)。所以第一个参数为`api_key`，第二个参数为`req_time`。
->
->将参数和参数值用`=`进行连接：得到`api_key=mmmyyyaaapppiiikkkeeeyyy`和`req_time=1234567890`。
->
->将得到的值用`&`进行连接，得到`api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890`
->
->在最后连接`&api_secret=ssseeecccrrreeettt`，得到`api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890&api_secret=ssseeecccrrreeettt`。
->
->将得到的字符串用MD5摘要算法进行签名，得到`c90172772df116dd658141e853185517`，加入到`sign`参数中
->
->将`api_key`，`req_time`和`sign`三个参数放入请求中并发送请求
+----
+## 接口鉴权和签名 
 
-注意：
-* 公共接口请加入请求头，否则会返回403
+对于私有接口除了接口本身所需的参数外，需要传的参数包括`api_key`，`req_time`和`sign`共三个，除去`sign`之外的参数都需要参与签名。
 
-* POST请求请将参数放入params，放入body会返回401
+| 参数        | 类型   |  是否必须   |  说明   |
+| :--------:   | :-----:  |  :-----:  |  :-----:  |
+| api_key         | string   |  √   |  您的api key   |
+| req_time          | string   |  √   |  请求时间戳   |
+| sign          | string   |  √   |  请求签名   |
+
+### 签名规则 
+* MXC签名是将所有参数名按字母顺序排列，参数名和参数值之间用`=`，参数之间用`&`连接，再加上您的api_secret，做MD5生成签名。
+* 如果您的`api_key`为`mmmyyyaaapppiiikkkeeeyyy`，您的`api_secret`为`ssseeecccrrreeettt`，当前的十位的时间戳为`1234567890`。
+
+* 首先将需要签名的参数按照参数名进行排序(首先比较所有参数名的第一个字母，按英文字母顺序排列，若遇到相同首字母，则看第二个字母，以此类推)。所以第一个参数为`api_key`，第二个参数为`req_time`。
+ 
+* 将参数和参数值用`=`进行连接：得到`api_key=mmmyyyaaapppiiikkkeeeyyy`和`req_time=1234567890`。
+
+* 将得到的值用`&`进行连接，得到`api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890`
+ 
+* 在最后连接`&api_secret=ssseeecccrrreeettt`，得到`api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890&api_secret=ssseeecccrrreeettt`。
+ 
+* 将得到的字符串用MD5摘要算法进行签名，得到`c90172772df116dd658141e853185517`，加入到`sign`参数中
+
+* 将`api_key`，`req_time`和`sign`三个参数放入请求中并发送请求
+
+### 请求示例
+获取账户资产信息 /open/api/v1/private/account/info
+
+
+
+| 参数        | 值  |
+| :--------:   | :-----:   |
+| api_key      | mmmyyyaaapppiiikkkeeeyyy |
+| api_secret   | ssseeecccrrreeettt  |
+#####  签名sign计算规则
+    参数为api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890 
+    最后连接api_secret 为 api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890&api_secret=ssseeecccrrreeettt
+    得到的字符串用MD5摘要算法进行签名，得到c90172772df116dd658141e853185517
+##### 请求参数传递规则
+    api_key=mmmyyyaaapppiiikkkeeeyyy&req_time=1234567890&sign=c90172772df116dd658141e853185517
+
+### 时间同步安全  
+
+* 签名接口均需要传递`req_time`参数, 其值应当是请求发送时刻的unix时间戳（毫秒）
+* 服务器收到请求时会判断请求中的时间戳，如果是时间已经过期，则请求会被认为无效。
 
 ----
+## 枚举定义
 
-API HOST: **https://www.mxc.com**
+### 订单状态
+* 1（未成交）
+* 2（已成交）
+* 3（部分成交）
+* 4（已撤单）
+* 5（部分撤单）
 
-公共接口：
+
+### 交易类型
+* 1（买入）
+* 2（卖出）
+
+
+### K线间隔
+m -> 分钟; h -> 小时; d -> 天;  M -> 月
+* 1m
+* 5m
+* 15m
+* 30m
+* 60m
+* 1h
+* 1M
+## 公共接口：
 
 * GET [/open/api/v1/data/markets](#获取市场列表信息) 获取市场列表信息
 * GET [/open/api/v1/data/markets_info](#获取交易对信息) 获取交易对信息
@@ -41,7 +97,7 @@ API HOST: **https://www.mxc.com**
 * GET [/open/api/v1/data/ticker](#获取市场行情信息) 获取市场行情信息
 * GET [/open/api/v1/data/kline](#获取市场k线信息) 获取市场k线信息
 
-私有接口：
+## 私有接口：
 
 * GET [/open/api/v1/private/account/info](#获取账户资产信息) 获取账户资产信息
 * GET [/open/api/v1/private/current/orders](#获取当前委托信息) 获取当前委托信息
@@ -65,6 +121,7 @@ API HOST: **https://www.mxc.com**
 
 | 参数        | 类型   |  是否必须   |  说明   |
 | :--------:   | :-----:  |  :-----:  |  :-----:  |
+| NONE  | NONE  | NONE  | NONE  |
 
 **返回值**
 
@@ -99,6 +156,7 @@ API HOST: **https://www.mxc.com**
 
 | 参数        | 类型   |  是否必须   |  说明   |
 | :--------:   | :-----:  |  :-----:  |  :-----:  |
+| NONE  | NONE  | NONE  | NONE  |
 
 **返回值**
 
@@ -669,7 +727,7 @@ API HOST: **https://www.mxc.com**
 ```python
 import requests
 
-ROOT_URL = 'https://www.mxc.com'
+ROOT_URL = 'https://www.mxc.ceo'
 
 headers = {
     'Content-Type': 'application/json',
