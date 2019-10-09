@@ -102,6 +102,7 @@ m -> 分钟; h -> 小时; d -> 天;  M -> 月
 * GET [/open/api/v1/private/account/info](#获取账户资产信息) 获取账户资产信息
 * GET [/open/api/v1/private/current/orders](#获取当前委托信息) 获取当前委托信息
 * POST [/open/api/v1/private/order](#下单) 下单
+* POST [/open/api/v1/private/order_batch](#批量下单) 批量下单
 * DELETE [/open/api/v1/private/order](#取消订单) 取消订单
 * GET [/open/api/v1/private/orders](#查询账号历史委托记录) 查询账号历史委托记录
 * GET [/open/api/v1/private/order](#查询订单状态) 查询订单状态
@@ -562,6 +563,61 @@ m -> 分钟; h -> 小时; d -> 天;  M -> 月
 
 ----
 
+## **批量下单**
+
+* POST `/open/api/v1/private/order_batch`
+
+**请求参数**
+
+| 参数        | 类型   |  是否必须   |  说明   |
+| :--------:   | :-----:  |  :-----:  |  :-----:  |
+| api_key         | string   |  √   |  您的api key   |
+| req_time            | string   |  √   |  请求时间戳   |
+| sign          | string   |  √   |  请求签名   |
+
+需要下的单用如下的格式放在body里面，格式为application/json：
+```json
+[
+    {
+        "market": "BTC_USDT",
+        "price": 10000,
+        "quantity": 1,
+        "type": 1
+    },
+    {
+        "market": "BTC_USDT",
+        "price": 9999,
+        "quantity": 1,
+        "type": 1
+    }
+]
+```
+
+**返回值**
+
+```json
+{
+    "code": 200,
+    "data": [
+        "57b02e27-a2ff-42c7-a09e-292054170c34",
+        "123ce00a-80cd-4ddf-8ef5-ed91337febb7"
+    ],
+    "msg": "OK"
+}
+```
+
+**返回值说明**
+
+| 返回值        |  说明   |
+| :--------:   | :-----:  |
+| data        |  订单id   |
+
+**示例**
+
+[python](#批量下单-python-demo)
+
+----
+
 ## **取消订单**
 
 * DELETE `/open/api/v1/private/order`
@@ -859,6 +915,33 @@ params = {'api_key': API_KEY,
 params.update({'sign': sign(params)})
 url = ROOT_URL + '/open/api/v1/private/order'
 response = requests.request('POST', url, params=params, headers=headers)
+print(response.json())
+```
+
+> ###### 批量下单 python demo
+
+```python
+symbol = 'BTC_USDT'
+trade_type = 1  # 1/2 (买/卖)
+params = {'api_key': API_KEY,
+          'req_time': time.time()}
+params.update({'sign': sign(params)})
+data = [
+    {
+        'market': symbol,
+        'price': 10000,
+        'quantity': 1,
+        'type': trade_type,
+    },
+    {
+        'market': symbol,
+        'price': 9999,
+        'quantity': 1,
+        'type': trade_type,
+    },
+]
+url = ROOT_URL + '/open/api/v1/private/order_batch'
+response = requests.request('POST', url, params=params, json=data, headers=headers)
 print(response.json())
 ```
 
