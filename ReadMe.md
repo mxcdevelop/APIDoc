@@ -104,6 +104,7 @@ m -> 分钟; h -> 小时; d -> 天;  M -> 月
 * POST [/open/api/v1/private/order](#下单) 下单
 * POST [/open/api/v1/private/order_batch](#批量下单) 批量下单
 * DELETE [/open/api/v1/private/order](#取消订单) 取消订单
+* POST [/open/api/v1/private/order_cancel](#批量取消订单) 批量取消订单
 * GET [/open/api/v1/private/orders](#查询账号历史委托记录) 查询账号历史委托记录
 * GET [/open/api/v1/private/order](#查询订单状态) 查询订单状态
 
@@ -655,6 +656,41 @@ m -> 分钟; h -> 小时; d -> 天;  M -> 月
 
 ----
 
+## **批量取消订单**
+
+* DELETE `/open/api/v1/private/order_cancel`
+
+**请求参数**
+
+| 参数        | 类型   |  是否必须   |  说明   |
+| :--------:   | :-----:  |  :-----:  |  :-----:  |
+| api_key         | string   |  √   |  您的api key   |
+| market          | string   |  √   |  交易对   |
+| req_time            | string   |  √   |  请求时间戳   |
+| trade_no             | string   |  √   |  委托单号,用英文逗号拼接   |
+| sign          | string   |  √   |  请求签名   |
+
+**返回值**
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "msg": "OK"
+}
+```
+
+**返回值说明**
+
+| 返回值        |  说明   |
+| :--------:   | :-----:  |
+
+**示例**
+
+[python](#批量取消订单-python-demo)
+
+----
+
 ## **查询账号历史委托记录**
 
 * GET `/open/api/v1/private/orders`
@@ -959,6 +995,21 @@ params = {'api_key': API_KEY,
 params.update({'sign': sign(params)})
 url = ROOT_URL + '/open/api/v1/private/order'
 response = requests.request('DELETE', url, params=params, headers=headers)
+print(response.json())
+```
+
+> ###### 批量取消订单 python demo
+
+```python
+symbol = 'BTC_USDT'
+order_id = ['3cd4bd41-****-****-****-d593f8eea202', '123ce00a-****-****-****-ed91337febb7']
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_no': ','.join(order_id)}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/order_cancel'
+response = requests.request('POST', url, params=params, headers=headers)
 print(response.json())
 ```
 
