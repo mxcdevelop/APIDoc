@@ -658,7 +658,7 @@ m -> 分钟; h -> 小时; d -> 天;  M -> 月
 
 ## **批量取消订单**
 
-* DELETE `/open/api/v1/private/order_cancel`
+* POST `/open/api/v1/private/order_cancel`
 
 **请求参数**
 
