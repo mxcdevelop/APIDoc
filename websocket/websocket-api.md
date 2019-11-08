@@ -2,14 +2,14 @@
 
 #	基本信息  
 
-原生websocket连接方式
-wss://wbs.mxc.co/socket.io/?EIO=3&transport=websocket
-wss://wbs.mxc.ceo/socket.io/?EIO=3&transport=websocket
-wss://wbs.mxc.com/socket.io/?EIO=3&transport=websocket
-基于SocketIO客户端连接方式
-wss://wbs.mxc.co  transport设置为websocket
-wss://wbs.mxc.ceo transport设置为websocket
-wss://wbs.mxc.com transport设置为websocket
+原生websocket连接方式  
+wss://wbs.mxc.co/socket.io/?EIO=3&transport=websocket  
+wss://wbs.mxc.ceo/socket.io/?EIO=3&transport=websocket  
+wss://wbs.mxc.com/socket.io/?EIO=3&transport=websocket  
+基于SocketIO客户端连接方式  
+wss://wbs.mxc.co  transport设置为websocket  
+wss://wbs.mxc.ceo transport设置为websocket  
+wss://wbs.mxc.com transport设置为websocket  
 
 ##	公共接口：
 ----
