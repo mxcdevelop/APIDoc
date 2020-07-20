@@ -87,7 +87,8 @@
         <div>
             <img src="./images/logo-0f661c53.png" alt="">
             <div>
-                <a class="active" id="tab1">Spot</a>
+                <a class="active" id="tab1" onclick="switchToRest()">REST API</a>
+                
             </div>
         </div>
         <a id="toggle" onclick="toggleLanage()">English</a>
@@ -95,31 +96,62 @@
     <iframe id="iframe" src="./index.html" frameborder="0"></iframe>
     <script>
         var languageSetting = localStorage.getItem('languageSetting') || 'en';
-        
-        function toggleLanage (isInit) {
-          var _iframe = document.getElementById('iframe'),
-          _tab1 = document.getElementById('tab1'),
-          _toggle = document.getElementById('toggle'),
-          docUrl = {
-              en: './open.api.v2.html',
-              cn: './cn/open.api.v2.html',
-          },
-          tab1 = {
-              en: 'REST API',
-              cn: 'REST API'
+
+        var docUrl = {
+              tab1_en: './open.api.v2.en.html',
+              tab1_cn: './open.api.v2.cn.html',
           },
           toggle = {
               en: '中文',
               cn: 'English'
           };
+        
+        function toggleLanage(isInit) {
+          var _iframe = document.getElementById('iframe'),
+          _toggle = document.getElementById('toggle');
+
+          var activeTab = getActiveTab(isInit);
+          
           if(!isInit){
               languageSetting = languageSetting === 'cn'? 'en': 'cn';
           }
-          localStorage.setItem('languageSetting',languageSetting);
+          localStorage.setItem('languageSetting', languageSetting);
           
-          _iframe.src = docUrl[languageSetting];
-          _tab1.innerText = tab1[languageSetting];
+          _iframe.src = docUrl[activeTab.id + '_' + languageSetting];
+          //activeTab.innerText = tab1[languageSetting];
           _toggle.innerText = toggle[languageSetting];
+        }
+
+        function getActiveTab(isInit) {
+          var _tab1 = document.getElementById('tab1');
+          var _tab2 = document.getElementById('tab2');
+          var activeTab = _tab1;
+          if (!isInit && _tab1.className != 'active') {
+            activeTab = _tab2;
+          }
+          return activeTab;
+        }
+
+        function switchToRest() {
+          var _iframe = document.getElementById('iframe'),
+          _toggle = document.getElementById('toggle');
+
+          var _tab1 = document.getElementById('tab1'),
+          _tab2 = document.getElementById('tab2');
+          _tab1.className = 'active';
+          _tab2.className = '';
+          _iframe.src = docUrl[_tab1.id + '_' + languageSetting];
+        }
+
+        function switchToWs() {
+          var _iframe = document.getElementById('iframe'),
+          _toggle = document.getElementById('toggle');
+
+          var _tab1 = document.getElementById('tab1'),
+          _tab2 = document.getElementById('tab2');
+          _tab1.className = '';
+          _tab2.className = 'active';
+          _iframe.src = docUrl[_tab2.id + '_' + languageSetting];
         }
 
         toggleLanage(true)
