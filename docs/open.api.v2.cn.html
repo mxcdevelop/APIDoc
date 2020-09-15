@@ -336,7 +336,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='5ea2e0cde2'>简介</h1>
-<p>欢迎使用MXC API！本文档为您提供了REST API的相关信息，帮助您获取市场行情，管理账户信息，并进行交易等   </p>
+<p>欢迎使用MXC API！本文档为您提供了REST API的相关信息，帮助您获取市场行情，管理账户信息，并进行交易等  </p>
 
 <aside class="notice">
 目前平台默认开通以下通证的API操作，如需要通过API操作其他通证，请联系客服<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<br>DASH_USDT，EOS_USDT，BTC_USDT，BCH_USDT，ONT_USDT，ETH_USDT，ZEC_USDT，LTC_USDT，TRX_USDT，XLM_USDT，DOGE_USDT，SERO_USDT，OMG_USDT，GRIN_USDT，VSYS_USDT，ARPA_USDT，ALGO_USDT，BNB_USDT，HT_USDT，IRIS_USDT
@@ -431,7 +431,7 @@
 </tr>
 </tbody></table>
 <h2 id='api-key'>创建API key</h2>
-<p>用户可以在MXC站点个人中心，创建API key，其包括两个部分，<code>Access key</code>API的访问秘钥，<code>Secret key</code>对应的秘钥，用于签名计算及验证 </p>
+<p>用户可以在MXC站点个人中心，创建API key，其包括两个部分，<code>Access key</code>API的访问秘钥，<code>Secret key</code>对应的秘钥，用于签名计算及验证。开始使用前，请为生成的API key设置相应的权限。</p>
 
 <aside class="warning">
 Secret key仅在申请时展示，请做好记录留存
@@ -1805,9 +1805,23 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 
 <p>参数：</p>
 
-<p>| 参数名 | 数据类型 | 是否必须 | 说明 | 取值范围 |
-|-----|-----|-----|-----|
-|order_ids|string|是|订单号，支持批量操作。最大批量操作数目为20|</p>
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>数据类型</th>
+<th>是否必须</th>
+<th>说明</th>
+<th>取值范围</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>order_ids</td>
+<td>string</td>
+<td>是</td>
+<td>订单号，支持批量操作。最大批量操作数目为20</td>
+<td></td>
+</tr>
+</tbody></table>
 
 <p>响应：</p>
 

@@ -431,7 +431,7 @@ At present the following tokens are available for API operation by default. Plea
 </tr>
 </tbody></table>
 <h2 id='creating-api-key'>Creating API key</h2>
-<p>API key can be created in the <code>User Center</code> of MXC site. There are two parts of API key, <code>Access key</code> and <code>Secret key</code>，both of them will be used for calculating and validating a signature </p>
+<p>API key can be created in the <code>User Center</code> of MXC site. There are two parts of API key, <code>Access key</code> and <code>Secret key</code>，both of them will be used for calculating and validating a signature. Please grant appropriate permissions for the created API key, before using it. </p>
 
 <aside class="warning">
 Secret key will ONLY be displayed in the page when API key is generated, please make records accordingly
@@ -1801,9 +1801,23 @@ For each batch request, the parameter client_order_id should be consistent, mean
 
 <p>Request parameters：</p>
 
-<p>| Parameter | Data type | Mandatory | Description | Allowed range |
-|-----|-----|-----|-----|
-|order_ids|string|Y|order id, batch process is supported. There can be 20 ids in one batch at most|</p>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Data type</th>
+<th>Mandatory</th>
+<th>Description</th>
+<th>Allowed range</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>order_ids</td>
+<td>string</td>
+<td>Y</td>
+<td>order id, batch process is supported. There can be 20 ids in one batch at most</td>
+<td></td>
+</tr>
+</tbody></table>
 
 <p>Response：</p>
 
