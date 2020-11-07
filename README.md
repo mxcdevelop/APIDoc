@@ -8,6 +8,10 @@ Please visit the following links for the API documents and demos
 
 - [https://github.com/mxcdevelop/APIDoc/tree/master/api_doc_v1](https://github.com/mxcdevelop/APIDoc/tree/master/api_doc_v1)
 
+### REST API for contract
+
+- [https://github.com/mxcdevelop/APIDoc/blob/master/contract/contract-api.md](https://github.com/mxcdevelop/APIDoc/blob/master/contract/contract-api.md)
+
 ### WebSocket doc
 
 - [https://github.com/mxcdevelop/APIDoc/blob/master/websocket/websocket-api.md](https://github.com/mxcdevelop/APIDoc/blob/master/websocket/websocket-api.md)
