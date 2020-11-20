@@ -1,10 +1,10 @@
-# OPEN-API接口模块
+# OPEN-API Interface Module
 
-##基本信息:
+##The basic information:
 
 url: https://contract.mxc.com 、  https://contract.mxc.io 、 https://contract.mxc.ai
 
-## 通用响应数据结构:
+## Common Response Data Structure:
 ```json
     {
       "success": true,
@@ -22,36 +22,33 @@ or
     {
       "success": false,
        "code":500,
-      "message": "系统内部错误!"
+      "message": "System internal  error!"
     }
 ```
-## 请求格式:
+## Request Format:
 
-相应API接受GET，POST或DELETE类型的请求,post请求的Content-Type为:application/json.参数以json格式发送(参数命名规则为驼峰命名),get请求以requestParam形式发送(参数命名规则为'_'隔开)
-鉴权方式:
+The corresponding API accepts a request of Type GET, POST, or DELETE, the content-type of POST request: Application/JSON. Parameters are sent in JSON format (camel named should be required), and get requests are sent in requestParam format ( '_' delimited should be required)
+
+Authentication  way:
     
-    1.对于公共接口,不需要签名
-    2.对于私有接口,需要在header中传入ApiKey、Request-Time、Signature、Recv-Window(可选)参数,Signature为签名字符串,签名规则如下:
-        1)签名时需要先获得请求参数字符串,无参时为"";对于get请求,按字典序拼接业务参数以&间隔，
-          并最终获得签名目标串（在批量操作的API中，若参数值中有逗号等特殊符号，这些符号在签名时需要做URL encode）,
-          对于post请求,签名参数为json字符串;
-        2)获得参数字符串后,再拼接签名目标串,规则为:accessKey+时间戳+获取到的参数字符串
-        3)要求使用HMAC SHA256算法对目标串进行签名，并最终将签名作为参数携带到header中
-        4)参与签名的业务参数为null时,不参与签名,对于path参数,也不参与签名;注意get请求将参数拼接至url上时,如果参数为null,
-          后台解析时,会解析成"",固当get请求,某参数为null时,不要传该参数,或者签名时,将该参数的值设置为"",否则会出现验签失败!
-        5)请求时将签名时用到的req_time的值放入header的Request-Time参数中,获得的签名字符串放入header的Signature参数中,将APIKEY的Access Key放在header的ApiKey参数中,其余业务参数按正常传递即可
-时间安全:
+    1.For public interfaces, signature is unnecessary
+    2.For the private interface, parameters such as ApiKey, request-time,Signature and recv-Window (optional) need to be entered in the header. Signature is a string with the following rules:
+        1)The request parameter string should be obtained first when signing,"" for cases there is no parameter;"&" for separating when face the concatenate request parameters in dictionary for get request . Finally get the signature target string (in the API of batch operation, if there are special symbols such as commas in the parameter value, these symbols need to do URL encode )For post requests, the signature parameter is a JSON string;
+        2)Splice the  signature target string after get the parameter string . The rule follows :accessKey+ timestamp + obtained parameter string
+        3)It is required to use HMAC SHA256 algorithm to sign the target string and carry the signature into the header as a parameter.
+        4)If the request parameter participating in the signature is NULL, it does not participate in the signature, nor does it participate in the signature for the path parameter; the validation will be failed if there is "" as a parameter in the signature. , the null parameters will be encoding as " " when get the request.
+        5) Put the  REq_time in the Signature into the request-time parameter of the header, put the Signature string obtained into the Signature parameter of the header, put the Access Key of the APIKEY into the APIKEY parameter of the header, the other request parameters will be passed normally.
+        
+Time security:
 
-    所有签名接口均需要传入header参数Request-Time，即以毫秒表示的时间戳字符串，服务端接收到请求后会验证请求发出的时间
-    范围。若接受请求时，收到的req_time小于或大于服务端时间10秒（默认值）以上（该时间窗口值可以通过发送可选header参数
-    Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_window），则认为该请求无效
+    The header parameter Request-Time required for all signature interfaces, which is a timestamp string in milliseconds, and the server will verify the Time range issued by the Request after receiving the Request.The request is considered invalid if the received REq_time is less than or more than the server time of 10 seconds (the default value) ,(the time window value can be defined by sending the optional header parameter recv-window with a maximum value of 60, and recv_window of 30 seconds or more is not recommended)
 
-java示例:
+java example:
 
             /**
-             * 获取get请求参数字符串
+             * Get the get request parameter string
              *
-             * @param param get/delete请求参数map
+             * @param param get/delete request parameters map
              * @return
              */
            public static String getRequestParamString(Map<String, String> param) {
@@ -76,7 +73,7 @@ java示例:
               }
           } 
           
-         /**签名*/
+         /**Signature*/
           public static String sign(SignVo signVo) {
                   if (signVo.getRequestParam() == null) {
                       signVo.setRequestParam("");
@@ -107,58 +104,58 @@ java示例:
               private String reqTime;
               private String accessKey;
               private String secretKey;
-              private String requestParam; //get请求参数根据字典顺序排序,使用&拼接字符串,post为json字符串
+              private String requestParam; //The request parameters are sorted in dictionary order, "&" should be used to concatenate strings, POST should be JSON string
           }
 
-## 创建API key
+## Create API key
 
-用户可以在MXC站点个人中心，创建API key，其包括两个部分，Access keyAPI的访问秘钥，Secret key对应的秘钥，用于签名计算及验证
-
-***
-
-##  合约行情接口(公共)
-***
-获取服务器时间:GET api/v1/contract/ping
-
-获取合约信息:GET api/v1/contract/detail
-
-获取合约支持划转的币种:GET api/v1/contract/support_currencies
-
-获取合约深度信息:GET api/v1/contract/depth/{symbol}
-
-获取合约深度信息:GET api/v1/contract/depth_commits/{symbol}/{limit}
-
-获取合约指数价格:GET api/v1/contract/index_price/{symbol}
-
-获取合约合理价格:GET api/v1/contract/fair_price/{symbol}
-
-获取合约资金费率:GET api/v1/contract/funding_rate/{symbol}
-
-获取合约K线数据: GET api/v1/contract/kline/{symbol}
-
-获取指数价格K线数据: GET api/v1/contract/kline/index_price/{symbol}
-
-获取合理价格K线数据: GET api/v1/contract/kline/fair_price/{symbol}
-
-获取合约成交数据: GET api/v1/contract/deals/{symbol}
-
-获取合约ticker数据: GET api/v1/contract/ticker
-
-获取合约风险基金余额: GET api/v1/contract/risk_reverse/{symbol}
-
-获取合约风险基金余额历史: GET api/v1/contract/risk_reverse/history
-
-获取合约资金费率历史: GET api/v1/contract/funding_rate/history
+Users can build API key in the personal center of MXC site, which consists of two parts, the AccessKey of Access keyAPI  and AccessKey corresponding to secret key, used for signature calculation and verification.
 
 ***
-+ ### 获取服务器时间
-+ ##### 限速规则: 20次/2秒 
+
+##  Contract Interface (Public)
+***
+Get server time:GET api/v1/contract/ping
+
+Get contract information:GET api/v1/contract/detail
+
+Get the cryptocurrency in which the contract supports transfers:GET api/v1/contract/support_currencies
+
+Get contract depth information:GET api/v1/contract/depth/{symbol}
+
+Get contract  depth information:GET api/v1/contract/depth_commits/{symbol}/{limit}
+
+Get contract  index price:GET api/v1/contract/index_price/{symbol}
+
+Get contract fair price:GET api/v1/contract/fair_price/{symbol}
+
+Get contract funding rate:GET api/v1/contract/funding_rate/{symbol}
+
+Get K line data: GET api/v1/contract/kline/{symbol}
+
+Get K lines data of the index price: GET api/v1/contract/kline/index_price/{symbol}
+
+Get K line data of fair price: GET api/v1/contract/kline/fair_price/{symbol}
+
+Get contract transaction data: GET api/v1/contract/deals/{symbol}
+
+Get contract Ticker data: GET api/v1/contract/ticker
+
+Get balance of contract risk fund: GET api/v1/contract/risk_reverse/{symbol}
+
+Get contract risk fund balance history: GET api/v1/contract/risk_reverse/history
+
+Get contract funding rate history: GET api/v1/contract/funding_rate/history
+
+***
++ ### Get server time
++ ##### Rate limit: 20 times / 2 seconds 
 + ##### method: 
      + **GET api/v1/contract/ping**
-- ##### 请求参数: 无
+- ##### Request parameter:None
 
-   - ##### 响应参数 :
-示例:
+   - ##### Response parameters :
+example:
 ```json
     {
       "success": true,
@@ -167,62 +164,62 @@ java示例:
 ```
 ***
 
-+ ### 获取合约信息
-+ ##### 限速规则: 1次/5秒 
++ ### Get contract information
++ ##### Rate limit:1/5 seconds
 + ##### method: 
      + **GET api/v1/contract/detail**
-- ##### 请求参数:
+- ##### Request parameters:
     
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-|  symbol | string  | false  | 合约名  |
+|  symbol | string  | false  | the name of the contract |
 
 
-   - ##### 响应参数 :
+   - ##### Response parameters :
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| displayName  | string | 展示名 |
-| displayNameEn  | string | 英文展示名 |
-| positionOpenType  | int  |  开仓类型,1：逐仓，2：全仓，3：全仓，逐仓都支持 |
-| baseCoin  | string  | 标的货币 如 BTC |
-| quoteCoin  | string  | 标价货币 如 USDT |
-| settleCoin  | string  | 结算货币 如 USDT|
-| contractSize  | decimal  | 合约面值 |
-| minLeverage  | int  | 杠杆倍数下限 |
-| maxLeverage  | int  | 杠杆倍数上限 |
-| priceScale  | int  | 价格精度 |
-| volScale  | int  | 数量精度 |
-| amountScale  | int  | 金额精度 |
-| priceUnit  | int  | 价格的最小步进单位 |
-| volUnit  | int  | 数量的最小步进单位 |
-| minVol  | decimal  | 订单张数下限|
-| maxVol  | decimal  | 订单张数上限 |
-| bidLimitPriceRate  | decimal  | 卖单价格限制比率 |
-| askLimitPriceRate  | decimal  | 买单价格限制比率 |
-| takerFeeRate  | decimal  | 买单费率 |
-| makerFeeRate  | decimal  | 卖单费率 |
-| maintenanceMarginRate  | decimal  | 维持保证金率 |
-| initialMarginRate  | decimal  | 初始保证金率 |
-| riskBaseVol  | decimal  | 基本张数 |
-| riskIncrVol  | decimal  | 递增张数 |
-| riskIncrMmr  | decimal  | 维持保证金率递增量 |
-| riskIncrImr  | decimal  | 初始保证金率递增量 |
-| riskLevelLimit  | int  | 风险限额档位数 |
-| priceCoefficientVariation  | decimal  | 合理价格偏离指数价格系数 |
-| indexOrigin  | List<String>  | 指数来源 |
-| state  | int  | 状态,0:启用,1:交割,2:交割完成,3:下线,4: 暂停|
+| symbol  | string | the name of the contract |
+| displayName  | string | display name |
+| displayNameEn  | string | English display name |
+| positionOpenType  | int  |  position open type,1：isolated，2：cross，3：both |
+| baseCoin  | string  | base currency such as BTC |
+| quoteCoin  | string  | quote currency such as USDT |
+| settleCoin  | string  | liquidation currency such as USDT|
+| contractSize  | decimal  | Contract value |
+| minLeverage  | int  |  minimum leverage|
+| maxLeverage  | int  | Maximum leverage|
+| priceScale  | int  | price scale |
+| volScale  | int  | quantity scale |
+| amountScale  | int  | amount scale |
+| priceUnit  | int  | price unit |
+| volUnit  | int  | volume unit |
+| minVol  | decimal  | minimum volume
+| maxVol  | decimal  | maximum volume |
+| bidLimitPriceRate  | decimal  | bid limitprice ratio |
+| askLimitPriceRate  | decimal  | ask limit price ratio |
+| takerFeeRate  | decimal  | taker rate |
+| makerFeeRate  | decimal  | maker rate|
+| maintenanceMarginRate  | decimal  | maintenance margin rate |
+| initialMarginRate  | decimal  | initial margin rate |
+| riskBaseVol  | decimal  | initial volume |
+| riskIncrVol  | decimal  | risk incresing volume |
+| riskIncrMmr  | decimal  | maintain increasing margin rate |
+| riskIncrImr  | decimal  | initial increasing margin rate |
+| riskLevelLimit  | int  |  risk level limit |
+| priceCoefficientVariation  | decimal  | price coefficient variation |
+| indexOrigin  | List<String>  | index origin |
+| state  | int  | Status,0:enabled,1:delivery,2:completion,3:offline,4: pause|
 
 ***
-+ ### 获取可划转币种
-+ ##### 限速规则: 20次/2秒 
++ ###  Get the cryptocurrency in which the contract supports transfers
++ ##### Rate limit:20 times/2 seconds
 + ##### method: 
      + **GET api/v1/contract/support_currencies**
-- ##### 请求参数: 无
+- ##### Request parameter:None
 
-   - ##### 响应参数 :
-示例:
+   - ##### Response parameters  :
+Example:
 ```json
     {
       "success": true,
@@ -230,26 +227,26 @@ java示例:
     }
 ```
 ***
-+ ### 获取合约深度信息
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract  depth information
++ ##### Rate limit:20 times/2 seconds
 + ##### method: 
      + **GET api/v1/contract/depth/{symbol}**
-- ##### 请求参数:
+- ##### Request parameter:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol | string  | true  | 合约名  |
+| symbol | string  | true  | the name of the contract |
 
-   - ##### 响应参数:
+   - ##### Response parameters :
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type  | Description  |
 | ------------ | ------------ | ------------ |
-| asks  | List<Numeric[]> |卖方深度 |
-| bids  | List<Numeric[]> | 买方深度 |
-| version  | long  | 版本号 |
+| asks  | List<Numeric[]> | the seller depth |
+| bids  | List<Numeric[]> | the buyer depth |
+| version  | long  | the version number |
 
-备注: [411.8, 10, 1] 411.8为价格，10为此价格的合约张数,1为订单数量
-返回示例:
+note: [411.8, 10, 1] 411.8 is the price，10 is the volume of contracts for this price,1 is the order quantity
+Example:
 ```json
 {
     "asks":[
@@ -279,876 +276,878 @@ java示例:
 }
 ```
 ***
-+ ### 获取合约最近N条深度信息快照
-+ ##### 限速规则: 20次/2秒 
++ ### Gets N snapshot of the most recent depth information of the contract
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/depth_commits/{symbol}/{limit}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol | string  | true  | 合约名  |
-| limit | int  | true  | 条数  |
+| symbol | string  | true  | the name of the contract  |
+| limit | int  | true  | count |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type  | Description  |
 | ------------ | ------------ | ------------ |
-| asks  | List<Numeric[]> |卖方深度 |
-| bids  | List<Numeric[]> | 买方深度 |
-| version  | long  | 版本号 |
+| asks  | List<Numeric[]> | the seller depth |
+| bids  | List<Numeric[]> | the buyer depth |
+| version  | long  | the version number |
 
 ***
-+ ### 获取合约指数价格
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract  index price
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/index_price/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol | string  | true  | 合约名  |
+| symbol | string  | true  | the name of the contract  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type  | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 交易对 |
-| indexPrice  | decimal  | 指数价格 |
-| timestamp  | long   | 系统时间戳 |
+| symbol  | string | trading pair |
+| indexPrice  | decimal  | index price |
+| timestamp  | long   | system timestamp |
 
 ***
 
-+ ### 获取合约合理价格
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract fair price
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/fair_price/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Tpye  | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
+| symbol  | string  | true  | the name of the contract  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol | string| 合约名 |
-| fairPrice  | decimal  | 合理价格 |
-| timestamp  | long   | 系统时间戳 |
+| symbol | string | the name of the contract |
+| fairPrice  | decimal  | fair price|
+| timestamp  | long   | system timestamp|
 
 ***
-+ ### 获取合约资金费率
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract capital rate
++ ##### Rate limit:20 times/2 seconds
 + ##### method: 
      + **GET api/v1/contract/funding_rate/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
+| symbol  | string  | true  | the name of the contract |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| fundingRate  | decimal  | 资金费率 |
-| maxFundingRate  | decimal  | 资金费率上限 |
-| minFundingRate  | decimal  | 资金费率下限 |
-| collectCycle  | int  | 收取周期 |
-| nextSettleTime  | long  | 下次收取时间 |
-| timestamp  | long   | 系统时间戳 |
+| symbol  | string | the name of the contract |
+| fundingRate  | decimal  | funding rate |
+| maxFundingRate  | decimal  | max fundingl rate |
+| minFundingRate  | decimal  | min funding rate |
+| collectCycle  | int  | charge cycle |
+| nextSettleTime  | long  | next liquidate time |
+| timestamp  | long   | system timestamp |
 
 ***
 
-+ ### 获取k线数据
-+ ##### 限速规则: 20次/2秒 
++ ### Get K line data
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/kline/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
-| interval   | string  | true  | 间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
-| start  | long  | true  | 开始时间戳  |
-| end  | long  | true  | 结束时间戳  |
+| symbol  | string  | true  | the name of the contract  |
+| interval   | string  | true  | interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
+| start  | long  | true  | start timestamp  |
+| end  | long  | true  | end timestamp |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| open  | double[]  | 开盘价 |
-| close  | double[]   | 收盘价 |
-| high  | double[]   | 最高价 |
-| low  | double[]   | 最低价 |
-| vol  | double[]   | 成交量 |
-| time  | long[]   | 时间窗口 |
+| open  | double[]  | the opening price |
+| close  | double[]   | the closing price|
+| high  | double[]   | the highest price |
+| low  | double[]   | the lowest price |
+| vol  | double[]   | volume |
+| time  | long[]   | time window |
 
 ***
 
-+ ### 获取指数价格k线数据
-+ ##### 限速规则: 20次/2秒 
++ ### Get K lines data of the index price
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/kline/index_price/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
-| interval   | string  | true  | 间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
-| start  | long  | true  | 开始时间戳  |
-| end  | long  | true  | 结束时间戳  |
+| symbol  | string  | true  | The name of the contract  |
+| interval   | string  | true  | interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
+| start  | long  | true  | start timestamp  |
+| end  | long  | true  | end timestamp |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| open  | double[]  | 开盘价 |
-| close  | double[]   | 收盘价 |
-| high  | double[]   | 最高价 |
-| low  | double[]   | 最低价 |
-| vol  | double[]   | 成交量 |
-| time  | long[]   | 时间窗口 |
+| open  | double[]  | the opening price |
+| close  | double[]   | the closing price |
+| high  | double[]   | the highest price |
+| low  | double[]   | the lowest price|
+| vol  | double[]   | volume |
+| time  | long[]   | time window |
 
 ***
 
-+ ### 获取合理价格k线数据
-+ ##### 限速规则: 20次/2秒 
++ ### Get K line data of fair price
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/kline/fair_price/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
-| interval   | string  | true  | 间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
-| start  | long  | true  | 开始时间戳  |
-| end  | long  | true  | 结束时间戳  |
+| symbol  | string  | true  | the name of contract  |
+| interval   | string  | true  | interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1  |
+| start  | long  | true  | start timestamp  |
+| end  | long  | true  | end timestamp  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| open  | double[]  | 开盘价 |
-| close  | double[]   | 收盘价 |
-| high  | double[]   | 最高价 |
-| low  | double[]   | 最低价 |
-| vol  | double[]   | 成交量 |
-| time  | long[]   | 时间窗口 |
+| open  | double[]  | the opening price |
+| close  | double[]   | the closing price |
+| high  | double[]   | the highest price |
+| low  | double[]   | the lowest price |
+| vol  | double[]   | volume |
+| time  | long[]   | time window |
 
 ***
 
-+ ### 获取成交数据
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract transaction data
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/deals/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名  |
-| limit  | int  | false  | 结果集数量，最大为100，不填默认返回100条  |
+| symbol  | string  | true  | the name of the contract  |
+| limit  | int  | false  | consequence set quantity ，maximum is 100, return 100 without default  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| p  | decimal  | 成交价 |
-| v  | decimal  | 数量 |
-| T  | int  | 成交方向,1:买,2:卖 |
-| O  | int   | 是否是开仓，1:是,2:否,当O为1的时候, vol是新增的持仓量 |
-| M  | int   | 是否为自成交,1:是,2:否 |
-| t  | long   | 成交时间|
+| p  | decimal  | deal price |
+| v  | decimal  | quantity |
+| T  | int  | deal type,1:purchase,2:sell |
+| O  | int   | Open position, 1: Yes,2: No, when O is 1, vol is the newly added position |
+| M  | int   |self-closing,1:yes,2:no |
+| t  | long   | deal time|
 
 ***
 
 
-+ ### 获取合约ticker数据
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract Ticker data
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET api/v1/contract/ticker**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名 |
+| symbol  | string  | false  | the name of the contract |
 
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type  | Description |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| lastPrice  | decimal  | 最新价 |
-| bid1  | decimal  | 买一价 |
-| ask1  | decimal  | 卖一价 |
-| volume24  | decimal  | 24小时成交量，按张数统计 |
-| amount24  | decimal  | 24小时成交额|
-| holdVol| decimal  | 总持仓量 |
-| lower24Price  | decimal  | 24小时最低价 |
-| high24Price  | decimal  | 24小时内最高价 |
-| riseFallRate  | decimal  | 涨跌幅 |
-| riseFallValue  | decimal  | 涨跌额 |
-| indexPrice  | decimal  | 指数价格 |
-| fairPrice  | decimal  | 合理价 |
-| fundingRate  | decimal  | 资金费率 |
-| timestamp  | long   | 成交时间 |
+| symbol  | string | The name of the contract |
+| lastPrice  | decimal  | the latest price |
+| bid1  | decimal  | purchase一price |
+| ask1  | decimal  | sell一price |
+| volume24  | decimal  | 24 hours trading volume, according to the volume of statistics |
+| amount24  | decimal  | 24 hours  transaction volume  |
+| holdVol| decimal  | total holdings |
+| lower24Price  | decimal  | lowest price within 24 hours |
+| high24Price  | decimal  | highest price within 24 hours |
+| riseFallRate  | decimal  | rise fall rate |
+| riseFallValue  | decimal  | rise fall value |
+| indexPrice  | decimal  | index price |
+| fairPrice  | decimal  | fair price |
+| fundingRate  | decimal  | funding rate |
+| timestamp  | long   | deal time |
 
 ***
-+ ### 获取合约风险基金余额
-+ ##### 限速规则: 20次/2秒 
++ ### Get balance of contract risk fund
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET  api/v1/contract/risk_reverse/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名 |
+| symbol  | string  | true  | the name of the contract |
 
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| currency  | string  | 结算货币 |
-| available  | decimal  | 余额 |
+| symbol  | string | the name of the contract |
+| currency  | string  | liquidation currency |
+| available  | decimal  | balance |
 ***
 
-+ ### 获取合约风险基金余额历史
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract risk fund balance history
++ ##### Rate limit:20 times/2 seconds
 + ##### method: 
      + **GET  api/v1/contract/risk_reverse/history**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名 |
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol  | string  | true  | the name of the contract |
+| page_num  | int  | true  | current page number, default is 1 |
+| page_size  | int  | true  | the page size, default 20, maximum 100  |
 
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
-| symbol  | string | 合约名 |
-| currency  | string  | 结算货币 |
-| available  | decimal  | 余额 |
-| snapshotTime  | long  | 快照时间 |
+| pageSize  | int  |  page size |
+| totalCount  | int  |  total count  |
+| totalPage  | int  | total pages  |
+| currentPage  | int  |  current page |
+| resultList  | list  | data consequence set |
+| symbol  | string | the name of the contract |
+| currency  | string  | liquidation currency |
+| available  | decimal  | balance |
+| snapshotTime  | long  |  snapshot  time |
 ***
 
-+ ### 获取合约资金费率历史
-+ ##### 限速规则: 20次/2秒 
++ ### Get contract funding rate history
++ ##### Rate limit:20 times/2 seconds 
 + ##### method: 
      + **GET  api/v1/contract/funding_rate/history**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名 |
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol  | string  | true  | The name of the contract |
+| page_num  | int  | true  | current number of pages, default is 1  |
+| page_size  | int  | true  | the page size, default 20, maximum 100  |
 
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
-| symbol  | string | 合约名 |
-| fundingRate  | decimal  | 资金费率 |
-| settleTime  | long  | 结算时间 |
+| pageSize  | int  | the page size |
+| totalCount  | int  | the total number |
+| totalPage  | int  | the total pages |
+| currentPage  | int  | the current page |
+| resultList  | list  | data consequence set |
+| symbol  | string | The name of the contract |
+| fundingRate  | decimal  | funding rate |
+| settleTime  | long  | liquidation time |
 ***
 
 
-## 私有接口
+## Private Interface
 ***
-获取用户所有资产信息:GET api/v1/private/account/assets
+Get all of the user's asset information:GET api/v1/private/account/assets
 
-获取用户资产信息:GET api/v1/private/account/asset/{currency}
+Get the user'sasset information:GET api/v1/private/account/asset/{currency}
 
-获取用户资产划转记录:GET api/v1/private/account/transfer_record
+Get the user's asset transfer record:GET api/v1/private/account/transfer_record
 
-获取用户历史持仓:GET api/v1/private/position/history_positions
+Get the user's history positions:GET api/v1/private/position/history_positions
 
-获取用户当前持仓:GET api/v1/private/position/open_positions
+Gets the user's current position:GET api/v1/private/position/open_positions
 
-获取资金费用明细:GET api/v1/private/position/funding_records
+Get details of funding records:GET api/v1/private/position/funding_records
 
-获取用户当前活跃订单:GET api/v1/private/order/open_orders/{symbol}
+Get the user's current active order:GET api/v1/private/order/open_orders/{symbol}
 
-获取用户所有历史订单:GET api/v1/private/order/history_orders
+Get all of the user's historical orders:GET api/v1/private/order/history_orders
 
-通过外部订单号获取单个订单:GET api/v1/private/order/external/{symbol}/{external_oid}
+Get order with an external order number:GET api/v1/private/order/external/{symbol}/{external_oid}
 
-通过订单号获取单个订单:GET api/v1/private/order/get/{order_id}
+Get order by order number:GET api/v1/private/order/get/{order_id}
 
-通过订单号批量获取订单:GET api/v1/private/order/batch_query
+Get orders in bulk by order number:GET api/v1/private/order/batch_query
 
-获取订单成交明细:GET api/v1/private/order/deal_details/{order_id}
-
-
-获取风险限额: GET api/v1/private/account/risk_limit
+Get order transaction details:GET api/v1/private/order/deal_details/{order_id}
 
 
-修改持仓保证金:POST api/v1/private/position/change_margin
+Get risk limits: GET api/v1/private/account/risk_limit
 
-修改持仓杠杆倍数:POST api/v1/private/position/change_leverage
 
-下单:POST api/v1/private/order/submit
+Modifiy margin on position:POST api/v1/private/position/change_margin
 
-批量下单:POST api/v1/private/order/submit_batch
+Modify position leverage :POST api/v1/private/position/change_leverage
 
-取消订单:POST api/v1/private/order/cancel
+Order:POST api/v1/private/order/submit
 
-取消所有订单:POST api/v1/private/order/cancel_all
+Bulk order:POST api/v1/private/order/submit_batch
 
-修改风险等级: POST api/v1/private/account/change_risk_level
+Cancel the order:POST api/v1/private/order/cancel
+
+Cancel all orders:POST api/v1/private/order/cancel_all
+
+Modify the risk level: POST api/v1/private/account/change_risk_level
 
 
 ***
 
-+ ### 获取用户所有资产信息
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 账户读取权限
++ ### Get all of the user's asset information
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Account read permissions
 + ##### method: 
      + **GET api/v1/private/account/assets**
-- ##### 请求参数: 无
+- ##### Request parameters: None
 
-   - ##### 响应参数:
+   - #####  Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description |
 | ------------ | ------------ | ------------ |
-| currency  | string  | 币种 |
-| positionMargin  | decimal   | 仓位保证金 |
-| frozenBalance  | decimal   | 冻结余额 |
-| availableBalance  | decimal   | 当前可用余额 |
-| cashBalance  | decimal   | 可提现余额 |
-| equity  | decimal   | 总权益 |
-| unrealized  | decimal   | 未实现盈亏 |
+| currency  | string  | currency |
+| positionMargin  | decimal   | position margin |
+| frozenBalance  | decimal   | frozen balance |
+| availableBalance  | decimal   | available balance |
+| cashBalance  | decimal   | drawable balance |
+| equity  | decimal   | total equity |
+| unrealized  | decimal   | unrealized profit and loss |
 
 ***
 
-+ ### 获取用户单个币种资产信息
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 账户读取权限
++ ### Get the user's single currency asset information
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Account read permissions
 + ##### method: 
      + **GET api/v1/private/account/asset/{currency}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| currency  | string  | true  | 币种  |
+| currency  | string  | true  | currency|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| currency  | string  | 币种 |
-| positionMargin  | decimal   | 仓位保证金 |
-| frozenBalance  | decimal   | 冻结余额 |
-| availableBalance  | decimal   | 当前可用余额 |
-| cashBalance  | decimal   | 可提现余额 |
-| equity  | decimal   | 总权益 |
-| unrealized  | decimal   | 未实现盈亏 |
+| currency  | string  | currency |
+| positionMargin  | decimal   | position margin |
+| frozenBalance  | decimal   | frozen balance |
+| availableBalance  | decimal   | available balance |
+| cashBalance  | decimal   | drawable balance |
+| equity  | decimal   | total equity |
+| unrealized  | decimal   | unrealized profit and loss |
 
 ***
 
-+ ### 获取用户资产划转记录
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 账户读取权限
++ ### Get the user's asset transfer records
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Account read permissions
 + ##### method: 
      + **GET api/v1/private/account/transfer_record**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| currency  | string  | false  | 币种  |
-| state  | string  | false  | 状态:WAIT 、SUCCESS 、FAILED  |
-| type  | string  | false  | 类型:IN 、OUT  |
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| currency  | string  | false  | Description  |
+| state  | string  | false  | state:WAIT 、SUCCESS 、FAILED  |
+| type  | string  | false  | type:IN 、OUT  |
+| page_num  | int  | true  | current page, default is 1 |
+| page_size  | int  | true  |  page size, default 20, maximum 100  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
+| pageSize  | int  | page size |
+| totalCount  | int  | total count |
+| totalPage  | int  | total page |
+| currentPage  | int  | current page |
+| resultList  | list  | data consequence set |
 | id  | long  | id |
-| txid  | string  | 流水号 |
-| currency  | string  | 币种 |
-| amount  | decimal  | 转账金额 |
-| type  | string   | 类型:IN 、OUT |
-| state  | string   | 状态:WAIT 、SUCCESS 、FAILED  |
-| createTime  | long   | 创建时间 |
-| updateTime  | long   | 修改时间 |
+| txid  | string  | cash number |
+| currency  | string  | currency|
+| amount  | decimal  | transfer amount |
+| type  | string   | type:IN 、OUT |
+| state  | string   | state:WAIT 、SUCCESS 、FAILED  |
+| createTime  | long   | create time |
+| updateTime  | long   | update time |
 
 ***
 
-+ ### 获取用户当前持仓
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get the user's current position
++ ##### Rate limit:20 times/2 seconds
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/position/open_positions**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名|
-   - ##### 响应参数:
+| symbol  | string  | false  | The name of the contract|
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Required  | Description  |
 | ------------ | ------------ | ------------ |
-| positionId  | long  | 持仓id |
-| symbol  | string  | 合约名 |
-| holdVol  | decimal  | 持仓数量 |
-| positionType  | int  | 仓位类型， 1多 2空 |
-| openType  | int   | 开仓类型， 1逐仓 2全仓 |
-| state  | int   | 仓位状态,1持仓中2系统代持3已平仓  |
-| frozenVol  | decimal   | 冻结量 |
-| closeVol  | decimal   | 平仓量 |
-| holdAvgPrice  | decimal   | 持仓均价 |
-| closeAvgPrice  | decimal   | 平仓均价 |
-| openAvgPrice  | decimal   | 开仓均价 |
-| liquidatePrice  | decimal   | 逐仓时的爆仓价 |
-| oim  | decimal   | 原始初始保证金 |
-| adlLevel  | int   | adl减仓等级,取值为 1-5，为空时需等待刷新 |
-| im  | decimal   | 初始保证金， 逐仓时可以加减此项以调节爆仓价 |
-| holdFee  | decimal   | 资金费, 正数表示得到，负数表示支出 |
-| realised  | decimal   | 已实现盈亏 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| positionId  | long  | position id |
+| symbol  | string  | The name of the contract |
+| holdVol  | decimal  | hold volume |
+| positionType  | int  | position type， 1 long  2 short  |
+| openType  | int   | open type， 1 isolated 2 cross |
+| state  | int   | position state,1holding. 2 system holding 3 closed  |
+| frozenVol  | decimal   | frozen volume |
+| closeVol  | decimal   | close volume |
+| holdAvgPrice  | decimal   | hold average price |
+| closeAvgPrice  | decimal   | close average price |
+| openAvgPrice  | decimal   | open average price |
+| liquidatePrice  | decimal   | liquidate price |
+| oim  | decimal   | original initial margin |
+| adlLevel  | int   | adl the value of store-reduction level is 1-5. If it is empty, wait for the refresh |
+| im  | decimal   | initial margin， add or subtract  items can be used to adjust the liquidate price |
+| holdFee  | decimal   | hold fee,  positive  means  get it,  negative  means lost it |
+| realised  | decimal   | profit and loss achieved |
+| createTime  | date   | create time |
+| updateTime  | date   | update time |
 ***
 
-+ ### 获取用户历史持仓信息
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get user history position information
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/position/history_positions**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type  | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名|
-| type  | int  | false  | 仓位类型， 1多 2空|
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol  | string  | false  | The name of the contract |
+| type  | int  | false  | position type， 1long 2short|
+| page_num  | int  | true  | current number of pages, default is 1  |
+| page_size  | int  | true  | page size , default 20, maximum 100  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
-| positionId  | long  | 持仓id |
-| symbol  | string  | 合约名 |
-| holdVol  | decimal  | 持仓数量 |
-| positionType  | int  | 仓位类型， 1多 2空 |
-| openType  | int   | 开仓类型， 1逐仓 2全仓 |
-| state  | int   | 仓位状态,1持仓中2系统代持3已平仓  |
-| frozenVol  | decimal   | 冻结量 |
-| closeVol  | decimal   | 平仓量 |
-| holdAvgPrice  | decimal   | 持仓均价 |
-| closeAvgPrice  | decimal   | 平仓均价 |
-| openAvgPrice  | decimal   | 开仓均价 |
-| liquidatePrice  | decimal   | 逐仓时的爆仓价 |
-| oim  | decimal   | 原始初始保证金 |
-| im  | decimal   | 初始保证金， 逐仓时可以加减此项以调节爆仓价 |
-| holdFee  | decimal   | 资金费, 正数表示得到，负数表示支出 |
-| realised  | decimal   | 已实现盈亏 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| pageSize  | int  | page size |
+| totalCount  | int  | total count |
+| totalPage  | int  | total pages |
+| currentPage  | int  | current page |
+| resultList  | list  | data consequence set |
+| positionId  | long  | position id |
+| symbol  | string  | The name of the contract |
+| holdVol  | decimal  | hold volume |
+| positionType  | int  | position type， 1 long  2 short |
+| openType  | int   | open type， 1isolated 2cross |
+| state  | int   | position state,1holding 2 system holding 3closed  |
+| frozenVol  | decimal   | frozen volume |
+| closeVol  | decimal   | close volume |
+| holdAvgPrice  | decimal   | hold average price |
+| closeAvgPrice  | decimal   | close average price |
+| openAvgPrice  | decimal   | open average price |
+| liquidatePrice  | decimal   | liquidate price |
+| oim  | decimal   | original initial margin |
+| im  | decimal   | initial margin， add or subtract  items can be used to adjust the liquidate price |
+| holdFee  | decimal   | hold fee,  positive  means  get it,  negative  means lost it |
+| realised  | decimal   |  profit and loss achieved |
+| createTime  | date   | create time |
+| updateTime  | date   | update time |
 
 ***
-+ ### 获取用户资金费用明细
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get details of funding records
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/position/funding_records**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol | string  | false  | 合约名|
-| position_id  | int  | false  | 仓位id|
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol | string  | false  | the name of the contract|
+| position_id  | int  | false  | position id|
+| page_num  | int  | true  | current page number, default is 1  |
+| page_size  | int  | true  | page size, default 20, maximum 100  |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
+| pageSize  | int  | page size |
+| totalCount  | int  | total count |
+| totalPage  | int  | total page|
+| currentPage  | int  | current page |
+| resultList  | list  | data consequence list |
 | id  | long  | id |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| positionType  | int  | 1:多仓,2:空仓 |
-| positionValue  | decimal  | 仓位价值 |
-| funding  | decimal   | 费用 |
-| rate  | decimal   | 资金费率  |
-| settleTime  | date   | 清算时间 |
+| symbol  | string  | the name of the contract |
+| positionId  | long  | position id |
+| positionType  | int  |  1 long  2 short |
+| positionValue  | decimal  | position volume |
+| funding  | decimal   | funding |
+| rate  | decimal   | funding rate  |
+| settleTime  | date   | liquidate time |
 
 ***
 
-+ ### 根据外部id查询订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Query the order based on the external ID
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/order/external/{symbol}/{external_oid}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type  | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名|
-| external_oid  | string  | true  | 外部订单号|
+| symbol  | string  | true  | the name of the contract|
+| external_oid  | string  | true  | external order ID|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type  | Description  |
 | ------------ | ------------ | ------------ |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,3代管平仓委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价|
-| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| orderId  | long  | page size |
+| symbol  | string  | the name of the contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price |
+| vol  | decimal  | order price |
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  |order category:1limit order,2close instead order,4ADL reduction|
+| orderType  | int  | 1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders,6 convert market price to current price |
+| dealAvgPrice  | decimal  | deal average price |
+| dealVol  | decimal   | deal volume |
+| orderMargin  | decimal   | order margin |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee |
+| profit  | decimal   | close profit |
+| feeCurrency  | string   | fee currency |
+| openType  | int   | open type,1isolated,2cross |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4canceled,5invalid|
+| externalOid  | string   | external order ID |
+| createTime  | date   | create time|
+| updateTime  | date   | update time |
 
 ***
 
 
-+ ### 根据订单id查询订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Query the order based on the order ID
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/order/get/{order_id}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| order_id  | long  | true  | 订单号|
+| order_id  | long  | true  | order number|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description |
 | ------------ | ------------ | ------------ |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,3代管平仓委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价|
-| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| orderId  | long  | page size |
+| symbol  | string  | the name of contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price |
+| vol  | decimal  | order volume|
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  | order category:1limit order,2close instead order,4ADL reduction |
+| orderType  | int  | 1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders,6 convert market price to current price |
+| dealAvgPrice  | decimal  | deal average price |
+| dealVol  | decimal   | deal volume |
+| orderMargin  | decimal   | order margin  |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee |
+| profit  | decimal   | close profit |
+| feeCurrency  | string   | fee currency |
+| openType  | int   | open type,1isolated,2cross |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid |
+| externalOid  | string   |External order ID|
+| createTime  | date   | create time  |
+| updateTime  | date   | update time |
 
 ***
 
-+ ### 根据订单id批量查询订单
-+ ##### 限速规则: 5次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Query the order in bulk based on the order ID
++ ##### Rate limit:5 times/2 seconds
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET /api/v1/private/order/batch_query**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| order_ids  | long[]  | true  | 订单号数组，可使用逗号隔开例如:order_ids = 1,2,3(最大50个订单):|
+| order_ids  | long[]  | true  | order number array，Can be separated by "," for example :order_ids = 1,2,3(maximum 50 orders):|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,3代管平仓委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价|
-| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| orderId  | long  | page size |
+| symbol  | string  | The name of the contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price |
+| vol  | decimal  | volume |
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  | order category:1limit order,2close instead order,4ADL reduction |
+| orderType  | int  | 1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders,6 convert market price to current price |
+| dealAvgPrice  | decimal  | deal |
+| dealVol  | decimal   | deal volume |
+| orderMargin  | decimal   | order margin  |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee |
+| profit  | decimal   | close profit |
+| feeCurrency  | string   | fee currency |
+| openType  | int   | open type ,1isolated,2cross |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid |
+| externalOid  | string   | external order ID |
+| createTime  | date   | create time |
+| updateTime  | date   | update time 
 
 ***
 
-+ ### 获取用户当前未结束订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get the user's current pending order
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/order/open_orders/{symbol}**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名,不传返回所有|
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol  | string  | false  | the name of the contract,不传返回所有|
+| page_num  | int  | true  | current page number, default is 1 |
+| page_size  | int  | true  |  page size default 20, maximum 100 |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  |  Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价|| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| usedMargin  | decimal   | 已经使用的保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| errorCode  | int   | 错误code,0:正常，1：参数错误，2：账户余额不足，3：仓位不存在，4：仓位可用持仓不足，5：多仓时， 委托价小于了强平价，空仓时， 委托价大于了强平价，6：开多时， 强平价大于了合理价，开空时， 强平价小于了合理价 ,7:超过风险限额限制，8：系统撤销|
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| pageSize  | int  | page size|
+| totalCount  | int  | total count |
+| totalPage  | int  | total pages|
+| currentPage  | int  | current page |
+| resultList  | list  | data consequence list |
+| orderId  | long  | page size |
+| symbol  | string  | the name of the contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price|
+| vol  | decimal  | order volume |
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  | order category:1limit order,2close instead order,4ADL reduction |
+| orderType  | int  |  1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders,6 convert market price to current price |
+| dealAvgPrice  | decimal  | deal average price |
+| dealVol  | decimal   | deal volume  |
+| orderMargin  | decimal   | order margin  |
+| usedMargin  | decimal   | used margin  |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee |
+| profit  | decimal   | close profit|
+| feeCurrency  | string   | fee currency|
+| openType  | int   | open type,1 isolated,2 cross |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid |
+| errorCode  | int   | error code,0:normal，1：parameter errors，2：account balance is insufficient，3：the position does not exist，4：  position insufficient，5：For long positions, the order price is less than the close price, while for short positions, the order price is more than the close rice.，6：When opening long, the close price is more than the fair price, while when opening short, the close price is less than the fair price  ,7:exceed risk quota restrictions, 8: system canceled |
+| externalOid  | string   | external order ID |
+| createTime  | date   | create time  |
+| updateTime  | date   | update time |
 
 ***
 
-+ ### 获取用户所有历史订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get all of the user's historical orders
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/order/history_orders**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名|
-| states  | string  | false  | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效;多个用 ',' 隔开|
-| category  | int  | false  | 订单类别,1:限价委托,2:强平代管委托,4:ADL减仓|
-| page_num  | int  | true  | 当前页数,默认为1  |
-| page_size  | int  | true  | 每页大小,默认20,最大100  |
+| symbol  | string  | false  | The name of the contract |
+| states  | string  | false  | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid; Multiple  separate by ','|
+| category  | int  | false  | order category:1limit order,2close instead order,4ADL reduction|
+| page_num  | int  | true  | current page number, default is 1  |
+| page_size  | int  | true  | page size, default 20, maximum 100 |
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| pageSize  | int  | 页面大小 |
-| totalCount  | int  | 总条数 |
-| totalPage  | int  | 总页数 |
-| currentPage  | int  | 当前页 |
-| resultList  | list  | 数据结果集 |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价|| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| usedMargin  | decimal   | 已经使用的保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| errorCode  | int   | 错误code,0:正常，1：参数错误，2：账户余额不足，3：仓位不存在，4：仓位可用持仓不足，5：多仓时， 委托价小于了强平价，空仓时， 委托价大于了强平价，6：开多时， 强平价大于了合理价，开空时， 强平价小于了合理价 |
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| pageSize  | int  | page size |
+| totalCount  | int  | total count |
+| totalPage  | int  | total pages |
+| currentPage  | int  | current page |
+| resultList  | list  | data consequence list  |
+| orderId  | long  | page size |
+| symbol  | string  | the name of the contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price|
+| vol  | decimal  | order volume |
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  | order category:1limit order,2close instead order,4ADL reduction |
+| orderType  | int  | 1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders,6 convert market price to current price|
+| dealAvgPrice  | decimal  | deal average price |
+| dealVol  | decimal   | deal volume |
+| orderMargin  | decimal   | order margin  |
+| usedMargin  | decimal   | used margin  |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee
+| profit  | decimal   | close profit |
+| feeCurrency  | string   | fee currency |
+| openType  | int   | open type,1 isolated,2 cross |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid |
+| errorCode  | int   | error code,0:normal，1：parameter errors，2：account balance is insufficient，3：the position does not exist，4： position insufficient，5：For long positions, the order price is less than the close price, while for short positions, the order price is more than the close rice.，6：When opening long, the close price is more than the fair price, while when opening short, the close price is less than the fair price .
+| externalOid  | string   | external order ID |
+| createTime  | date   | create time |
+| updateTime  | date   | update tine |
 
 ***
 
-+ ### 获取订单成交明细
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get order transaction details
++ ##### Rate limit:20 times/2 seconds
++ ##### Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/order/deal_details/{order_id}**
-- ##### 请求参数:
+- ##### Request parameters :
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| order_id  | long  | true  | 订单id|
+| order_id  | long  | true  | order id|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string  | 合约名 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| vol  | decimal  | 成交数量|
-| price  | decimal   | 成交价格 |
-| fee  | decimal   | 手续费 |
-| feeCurrency  | string   | 收费币种 |
-| timestamp  | long   | 修改时间 |
+| symbol  | string  | The name of the contract |
+| side  | int  |order side 1open long,2close short,3open short,close long |
+| vol  | decimal  | deal volume |
+| price  | decimal   | deal price |
+| fee  | decimal   | fee |
+| feeCurrency  | string   | fee currency |
+| timestamp  | long   | update time |
 ***
 
-+ ### 获取风险限额
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易读取权限
++ ### Get risk limits
++ ##### Rate limit:20 times/2 seconds 
++ #####Required permissions: Trade read permissions
 + ##### method: 
      + **GET api/v1/private/account/risk_limit**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type  | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false  | 合约名,不传返回所有|
+| symbol  | string  | false  | the name of contrcat , not uploaded will return all|
 
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter | Data Type   | Description |
 | ------------ | ------------ | ------------ |
-| symbol  | string  | 合约名 |
-| positionType  | int  | 持仓类型 1:多仓，2:空仓|
-| level  | int   | 当前风险等级 |
-| maxVol  | decimal   | 最大可持仓数量 |
-| maxLeverage  | int   | 最大杠杆倍数 |
-| mmr  | decimal   | 维持保证金率 |
-| imr  | decimal   | 初始保证金率 |
+| symbol  | string  | the name of the contract |
+| positionType  | int  | position type 1:long，2:short |
+| level  | int   | current risk level |
+| maxVol  | decimal   | maximum position volume |
+| maxLeverage  | int   | maximum leverage ratio |
+| mmr  | decimal   | maintenance margin rate |
+| imr  | decimal   | initial margin rate |
 ***
 
-+ ### 增加或减少仓位保证金
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Increase or decrease margin
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/position/change_margin**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| positionId  | long  | true  | 仓位id|
-| amount  | decimal  | true  | 金额|
-| type  | string  | true  | 类型,ADD:增加,SUB:减少|
+| positionId  | long  | true  | position id|
+| amount  | decimal  | true  | amount |
+| type  | string  | true  | type ,ADD:increase,SUB:decrese|
 
-   - ##### 响应参数: 公共参数,success: true成功,false失败
+   - ##### Response parameters: public,success: true,success,false,failure
 
 ***
 
-+ ### 修改杠杆倍数
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Modified leverage ratio
++ #####Rate limit:20 times/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/position/change_leverage**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required|  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| positionId  | long  | true  | 仓位id|
-| leverage  | int  | true  | 杠杆倍数|
+| positionId  | long  | true  | position id|
+| leverage  | int  | true  | leverage|
 
-   - ##### 响应参数: 公共参数,success: true成功,false失败
+   - ##### Response parameters: public,success: true,false
 
 ***
 
-+ ### 下单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Order
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/order/submit**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description|
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名|
-| price  | decimal  | true  | 价格|
-| vol  | decimal  | true  | 数量|
-| leverage  | int  | false  | 杠杆倍数,开仓的时候杠杆倍数必须传入|
-| side  | int  | true  | 订单方向 1开多,2平空,3开空,4平多|
-| type  | int  | true  | 订单类型,1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消,5:市价单|
-| openType  | int  | true  | 开仓类型,1:逐仓,2:全仓|
-| externalOid  | string  | false  | 外部订单号|
+| symbol  | string  | true  | the name of the contract|
+| price  | decimal  | true  | price |
+| vol  | decimal  | true  | volume|
+| leverage  | int  | false  | levarage ,the leverage ratio must be passed in when opening the position|
+| side  | int  | true  | order side 1 open long ,2close short,3open short ,4 close l|
+| type  | int  | true  | order type,1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders |
+| openType  | int  | true  | open type,1:isolated,2:cross|
+| externalOid  | string  | false  | external order ID|
 
-   - ##### 响应参数: 成功时,success =true,data值为订单id,success =false,失败data=null
+   - ##### Response parameters: success,success =true,data is the order ID,success =false,failure data=null
 ***
-+ ### 批量下单
-+ ##### 限速规则: 1次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Bulk order
++ ##### Rate limit:1/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/order/submit_batch**
-- ##### 请求参数(最大50条):
+- ##### Request parameters(maximum 50 ):
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter  | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | true  | 合约名|
-| price  | decimal  | true  | 价格|
-| vol  | decimal  | true  | 数量|
-| leverage  | int  | false  | 杠杆倍数,开仓的时候杠杆倍数必须传入|
-| side  | int  | true  | 订单方向 1开多,2平空,3开空,4平多|
-| type  | int  | true  | 订单类型,1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消,5:市价单|
-| openType  | int  | true  | 开仓类型,1:逐仓,2:全仓|
-| externalOid  | string  | false  | 外部订单号,如果已存在，返回已存在的订单id|
+| symbol  | string  | true  | the name of the contract |
+| price  | decimal  | true  | price|
+| vol  | decimal  | true  | volume|
+| leverage  | int  | false  | leverage ,the leverage ratio must be passed in when opening the position|
+| side  | int  | true  | order side 1open long,2close short,3open short,close long|
+| type  | int  | true  | order type,1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations，5:market orders |
+| openType  | int  | true  | open type,1:isolated,2:cross||
+| externalOid  | string  | false  | external order ID,returns the existing order ID if it already exists|
 
 
-参数示例:
+Example:
 ```json
     [{
       "symbol": "BTC_USD",
@@ -1158,7 +1157,7 @@ java示例:
       "side": 1,
       "type": 1,
       "openType": 1,
-      "externalOid": "order1"
+      "externalOid":System to cancel "order1"
     },
     {
        "symbol": "BTC_USD",
@@ -1171,153 +1170,153 @@ java示例:
         "externalOid": "order2"
           }]
 ```
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| externalOid  | string  | 外部订单号 |
-| orderId  | long  | 订单id,失败时为null  |
-| errorMsg  | string  | 错误信息，失败时不为空|
-| errorCode  | int  | 错误code，默认为0|
+| externalOid  | string  | external order ID |
+| orderId  | long  | order ID, null on failure  |
+| errorMsg  | string  | error message, not null when failed|
+| errorCode  | int  | error code, default is 0|
 
 ***
 
 	
-+ ### 取消订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Oreder canceled
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/order/cancel**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter | Data Type   | Required  |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| 无  | List<Long>  | true  | 订单id列表,最大50条|
+| None  | List<Long>  | true  | order id list,maximum 50|
 
- 参数示例:[1,2,3]
+ Example :[1,2,3]
 
-   - ##### 响应参数: - ##### 响应参数: 公共参数,success: true成功,false失败
+   - ##### Response parameters: - ##### Response parameters: public parameters, Success: true success,false failure
 
 ***
-+ ### 取消某合约下所有订单
-+ ##### 限速规则: 20次/2秒 
-+ ##### 需要权限: 交易权限
++ ### Cancel all orders under a contract
++ ##### Rate limit:20 times/2 seconds 
++ ##### Required permissions: trading permissions
 + ##### method: 
      + **POST api/v1/private/order/cancel_all**
-- ##### 请求参数:
+- ##### Request parameters:
 	
-| 参数名  | 类型  | 是否必填  |  说明 |
+| Parameter   | Data Type   | Required |  Description |
 | ------------ | ------------ | ------------ | ------------ |
-| symbol  | string  | false| 合约名,传入symbol只取消该合约下的订单，不传取消所有合约下的订单|
+| symbol  | string  | false | the name of the contract, fill in The Symbol cancels only orders placed under this contract, not all orders placed under this contract|
 
-   - ##### 响应参数: - ##### 响应参数: 公共参数,success: true成功,false失败
+   - ##### Response parameters: - ##### Response parameters: public,success: true success,false failure
    
  ***
- + ### 修改风险等级
- + ##### 限速规则: 20次/2秒 
- + ##### 需要权限: 交易权限
+ + ### Modify the risk level
+ + ##### Rate limit:20 times/2 seconds 
+ + ##### Required permissions: trading permissions
  + ##### method: 
       + **POST api/v1/private/account/change_risk_level**
- - ##### 请求参数:
+ - ##### Request parameters:
  	
- | 参数名  | 类型  | 是否必填  |  说明 |
+ | Parameter   | Data Type   | Required  |  Description |
  | ------------ | ------------ | ------------ | ------------ |
- | symbol  | string  | true  | 合约名|
- | level  | int  | true  | 等级|
- | positionType  | int  | true  | 1:多仓，2:空仓|
+ | symbol  | string  | true  | the name of the contract |
+ | level  | int  | true  | level|
+ | positionType  | int  | true  | 1:long，2:short |
  
-    - ##### 响应参数: - ##### 响应参数: 公共参数,success: true成功,false失败
+    - ##### Response parameters: - ##### Response parameters: public parameters,success: true success ,false failure
     
  ***
 
- - #### 错误码:
+ - #### Error code:
   
-  | code  | 描述  |
+  | code  | Description  |
   | ------------ | ------------ |
-  | 0  | 操作成功  |
-  | 9999  | 公共异常  |
-  | 500  | 内部错误  |
-  | 501  | 系统繁忙  |
-  | 401  | 未授权  | 
-  | 402  | api_key过期  |
-  | 406  | 访问ip不在白名单  |
-  | 506  | 未知的请求来源  |
-  | 510  | 请求过于频繁  |
-  | 511  | 接口禁止访问  |
-  | 513  | 请求无效(针对open api 请求时间>服务器时间2秒或者<服务器时间10秒以上)  |
-  | 600  | 参数错误  |
-  | 601  | 数据解析错误  |
-  | 602  | 验签失败  |
-  | 603  | 重复请求  |
-  | 1000  | 账户不存在  |
-  | 1001  | 合约不存在  |
-  | 1002  | 合约未启用  |
-  | 1003  | 风险限额等级错误  |
-  | 1004  | 金额错误  |
-  | 2001  | 订单方向错误  |
-  | 2002  | 开仓类型错误  |
-  | 2003  | 买单价格过高  |
-  | 2004  | 卖单价格过低  |
-  | 2005  | 余额不足  |
-  | 2006  | 杠杆倍数错误  |
-  | 2007  | 订单价格错误  |
-  | 2008  | 可平数量不足  |
-  | 2009  | 仓位不存在或已平仓  |
-  | 2011  | 订单数量错误  |
-  | 2013  | 取消订单数量超过最大限制  |
-  | 2014  | 批量下单数量超限  |
-  | 2015  | 价格或者数量精度错误  |
-  | 2016  | 计划委托超过最大委托数量  |
-  | 2018  | 超过最大可减保证金  |
-  | 2019  | 存在开仓活跃委托``  |
-  | 2021  | 下单杠杆倍数和已有仓位杠杆倍数不一致  |
-  | 2022  | 持仓类型错误  |
-  | 2023  | 存在大于新档位最大杠杆倍数的持仓  |
-  | 2024  | 存在大于新档位最大杠杆倍数的订单  |
-  | 2025  | 当前持仓数量大于新档位最大允许数量  |
-  | 2026  | 全仓不支持修改杠杆  |
-  | 2027  | 同一方向全仓和逐仓只能存在一个  |
-  | 3001  | 计划委托价格类型错误  |
-  | 3002  | 计划委托触发类型错误  |
-  | 3003  | 执行周期错误  |
-  | 3004  | 触发价格错误  |
-  | 4001  | 不支持的币种  |
+  | 0  | succeed  |
+  | 9999  | public abnormal  |
+  | 500  | internal error  |
+  | 501  | system busyness  |
+  | 401  | unauthorized  | 
+  | 402  | api_key overdue  |
+  | 406  | access ip is not in the list  |
+  | 506  | unknow request  |
+  | 510  | excessive frequency of requests  |
+  | 511  | interface inaccessible  |
+  | 513  | invalid request(For access API request time more than server time 2 seconds or less than server time 10 seconds or more  |
+  | 600  | parameter error  |
+  | 601  | data decode error  |
+  | 602  | verify failed  |
+  | 603  | repeated requests  |
+  | 1000  | account does not exist  |
+  | 1001  | contract does not exist |
+  | 1002  | Contract not activated  |
+  | 1003  | wrong risk limit level  |
+  | 1004  | amount error  |
+  | 2001  | wrong order side  |
+  | 2002  | wrong opening type  |
+  | 2003  | overpriced to buy  |
+  | 2004  | lowpriced to sell  |
+  | 2005  | lack of balance  |
+  | 2006  | leverage ratio error |
+  | 2007  | order price error  |
+  | 2008  | closing quantity is insufficient  |
+  | 2009  | position does not exist or have been closed  |
+  | 2011  | order quantity error  |
+  | 2013  | cancel orders excess maximum the limit  |
+  | 2014  |  batch order quantity exceeds the limit  |
+  | 2015  | price or quantity scale error |
+  | 2016  | order planned over the maximum  |
+  | 2018  | exceed the maximum order margin  |
+  | 2019  | there is an active open position order``  |
+  | 2021  |  the order leverage  is not consistent with the existing position leverage  |
+  | 2022  | error position type  |
+  | 2023  | the new position over the maximum leverage position  |
+  | 2024  | the new order over the maximum leverage order  |
+  | 2025  | the new holding positions over the maximum position  |
+  | 2026  | leverage modified unsupported for long positon.  |
+  | 2027  | only one option for cross or isolated position in the same side. |
+  | 3001  | order planned price error  |
+  | 3002  | order planned trigger  error |
+  | 3003  | xxecution cycle error  |
+  | 3004  | trigger price error |
+  | 4001  | unsupported currency |
 ***
 
 
-# WEBSOCKET模块
+# WEBSOCKET Module
 
-## 基本信息:
-	原生ws连接地址: wss://contract.mxc.ai/ws 、  wss://contract.mxc.com/ws 、 wss://contract.mxc.io/ws
+## Essential Information:
+	original ws link : wss://contract.mxc.ai/ws 、  wss://contract.mxc.com/ws 、 wss://contract.mxc.io/ws
 
-## 数据交互命令详解:
-    订阅/取消订阅数据命令列表（除个人相关命令列表之外，其余都不需要做ws认证）
-    发送ping消息:
+## Details of data interaction commands:
+    List of subscribe/unsubscribe data commands（ws identification is not required except the list of personal related commands）
+    send ping  message:
     {"method":"ping"}
-    服务端返回:
-    {"channel":"pong","data":1587453241453},1分钟以内未收到客户端ping，将断开该客户端连接，建议10~20秒发送一次ping
-### 公共模块:
+    Servers return:
+    {"channel":"pong","data":1587453241453},If no ping is received within 1 minute, the connection will be disconnected. It is recommended to send a ping for 10-20 seconds.
+### Public model:
 ***
 ####tickers: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
  {"method":"sub.tickers","param":{}}
 ```
-如需返回明文(后面订阅一样):
+If you want to return content (the same with following subscription ):
 ```json
  {"method":"sub.tickers","param":{},"gzip": false}
 ```
-  - ##### 响应参数:
+  - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type  | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| lastPrice  | decimal  | 最新价 |
-| volume24  | decimal  | 24小时成交量，按张数统计 |
-| riseFallRate  | decimal  | 涨跌幅 |
-| fairPrice  | decimal  | 合理价 |
-示例:
+| symbol  | string | the name of the contract |
+| lastPrice  | decimal  | last price |
+| volume24  | decimal  | 24 hours trading volume, according to the  statistics count |
+| riseFallRate  | decimal  | rise fall rate |
+| fairPrice  | decimal  | fair price |
+Example:
 ```json
  {"channel":"push.tickers",
  "data":[
@@ -1326,36 +1325,36 @@ java示例:
     ],
  "ts":1587442022003}
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
  {"method":"unsub.tickers","param":{}}
 ```
 ***
-#### 单个ticker: 
+#### Single ticker: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.ticker","param":{"symbol":"BTC_USDT"}}
 ```
-  - ##### 响应参数:
+  - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| lastPrice  | decimal  | 最新价 |
-| bid1  | decimal  | 买一价 |
-| ask1  | decimal  | 卖一价 |
-| volume24  | decimal  | 24小时成交量，按张数统计 |
-| holdVol| decimal  | 总持仓量 |
-| lower24Price  | decimal  | 24小时最低价 |
-| high24Price  | decimal  | 24小时内最高价 |
-| riseFallRate  | decimal  | 涨跌幅 |
-| riseFallValue  | decimal  | 涨跌额 |
-| indexPrice  | decimal  | 指数价格 |
-| fairPrice  | decimal  | 合理价 |
-| fundingRate  | decimal  | 资金费率 |
-| timestamp  | long   | 系统时间戳 |
-示例:
+| symbol  | string | The name of the contract |
+| lastPrice  | decimal  | last price |
+| bid1  | decimal  | bid/1 |
+| ask1  | decimal  | ask/1 |
+| volume24  | decimal  | 24 hours trading volume, according to the number of statistics |
+| holdVol| decimal  | hold volume |
+| lower24Price  | decimal  | lowest price within 24 hours |
+| high24Price  | decimal  | highest price in 24 hours |
+| riseFallRate  | decimal  | rise fall rate |
+| riseFallValue  | decimal  | rise fall value|
+| indexPrice  | decimal  | index price |
+| fairPrice  | decimal  | fair price |
+| fundingRate  | decimal  | funding fee |
+| timestamp  | long   | system timestamp|
+Example:
 ```json
 {"channel":"push.ticker",
 "data":{"ask1":6866.5,"bid1":6865,"contractId":1,"fairPrice":6867.4,
@@ -1368,29 +1367,29 @@ java示例:
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.ticker","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-#### 成交: 
+#### Deal: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.deal","param":{"symbol":"BTC_USDT"}}
 ```
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| p  | decimal  | 成交价 |
-| v  | decimal  | 数量 |
-| T  | int  | 成交方向,1:买,2:卖 |
-| O  | int   | 是否是开仓，1:是,2:否,当O为1的时候, vol是新增的持仓量 |
-| M  | int   | 是否为自成交,1:是,2:否 |
-| t  | long   | 成交时间|
-示例:
+| p  | decimal  | deal price |
+| v  | decimal  | volume |
+| T  | int  | transaction direction,1:purchase,2:sell |
+| O  | int   | Open position?, 1: Yes,2: No, vol is the newly added position when O is 1 |
+| M  | int   | Is it automatic? 1: Yes,2: No |
+| t  | long   | deal time |
+Example:
 ```json
 {"channel":"push.deal",
 "data":{"M":1,"O":1,"T":1,"p":6866.5,"t":1587442049632,"v":2096},
@@ -1398,30 +1397,30 @@ java示例:
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.deal","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-#### 深度: 
+#### Depth: 
 
-+ ##### 订阅:
++ #####Subscribe:
 ```json
-{"method":"sub.depth","param":{"symbol":"BTC_USDT"}} //增量，全部
-{"method":"sub.depth","param":{"symbol":"BTC_USDT","compress":true}}//增量，压缩后推送
-{"method":"sub.depth.full","param":{"symbol":"BTC_USDT","limit":5}}//全量,limit可取值:5、10、20，不传默认为20档，只能订阅一个档位的全量
+{"method":"sub.depth","param":{"symbol":"BTC_USDT"}} //Incremental, all
+{"method":"sub.depth","param":{"symbol":"BTC_USDT","compress":true}}//Incremental, push after compression
+{"method":"sub.depth.full","param":{"symbol":"BTC_USDT","limit":5}}//Limit :5, 10, 20, default is 20, can only subscribe to the full amount of one gear
 ```
-   - ##### 响应参数:
+   - ##### Response Parameter:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type  | Description |
 | ------------ | ------------ | ------------ |
-| asks  | List<Numeric[]> |卖方深度 |
-| bids  | List<Numeric[]> | 买方深度 |
-| version  | long  | 版本号 |
-备注: [411.8, 10, 1] 411.8为价格，10为此价格的合约张数,1为订单数量
+| asks  | List<Numeric[]> |seller depth |
+| bids  | List<Numeric[]> | buyerdepth |
+| version  | long  | the version number |
+Tip: [411.8, 10, 1] 411.8 is price，10 is the order numbers of the contract ,1 is the order quantity
 
-示例:
+example:
 ```json
 {"channel":"push.depth",
 "data":{"asks":[[6859.5,3251,1]],"bids":[],"version":96801927},
@@ -1430,35 +1429,34 @@ java示例:
 
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
-{"method":"unsub.depth","param":{"symbol":"BTC_USDT"}}//增量的都以该事件取消订阅
-{"method":"usub.depth.full","param":{"symbol":"BTC_USDT"}}//取消订阅全量，limit可传可不传
+{"method":"unsub.depth","param":{"symbol":"BTC_USDT"}}//Increments are unsubscribed with this event
+{"method":"usub.depth.full","param":{"symbol":"BTC_USDT"}}//unsubscribe to the full amount, limit or not
 ```
 ***
 
-#### K线: 
+#### K line: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.kline","param":{"symbol":"BTC_USDT","interval":"Min60"}}
 ```
-interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1 
-   - ##### 响应参数:
+interval optional parameters:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1 
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| a  | decimal  | 总成交金额 |
-| c  | decimal  | 收盘价 |
-| interval  | string  | 间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1 |
-| l  | decimal  | 最低价 |
-| o  | decimal  | 开盘价 |
-| q  | decimal  | 总成交量 |
-| h  | decimal  | 最高价 |
-| t  | long  | 交易时间，单位：秒（s），为窗口的开始时间（windowStart） |
-
-示例:
+| symbol  | string | The name of the contract |
+| a  | decimal  | total transaction amount |
+| c  | decimal  | the closing price |
+| interval  | string  | interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1 |
+| l  | decimal  | the lowest price |
+| o  | decimal  | the opening price |
+| q  | decimal  | total quantity of transactions |
+| h  | decimal  | the highest price |
+| t  | long  | trading time，unit：second（s）， the start time of the window（windowStart） |
+example:
 ```json
 {"channel":"push.kline",
 "data":{"a":233.740269343644737245,"c":6885,"h":6910.5,
@@ -1468,27 +1466,27 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.kline","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-#### 资金费率: 
+#### capital rate: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.funding.rate","param":{"symbol":"BTC_USDT"}}
 ```
-   - ##### 响应参数:
+   - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type  | Description |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| fundingRate  | decimal  | 资金费率 |
-| nextSettleTime  | long  | 下一次结算时间 |
+| symbol  | string | the name of the contract |
+| fundingRate  | decimal  | funding rate |
+| nextSettleTime  | long  | next liquidate time |
 
-示例:
+Example:
 ```json
 {"channel":"push.funding.rate",
 "data":{"rate":0.001,"symbol":"BTC_USDT"},
@@ -1496,26 +1494,26 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.funding.rate","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-#### 指数价格: 
+#### index price: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.index.price","param":{"symbol":"BTC_USDT"}}
 ```
-  - ##### 响应参数:
+  - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| price  | decimal  | 价格 |
+| symbol  | string | the name of the contract |
+| price  | decimal  | price |
 
-示例:
+example:
 ```json
 {"channel":"push.index.price",
 "data":{"price":0.001,"symbol":"BTC_USDT"},
@@ -1523,26 +1521,26 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.index.price","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-#### 合理价格: 
+#### Fair price: 
 
-+ ##### 订阅:
++ ##### Subscribe:
 ```json
 {"method":"sub.fair.price","param":{"symbol":"BTC_USDT"}}
 ```
-  - ##### 响应参数:
+  - ##### Response parameters:
 	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string | 合约名 |
-| price  | decimal  | 价格 |
+| symbol  | string | the name of the contract |
+| price  | decimal  | price |
 
-示例:
+examp:
 ```json
 {"channel":"push.fair.price",
 "data":{"price":0.001,"symbol":"BTC_USDT"},
@@ -1550,29 +1548,29 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 "ts":1587442022003
 }
 ```
-+ ##### 取消订阅:
++ ##### Unsubscribe:
 ```json
 {"method":"unsub.fair.price","param":{"symbol":"BTC_USDT"}}
 ```
 ***
 
-### 私有模块:
+### Private Module:
 
-- #### 登录认证
+- #### Login validation
 ```json
 {
 	"method":"login",
 	"param":{
-		"apiKey":"apiKey", // openapi需要传此参数，参数构造方式参照openapi文档
-		"reqTime":"reqTime", // openapi需要传此参数，参数构造方式参照openapi文档
-		"signature":"signature" // openapi需要传此参数，参数构造方式参照openapi文档
+		"apiKey":"apiKey", // Openapi needs to pass this parameter, which is constructed in accordance with the OpenAPI documentation
+		"reqTime":"reqTime", // Openapi needs to pass this parameter, which is constructed in accordance with the OpenAPI documentation
+		"signature":"signature" // Openapi needs to pass this parameter, which is constructed in accordance with the OpenAPI documentation
 	}
 }
 ```
-#### 响应参数: 成功: 无，失败:返回对应错误信息,channel = rs.error
+#### Response parameters: success: None，fail:Returns the corresponding error message,channel = rs.error
 
-- ##### 登录成功(channel = rs.login)
-示例:
+- ##### Login succeed(channel = rs.login)
+Example:
 ```json
 {"channel":"rs.login",
 "data":"success",
@@ -1581,109 +1579,108 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 ```
 
 
-- ##### 订单(channel = push.personal.order)
-| 参数名  | 类型  | 说明  |
+- ##### Order (channel = push.personal.order)
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| orderId  | long  | 页面大小 |
-| symbol  | string  | 合约名 |
-| positionId  | long  | 持仓id |
-| price  | decimal  | 委托价格 |
-| vol  | decimal  | 委托数量 |
-| leverage  | long  | 杠杆倍数 |
-| side  | int  | 订单方向 1开多,2平空,3开空,4平多 |
-| category  | int  | 订单类别:1限价委托,2强平代管委托,4ADL减仓 |
-| orderType  | int  | 1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消| |
-| dealAvgPrice  | decimal  | 成交均价 |
-| dealVol  | decimal   | 成交数量 |
-| orderMargin  | decimal   | 委托保证金  |
-| usedMargin  | decimal   | 已经使用的保证金  |
-| takerFee  | decimal   | 买单手续费 |
-| makerFee  | decimal   | 卖单手续费 |
-| profit  | decimal   | 平仓盈亏 |
-| feeCurrency  | string   | 收费币种 |
-| openType  | int   | 开仓类型,1逐仓,2全仓 |
-| state  | int   | 订单状态,1:待报,2未完成,3已完成,4已撤销,5无效 |
-| errorCode  | int   | 错误code,0:正常，1：参数错误，2：账户余额不足，3：仓位不存在，4：仓位可用持仓不足，5：多仓时， 委托价小于了强平价，空仓时， 委托价大于了强平价，6：开多时， 强平价大于了合理价，开空时， 强平价小于了合理价 ,7:超过风险限额限制，8:系统撤销|
-| externalOid  | string   | 外部订单号 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| orderId  | long  | page size |
+| symbol  | string  | the name of the contract |
+| positionId  | long  | position id |
+| price  | decimal  | order price |
+| vol  | decimal  | order volume |
+| leverage  | long  | leverage |
+| side  | int  | order side 1open long,2close short,3open short,close long |
+| category  | int  | order category:1limit order,2close instead order,4ADL reduction仓 |
+| orderType  | int  | 1:price limited order,2:Post Only Maker,3:transact  or cancel immediately,4:all transactions or all cancellations |
+| dealAvgPrice  | decimal  | deal avarage price |
+| dealVol  | decimal   | deal volume |
+| orderMargin  | decimal   | order margin  |
+| usedMargin  | decimal   | used margin  |
+| takerFee  | decimal   | taker fee |
+| makerFee  | decimal   | maker fee |
+| profit  | decimal   | close profit |
+| feeCurrency  | string   | fee currency |
+| openType  | int   | open type,1:isolated,2:cross| |
+| state  | int   | order state,1:uninformed,2uncompleted,3completed,4cancelled,5invalid |
+| errorCode  | int   |error code,0:normal，1：parameter errors，2：account balance is insufficient，3：the position does not exist，4： position insufficient，5：For long positions, the order price is less than the close price, while for short positions, the order price is more than the close rice.，6：When opening long, the close price is more than the fair price, while when opening short, the close price is less than the fair price ,7:exceed the risk limit，8:system  cancelled |
+| externalOid  | string   | extranal order id |
+| createTime  | date   | create time |
+| updateTime  | date   | update time |
  
- - ##### 资产(channel = push.personal.asset)
+ - ##### Assert (channel = push.personal.asset)
  
- | 参数名  | 类型  | 说明  |
+ | Parameter   | Data Type   | Description  |
  | ------------ | ------------ | ------------ |
- | currency  | string  | 币种 |
- | positionMargin  | decimal   | 仓位保证金 |
- | frozenBalance  | decimal   | 冻结余额 |
- | availableBalance  | decimal   | 当前可用余额 |
- | cashBalance  | decimal   | 可提现余额 |
+ | currency  | string  | currency |
+ | positionMargin  | decimal   | position margin |
+ | frozenBalance  | decimal   | frozen balance |
+ | availableBalance  | decimal   | available balance |
+ | cashBalance  | decimal   | drawable balance |
  
- - ##### 仓位(channel = push.personal.position)
+ - ##### position (channel = push.personal.position)
  	
-| 参数名  | 类型  | 说明  |
+| Parameter  | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| positionId  | long  | 持仓id |
-| symbol  | string  | 合约名 |
-| holdVol  | decimal  | 持仓数量 |
-| positionType  | int  | 仓位类型， 1多 2空 |
-| openType  | int   | 开仓类型， 1逐仓 2全仓 |
-| state  | int   | 仓位状态,1持仓中2系统代持3已平仓  |
-| frozenVol  | decimal   | 冻结量 |
-| closeVol  | decimal   | 平仓量 |
-| holdAvgPrice  | decimal   | 持仓均价 |
-| closeAvgPrice  | decimal   | 平仓均价 |
-| openAvgPrice  | decimal   | 开仓均价 |
-| liquidatePrice  | decimal   | 逐仓时的爆仓价 |
-| oim  | decimal   | 原始初始保证金 |
-| adlLevel  | int   | adl减仓等级,取值为 1-5，为空时需等待刷新 |
-| im  | decimal   | 初始保证金， 逐仓时可以加减此项以调节爆仓价 |
-| holdFee  | decimal   | 资金费, 正数表示得到，负数表示支出 |
-| realised  | decimal   | 已实现盈亏 |
-| createTime  | date   | 创建时间 |
-| updateTime  | date   | 修改时间 |
+| positionId  | long  | position id |
+| symbol  | string  | the name of the contract |
+| holdVol  | decimal  | hold volume |
+| positionType  | int  | position type， 1long 2short |
+| openType  | int   | open type， 1isolated 2cross |
+| state  | int   | position state,1holding2system holding 3closed  |
+| frozenVol  | decimal   | frozen volume |
+| closeVol  | decimal   | close volume|
+| holdAvgPrice  | decimal   | hold average price |
+| closeAvgPrice  | decimal   | close average price |
+| openAvgPrice  | decimal   | open average price |
+| liquidatePrice  | decimal   | liquidate price |
+| oim  | decimal   | original initial margin |
+| adlLevel  | int   | The value of ADL is 1-5. If it is empty,  wait for the refresh |
+| im  | decimal   | initial margin， add or subtract this item can be used to adjust the liquidate price |
+| holdFee  | decimal   | hold fee,  positive  means u get it,  negative means lose it |
+| realised  | decimal   | profit and loss achieved |
+| createTime  | date   | create time|
+| updateTime  | date   | update time |
 
 
- - ##### 风险限额(channel = push.personal.risk.limit)
+ - ##### Risk limitation(channel = push.personal.risk.limit)
  	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type   | Description  |
 | ------------ | ------------ | ------------ |
-| symbol  | string  | 合约名 |
-| positionType  | int  | 持仓类型 1:多仓，2:空仓|
-| level  | int   | 当前风险等级 |
-| maxVol  | decimal   | 最大可持仓数量 |
-| maxLeverage  | int   | 最大杠杆倍数 |
-| mmr  | decimal   | 维持保证金率 |
-| imr  | decimal   | 初始保证金率 |
+| symbol  | string  | the name of the contract |
+| positionType  | int  | position typt 1:long，2:short|
+| level  | int   | current risk level |
+| maxVol  | decimal   | maximum position volume |
+| maxLeverage  | int   | maximum leverage ratio |
+| mmr  | decimal   | maintenance margin rate |
+| imr  | decimal   | initial margin rate|
 
- - ##### adl自动减仓等级(channel = push.personal.adl.level)
+ - ##### adl automatic reduction of position level(channel = push.personal.adl.level)
  	
-| 参数名  | 类型  | 说明  |
+| Parameter   | Data Type  | Description |
 | ------------ | ------------ | ------------ |
-| adlLevel| int   | 当前adl等级 ：1-5|
-| positionId  | long   | 仓位id |
+| adlLevel| int   | the current adl level ：1-5|
+| positionId  | long   | position id |
 
- - ##### 如何维护深度信息
+ - ##### How is depth information maintained
   
-#### 如何维护增量深度信息:
-        1.通过接口 https://contract.mxc.com/api/v1/contract/depth/BTC_USDT获取全量深度信息，保存当前version
-        2.订阅ws深度信息，收到更新后，如果收到的数据version>当前version,同一个价位，后收到的更新覆盖前面的。
-        3.通过接口 https://contract.mxc.com/api/v1/contract/depth_commits/BTC_USDT/1000获取最新1000条深度快照
-        4.将目前缓存的深度信息中同一价格，version<步骤3获取到的快照中的version的数据丢弃
-        5.将深度快照中的内容更新至本地缓存，并从ws接收到的event开始继续更新
-        5.每一个新event的version应该恰好等于上一个event的version+1，否则可能出现了丢包，如出现丢包或者获取到的
-        event的version不连续,请从步骤3重新进行初始化。
-        6.每一个event中的挂单量代表这个价格目前的挂单量绝对值，而不是相对变化。
-        7.如果某个价格对应的挂单量为0，表示该价位的挂单已经撤单或者被吃，应该移除这个价位。
+#### How is incremental depth information maintained:
+        1:Though https://contract.mxc.com/api/v1/contract/depth/BTC_USDT to get full amount of depth information, save the current version.
+        2. Subscribe to ws depth information, if the received data version more than the current version after update,  the later received update overwrites the previous one at the same price.
+        3.Through https://contract.mxc.com/api/v1/contract/depth_commits/BTC_USDT/1000 get  the latest 1000 depth snapshots.
+        4.Discard version data from the snapshot obtained by Version (less than step 3 )for the same price in the current cached depth information
+        5.Update the contents of the deep snapshot to the local cache and keep updating from the event received by the WS
+       6. The version of each new event should be exactly equal to version+1 of the previous event, otherwise packet loss may occur. In case of packet loss or discontinuous version of the event retrieved, please re-initialize from Step 3.
+       7. The amount of hanging orders in each event represents the absolute value of the current hanging orders of the price, rather than the relative change.
+        8. If the amount of a hanging order corresponding to a certain price is 0, it means that the hanging order at that price has been cancelled, the price should be removed.
 
-#### 订阅类事件，订阅成功响应:     
+#### Subscriptions，subscribe succeed response:     
    
-      channel 为 rs. + 订阅的method，
+      channel is rs. + Subscribed method，
       data为 "success"
-例如订阅成交信息：
+Submit subscription information：
 ```json
 {"method":"sub.deal","param":{"symbol":"BTC_USDT"}}
 ```
-订阅成功响应:
+subscribe succeed response:
 ```json
 {"channel":"rs.sub.deal",
 "data":"success",
@@ -1691,12 +1688,13 @@ interval可选参数:  Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day
 }
 ```
 
-订阅失败响应:
+subscribe failed response:
 ```json
 {"channel":"rs.error",
-"data":"合约不存在!",
+"data":"Contract doesn't exist!",
 "ts":"11111111111"
 }
 ```
+
 
 
