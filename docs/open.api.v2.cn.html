@@ -382,7 +382,7 @@
 
 <ul>
 <li>对于GET/DELETE请求，所有参数都放在路径（request param）中</li>
-<li>对于POST请求，每个方法自带的参数不进行签名认证，放在请求体（request body）发送。即POST请求中需要放在路径（request param）中的参数包括: <code>api_key</code>、<code>req_time</code>、<code>recv_window</code>、<code>sign</code></li>
+<li>对于POST请求，每个方法自带的参数不进行签名认证，放在请求体（request body）发送，<code>content-type</code>须指定为<code>application/json</code>。即POST请求中需要放在路径（request param）中的参数包括: <code>api_key</code>、<code>req_time</code>、<code>recv_window</code>、<code>sign</code></li>
 </ul>
 <h2 id='dac673286f'>返回格式</h2>
 <p>所有接口的返回数据均为JSON形式</p>

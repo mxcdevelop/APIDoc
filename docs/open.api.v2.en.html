@@ -382,7 +382,7 @@ At present the following tokens are available for API operation by default. Plea
 
 <ul>
 <li>For a GET or DELETE reqeust, all parameters are path paremeters (query string)</li>
-<li>For a POST reqeust, business parameters are to be put in request body and of JSON format, they will not be used for signing of the request. To calculate signature, params <code>api_key</code>、<code>req_time</code>、<code>recv_window</code>(optional)、<code>sign</code> need to be sent as path parameter</li>
+<li>For a POST reqeust, business parameters are to be put in request body and of JSON format(with<code>content-type</code>set to<code>application/json</code>), they will not be used for signing of the request. To calculate signature, params <code>api_key</code>、<code>req_time</code>、<code>recv_window</code>(optional)、<code>sign</code> need to be sent as path parameter</li>
 </ul>
 <h2 id='response-format'>Response Format</h2>
 <p>Response is of JSON format for all APIs</p>
