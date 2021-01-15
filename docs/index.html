@@ -87,8 +87,8 @@
         <div>
             <img src="./images/logo-0f661c53.png" alt="">
             <div>
-                <a class="active" id="tab1" onclick="switchToRest()">REST API</a>
-                
+                <a class="active" id="tab1" onclick="switchToSpot()">现货API</a>
+                <a id="tab2" onclick="switchToContract()">合约API</a>
             </div>
         </div>
         <a id="toggle" onclick="toggleLanage()">English</a>
@@ -100,6 +100,16 @@
         var docUrl = {
               tab1_en: './open.api.v2.en.html',
               tab1_cn: './open.api.v2.cn.html',
+              tab2_en: './contract.api.en.html',
+              tab2_cn: './contract.api.cn.html',
+          },
+          tab1 = {
+              en: 'SPOT API',
+              cn: '现货API'
+          },
+          tab2 = {
+              en: 'Contract API',
+              cn: '合约API'
           },
           toggle = {
               en: '中文',
@@ -110,6 +120,9 @@
           var _iframe = document.getElementById('iframe'),
           _toggle = document.getElementById('toggle');
 
+          var _tab1 = document.getElementById('tab1');
+          var _tab2 = document.getElementById('tab2');
+
           var activeTab = getActiveTab(isInit);
           
           if(!isInit){
@@ -118,7 +131,8 @@
           localStorage.setItem('languageSetting', languageSetting);
           
           _iframe.src = docUrl[activeTab.id + '_' + languageSetting];
-          //activeTab.innerText = tab1[languageSetting];
+          _tab1.innerText = tab1[languageSetting];
+          _tab2.innerText = tab2[languageSetting];
           _toggle.innerText = toggle[languageSetting];
         }
 
@@ -132,7 +146,7 @@
           return activeTab;
         }
 
-        function switchToRest() {
+        function switchToSpot() {
           var _iframe = document.getElementById('iframe'),
           _toggle = document.getElementById('toggle');
 
@@ -143,7 +157,7 @@
           _iframe.src = docUrl[_tab1.id + '_' + languageSetting];
         }
 
-        function switchToWs() {
+        function switchToContract() {
           var _iframe = document.getElementById('iframe'),
           _toggle = document.getElementById('toggle');
 

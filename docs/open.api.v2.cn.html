@@ -196,9 +196,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen-1543c1d4.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-f57a5640.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-41bbd87c.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all_nosearch-c275c2f6.js"></script>
+      <script src="javascripts/all_nosearch-c7f2c45b.js"></script>
     <link href="images/favicon-7465a6e0.png" rel="icon" type="image/png" />
   </head>
 
@@ -253,6 +253,20 @@
                   </li>
                   <li>
                     <a href="#8c6d51826c" class="toc-h2 toc-link" data-title="枚举定义">枚举定义</a>
+                      <ul class="toc-list-h3">
+                          <li>
+                            <a href="#4e4ca9ca80" class="toc-h3 toc-link" data-title="订单状态">订单状态</a>
+                          </li>
+                          <li>
+                            <a href="#a1d4eaf18c" class="toc-h3 toc-link" data-title="订单类型">订单类型</a>
+                          </li>
+                          <li>
+                            <a href="#a1333ff745" class="toc-h3 toc-link" data-title="交易类型">交易类型</a>
+                          </li>
+                          <li>
+                            <a href="#c31851a4b2" class="toc-h3 toc-link" data-title="时间间隔">时间间隔</a>
+                          </li>
+                      </ul>
                   </li>
               </ul>
           </li>
@@ -261,9 +275,6 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#b5b07ad167" class="toc-h2 toc-link" data-title="所有交易对信息">所有交易对信息</a>
-                  </li>
-                  <li>
-                    <a href="#bdb5b9a76f" class="toc-h2 toc-link" data-title="各接口限速信息">各接口限速信息</a>
                   </li>
                   <li>
                     <a href="#97e5358548" class="toc-h2 toc-link" data-title="当前系统时间">当前系统时间</a>
@@ -337,10 +348,6 @@
       <div class="content">
         <h1 id='5ea2e0cde2'>简介</h1>
 <p>欢迎使用MXC API！本文档为您提供了REST API的相关信息，帮助您获取市场行情，管理账户信息，并进行交易等  </p>
-
-<aside class="notice">
-目前平台默认开通以下通证的API操作，如需要通过API操作其他通证，请联系客服<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<br>DASH_USDT，EOS_USDT，BTC_USDT，BCH_USDT，ONT_USDT，ETH_USDT，ZEC_USDT，LTC_USDT，TRX_USDT，XLM_USDT，DOGE_USDT，SERO_USDT，OMG_USDT，GRIN_USDT，VSYS_USDT，ARPA_USDT，ALGO_USDT，BNB_USDT，HT_USDT，IRIS_USDT
-</aside>
 <h1 id='185368440e'>更新日志</h1>
 <table><thead>
 <tr>
@@ -373,9 +380,7 @@
 <p>请选用以下的baseurl进行API请求：</p>
 
 <ul>
-<li><code>https://www.mxc.ceo</code></li>
-<li><code>https://www.mxc.co</code></li>
-<li><code>https://www.mxcio.co</code></li>
+<li><code>https://www.mxc.com</code></li>
 </ul>
 <h2 id='21d67c3c4c'>请求格式</h2>
 <p>相应API接受GET，POST或DELETE类型的请求</p>
@@ -446,7 +451,7 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=
 <blockquote>
 <p>签名后发送的具体请求</p>
 </blockquote>
-<pre class="highlight http tab-http"><code><span class="err">GET https://www.mxc.co/api/v2/order/open_orders?api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=1572076703000&amp;symbol=MX_ETH&amp;tradeType=BID&amp;sign=0d1a5ee9e76a4907abedc4fe383ddfd0
+<pre class="highlight http tab-http"><code><span class="err">GET https://www.mxc.com/api/v2/order/open_orders?api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=1572076703000&amp;symbol=MX_ETH&amp;tradeType=BID&amp;sign=0d1a5ee9e76a4907abedc4fe383ddfd0
 </span></code></pre>
 <blockquote>
 <pre class="highlight plaintext"><code></code></pre></blockquote>
@@ -535,6 +540,10 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <tr>
 <td>30020</td>
 <td>受限制的交易对，暂不支持API访问</td>
+</tr>
+<tr>
+<td>30021</td>
+<td>无效的交易对</td>
 </tr>
 </tbody></table>
 <h2 id='c1fd2fc5ac'>限频规则</h2>
@@ -647,7 +656,7 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 
 <p>参数：None</p>
 
-<p>响应</p>
+<p>响应：</p>
 
 <table><thead>
 <tr>
@@ -695,47 +704,6 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <td>state</td>
 <td>string</td>
 <td>交易对状态，当前是否可以进行交易</td>
-</tr>
-</tbody></table>
-<h2 id='bdb5b9a76f'>各接口限速信息</h2>
-<blockquote>
-<p>响应示例</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"total_limit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"request_limit"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"/api/v2/market/symbols"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"/api/v2/market/depth"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<ul>
-<li><strong>GET</strong> <code>/open/api/v2/common/rate_limit</code></li>
-</ul>
-
-<p>参数：None</p>
-
-<p>响应</p>
-
-<table><thead>
-<tr>
-<th>字段名</th>
-<th>数据类型</th>
-<th>说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>total_limit</td>
-<td>string</td>
-<td>用户每秒最大请求阈值</td>
-</tr>
-<tr>
-<td>request_limit</td>
-<td>map</td>
-<td>用户每秒每个API最大请求阈值</td>
 </tr>
 </tbody></table>
 <h2 id='97e5358548'>当前系统时间</h2>

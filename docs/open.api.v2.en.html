@@ -196,9 +196,9 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen-1543c1d4.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-f57a5640.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-41bbd87c.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all_nosearch-c275c2f6.js"></script>
+      <script src="javascripts/all_nosearch-c7f2c45b.js"></script>
     <link href="images/favicon-7465a6e0.png" rel="icon" type="image/png" />
   </head>
 
@@ -253,6 +253,20 @@
                   </li>
                   <li>
                     <a href="#enum-definition" class="toc-h2 toc-link" data-title="ENUM Definition">ENUM Definition</a>
+                      <ul class="toc-list-h3">
+                          <li>
+                            <a href="#order-state" class="toc-h3 toc-link" data-title="Order State">Order State</a>
+                          </li>
+                          <li>
+                            <a href="#order-type" class="toc-h3 toc-link" data-title="Order Type">Order Type</a>
+                          </li>
+                          <li>
+                            <a href="#trade-type" class="toc-h3 toc-link" data-title="Trade Type">Trade Type</a>
+                          </li>
+                          <li>
+                            <a href="#time-interval" class="toc-h3 toc-link" data-title="Time Interval">Time Interval</a>
+                          </li>
+                      </ul>
                   </li>
               </ul>
           </li>
@@ -261,9 +275,6 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#all-symbols" class="toc-h2 toc-link" data-title="All symbols">All symbols</a>
-                  </li>
-                  <li>
-                    <a href="#rate-limit-info" class="toc-h2 toc-link" data-title="Rate Limit Info">Rate Limit Info</a>
                   </li>
                   <li>
                     <a href="#current-system-time" class="toc-h2 toc-link" data-title="Current System Time">Current System Time</a>
@@ -337,10 +348,6 @@
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
 <p>Welcome to MXC API! Information related to the REST API of MXC is provided here, to help you to access market data, and to manage your account.   </p>
-
-<aside class="notice">
-At present the following tokens are available for API operation by default. Please contact customer service in case you need to access other tokens through the API<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<br>DASH_USDT，EOS_USDT，BTC_USDT，BCH_USDT，ONT_USDT，ETH_USDT，ZEC_USDT，LTC_USDT，TRX_USDT，XLM_USDT，DOGE_USDT，SERO_USDT，OMG_USDT，GRIN_USDT，VSYS_USDT，ARPA_USDT，ALGO_USDT，BNB_USDT，HT_USDT，IRIS_USDT
-</aside>
 <h1 id='change-log'>Change log</h1>
 <table><thead>
 <tr>
@@ -373,9 +380,7 @@ At present the following tokens are available for API operation by default. Plea
 <p>Please make API requests with the following base urls:</p>
 
 <ul>
-<li><code>https://www.mxc.ceo</code></li>
-<li><code>https://www.mxc.co</code></li>
-<li><code>https://www.mxcio.co</code></li>
+<li><code>https://www.mxc.com</code></li>
 </ul>
 <h2 id='request-format'>Request Format</h2>
 <p>The APIs accept GET, POST or DELETE request, as will be described in later sections</p>
@@ -447,7 +452,7 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=
 <blockquote>
 <p>The actual request after signed </p>
 </blockquote>
-<pre class="highlight http tab-http"><code><span class="err">GET https://www.mxc.co/api/v2/order/open_orders?api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=1572076703000&amp;symbol=MX_ETH&amp;tradeType=BID&amp;sign=0d1a5ee9e76a4907abedc4fe383ddfd0
+<pre class="highlight http tab-http"><code><span class="err">GET https://www.mxc.com/api/v2/order/open_orders?api_key=mxcV9JCC8iu8zpaiWC&amp;limit=1000&amp;req_time=1572936251&amp;startTime=1572076703000&amp;symbol=MX_ETH&amp;tradeType=BID&amp;sign=0d1a5ee9e76a4907abedc4fe383ddfd0
 </span></code></pre>
 <blockquote>
 <p>Signing target of a POST request</p>
@@ -537,6 +542,10 @@ For GET or DEELTE requests, all reqeust parameters will be included in the signa
 <tr>
 <td>30020</td>
 <td>Restricted symbol, API access is not allowed for the time being</td>
+</tr>
+<tr>
+<td>30021</td>
+<td>Invalid symbol</td>
 </tr>
 </tbody></table>
 <h2 id='rate-limit'>Rate Limit</h2>
@@ -691,47 +700,6 @@ For GET or DEELTE requests, all reqeust parameters will be included in the signa
 <td>state</td>
 <td>string</td>
 <td>symbol status, whether available for trading</td>
-</tr>
-</tbody></table>
-<h2 id='rate-limit-info'>Rate Limit Info</h2>
-<blockquote>
-<p>Response example</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"total_limit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"request_limit"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"/api/v2/market/symbols"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"/api/v2/market/depth"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<ul>
-<li><strong>GET</strong> <code>/open/api/v2/common/rate_limit</code></li>
-</ul>
-
-<p>Request parameters：None</p>
-
-<p>Response</p>
-
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Data type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>total_limit</td>
-<td>string</td>
-<td>Maximum request count per access key per second</td>
-</tr>
-<tr>
-<td>request_limit</td>
-<td>map</td>
-<td>Maximum request count per interface per access key per second</td>
 </tr>
 </tbody></table>
 <h2 id='current-system-time'>Current System Time</h2>
