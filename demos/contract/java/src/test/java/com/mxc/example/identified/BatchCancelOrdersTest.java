@@ -8,6 +8,6 @@ import com.google.common.collect.Lists;
 public class BatchCancelOrdersTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.cancelOrders(Lists.newArrayList(1L, 2L, 3L)).isSuccess());
+        System.out.println(privateApi.cancelOrders(Lists.newArrayList(1L, 2L, 3L)));
     }
 }

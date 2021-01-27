@@ -2,7 +2,7 @@ package com.mxc.example.open;
 
 import com.mxc.contract.demo.request.open.ContractKlineFairPriceReq;
 import com.mxc.contract.demo.response.Result;
-import com.mxc.contract.demo.response.open.ContractKlineFairPriceResp;
+import com.mxc.contract.demo.response.open.ContractKlineDTO;
 import org.springframework.beans.BeanUtils;
 
 public class ContractKlineFairPriceTest extends BasePublicApiTest {
@@ -10,7 +10,7 @@ public class ContractKlineFairPriceTest extends BasePublicApiTest {
     public void test() {
         ContractKlineFairPriceReq req = new ContractKlineFairPriceReq();
         BeanUtils.copyProperties(getContractKlineDto(), req);
-        Result<ContractKlineFairPriceResp> contractKlineFairPrice = publicApi.getContractKlineFairPrice(req);
-        System.out.println(contractKlineFairPrice.getData());
+        Result<ContractKlineDTO> contractKlineFairPrice = publicApi.getContractKlineFairPrice(req);
+        System.out.println(contractKlineFairPrice);
     }
 }

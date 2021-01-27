@@ -10,6 +10,6 @@ public class OrderDealDetailsPageTest extends BasePrivateApiTest{
     public void test() {
         OrderDealsReq orderDealsReq = new OrderDealsReq();
         orderDealsReq.setSymbol(symbol);
-        System.out.println(privateApi.getOrderDeals(new OrderDealsReq()).getData());
+        System.out.println(privateApi.getOrderDeals(orderDealsReq));
     }
 }

@@ -8,29 +8,30 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Calendar;
+import java.util.Date;
 
 @RunWith(JUnit4.class)
 public abstract class BasePublicApiTest {
-    PublicApi publicApi = new PublicApi("https://contract.mxc.com");
+    PublicApi publicApi = new PublicApi("https://contract.mxc.ai");
 
     public String symbol = "BTC_USDT";
 
     public ContractKlineDTO getContractKlineDto() {
         ContractKlineDTO req = new ContractKlineDTO();
         req.setSymbol(symbol);
-        req.setInterval("Min5");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        req.setStart(calendar.getTimeInMillis());
-        req.setEnd(System.currentTimeMillis());
+        req.setInterval("Min15");
+        Long end = System.currentTimeMillis() / 1000;
+        req.setStart(end - 24 * 60 * 60);
+        req.setEnd(end);
         return req;
     }
 
-    public ContractHistoryReq getContractHistoryReq(){
+    public ContractHistoryReq getContractHistoryReq() {
         ContractHistoryReq req = new ContractHistoryReq();
         req.setSymbol(symbol);
         return req;
     }
+
     @Test
     public abstract void test();
 }

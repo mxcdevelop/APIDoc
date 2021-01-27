@@ -10,6 +10,6 @@ public class OpenOrdersUnfinishedTest extends BasePrivateApiTest{
     public void test() {
         OpenOrdersReq openOrdersReq = new OpenOrdersReq();
         openOrdersReq.setSymbol(symbol);
-        System.out.println(privateApi.getOpenOrders(new OpenOrdersReq()).getData());
+        System.out.println(privateApi.getOpenOrders(openOrdersReq));
     }
 }

@@ -6,7 +6,6 @@ package com.mxc.example.identified;
 public class CancelAllPlanOrderTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.cancelAllPlanOrder(null).isSuccess());
-        System.out.println(privateApi.cancelAllPlanOrder(symbol).isSuccess());
+        System.out.println(privateApi.cancelAllPlanOrder(symbol));
     }
 }

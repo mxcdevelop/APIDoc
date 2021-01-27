@@ -7,7 +7,7 @@ public class ContractFairPriceTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<ContractFairPriceResp> contractFairPrice = publicApi.getContractFairPrice(symbol);
-        System.out.println(contractFairPrice.getData());
+        System.out.println(contractFairPrice);
 
     }
 }

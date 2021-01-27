@@ -7,13 +7,15 @@ import com.mxc.contract.demo.request.open.ContractKlineIndexPriceReq;
 import com.mxc.contract.demo.request.open.ContractKlineReq;
 import com.mxc.contract.demo.response.Result;
 import com.mxc.contract.demo.response.open.*;
-import com.mxc.contract.demo.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.mxc.contract.demo.utils.UrlUtils.requestParamOfGet;
+
 
 public class PublicApi {
     private String url;
@@ -124,12 +126,12 @@ public class PublicApi {
      * @param req
      * @return
      */
-    public Result<ContractKlineResp> getContractKline(ContractKlineReq req) {
+    public Result<ContractKlineDTO> getContractKline(ContractKlineReq req) {
         String uri = url + "/api/v1/contract/kline/" + req.getSymbol();
         req.setSymbol(null);
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         uri = uri + "?" + param;
-        return ApiClient.get(uri, new TypeReference<Result<ContractKlineResp>>() {
+        return ApiClient.get(uri, new TypeReference<Result<ContractKlineDTO>>() {
         });
 
     }
@@ -140,12 +142,12 @@ public class PublicApi {
      * @param req
      * @return
      */
-    public Result<ContractKlineIndexPriceResp> getContractKlineIndexPrice(ContractKlineIndexPriceReq req) {
+    public Result<ContractKlineDTO> getContractKlineIndexPrice(ContractKlineIndexPriceReq req) {
         String uri = url + "/api/v1/contract/kline/index_price/" + req.getSymbol();
         req.setSymbol(null);
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         uri = uri + "?" + param;
-        return ApiClient.get(uri, new TypeReference<Result<ContractKlineIndexPriceResp>>() {
+        return ApiClient.get(uri, new TypeReference<Result<ContractKlineDTO>>() {
         });
 
     }
@@ -156,12 +158,12 @@ public class PublicApi {
      * @param req
      * @return
      */
-    public Result<ContractKlineFairPriceResp> getContractKlineFairPrice(ContractKlineFairPriceReq req) {
+    public Result<ContractKlineDTO> getContractKlineFairPrice(ContractKlineFairPriceReq req) {
         String uri = url + "/api/v1/contract/kline/fair_price/" + req.getSymbol();
         req.setSymbol(null);
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         uri = uri + "?" + param;
-        return ApiClient.get(uri, new TypeReference<Result<ContractKlineFairPriceResp>>() {
+        return ApiClient.get(uri, new TypeReference<Result<ContractKlineDTO>>() {
         });
 
     }
@@ -212,7 +214,7 @@ public class PublicApi {
      */
     public Result<ContractRiskReserveHistoryResp> getContractRiskReserveHistory(ContractHistoryReq req) {
         String uri = url.concat("/api/v1/contract/risk_reverse/history")
-                .concat("?").concat(UrlUtils.requestParamOfGet(req));
+                .concat("?").concat(requestParamOfGet(req));
         return ApiClient.get(uri, new TypeReference<Result<ContractRiskReserveHistoryResp>>() {
         });
     }
@@ -225,7 +227,7 @@ public class PublicApi {
      */
     public Result<ContractFundingRateHistoryResp> getContractFundingRateHistory(ContractHistoryReq req) {
         String uri = url.concat("/api/v1/contract/funding_rate/history")
-                .concat("?").concat(UrlUtils.requestParamOfGet(req));
+                .concat("?").concat(requestParamOfGet(req));
 
         return ApiClient.get(uri, new TypeReference<Result<ContractFundingRateHistoryResp>>() {
         });

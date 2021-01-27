@@ -9,6 +9,6 @@ public class ContractDetailTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<List<ContractResp>> contractDetail = publicApi.getContractDetail(symbol);
-        System.out.println(contractDetail.getData());
+        System.out.println(contractDetail);
     }
 }

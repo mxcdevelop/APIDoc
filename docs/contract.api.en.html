@@ -1524,13 +1524,13 @@ Rate limit:20 times/2 seconds
 <td>start</td>
 <td>long</td>
 <td>true</td>
-<td>start timestamp</td>
+<td>start timestamp,seconds</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
 <td>true</td>
-<td>end timestamp</td>
+<td>end timestamp,seconds</td>
 </tr>
 </tbody></table>
 
@@ -1645,13 +1645,13 @@ Rate limit:20 times/2 seconds
 <td>start</td>
 <td>long</td>
 <td>true</td>
-<td>start timestamp</td>
+<td>start timestamp,seconds</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
 <td>true</td>
-<td>end timestamp</td>
+<td>end timestamp,seconds</td>
 </tr>
 </tbody></table>
 
@@ -4206,6 +4206,11 @@ Rate limit:20 times/2 seconds
 </tr>
 </thead><tbody>
 <tr>
+<td>id</td>
+<td>long</td>
+<td>transactionid</td>
+</tr>
+<tr>
 <td>symbol</td>
 <td>string</td>
 <td>the name of the contract</td>
@@ -5279,7 +5284,7 @@ Rate limit:20 times/2 seconds
 <td>leverage</td>
 <td>int</td>
 <td>false</td>
-<td>leverage ,the leverage ratio must be fill in when open the position</td>
+<td>leverage ,Leverage is necessary on Isolated Margin</td>
 </tr>
 <tr>
 <td>side</td>
@@ -5288,10 +5293,10 @@ Rate limit:20 times/2 seconds
 <td>order direction 1 open long ,2close short,3open short ,4 close l</td>
 </tr>
 <tr>
-<td>orderType</td>
+<td>type</td>
 <td>int</td>
 <td>true</td>
-<td>1:price limited order,2:Post Only Maker,3:transact  or cancel instantly ,4 : transact completely or cancel completely，5:market orders,6 convert market price to current price</td>
+<td>orderType,1:price limited order,2:Post Only Maker,3:transact  or cancel instantly ,4 : transact completely or cancel completely，5:market orders,6 convert market price to current price</td>
 </tr>
 <tr>
 <td>openType</td>
@@ -5393,7 +5398,7 @@ Rate limit:1/2 seconds
 <td>leverage</td>
 <td>int</td>
 <td>false</td>
-<td>leverage ,the leverage ratio must be passed in when opening the position</td>
+<td>leverage ,Leverage is necessary on Isolated Margin</td>
 </tr>
 <tr>
 <td>side</td>
@@ -5406,6 +5411,12 @@ Rate limit:1/2 seconds
 <td>int</td>
 <td>true</td>
 <td>order type :1 price limited order,2:Post Only Maker,3:transact  or cancel instantly ,4 : transact completely or cancel completely，5:market orders,6 convert market price to current price</td>
+</tr>
+<tr>
+<td>openType</td>
+<td>int</td>
+<td>true</td>
+<td>open type,1:isolated,2:cross</td>
 </tr>
 <tr>
 <td>externalOid</td>
@@ -5461,12 +5472,28 @@ Rate limit:1/2 seconds
 <blockquote>
 <p>Response</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  1,
-  2,
-  3
-]
-</code></pre>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+ </span><span class="s2">"success"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"code"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"data"</span><span class="p">:[</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">101716841474621953</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">2040</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"order not exist"</span><span class="w">
+ </span><span class="p">},</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">108885377779302912</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">2041</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"order state cannot be cancelled"</span><span class="w">
+ </span><span class="p">},</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">108886241042563584</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+ </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <p>Cancel the pending order placed before, each time can cancel up to 50 orders.</p>
 
 <ul>
@@ -5499,7 +5526,29 @@ Rate limit:20 times/2 seconds
 
 <p><strong>Response parameters:</strong></p>
 
-<p>public parameters, Success: true success, false failure</p>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Data Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderId</td>
+<td>long</td>
+<td>order ID</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>string</td>
+<td>error message</td>
+</tr>
+<tr>
+<td>errorCode</td>
+<td>int</td>
+<td>error code，Not 0 means the revoke failed</td>
+</tr>
+</tbody></table>
 <h2 id='cancel-the-order-according-to-the-external-order-id'>Cancel the order according to the external order ID</h2>
 <blockquote>
 <p>Response</p>
@@ -5669,8 +5718,8 @@ Rate limit:20 times/2 seconds
 <tr>
 <td>leverage</td>
 <td>int</td>
-<td>true</td>
-<td>leverage , open position should  filling</td>
+<td>false</td>
+<td>leverage , Leverage is necessary on Isolated Margin</td>
 </tr>
 <tr>
 <td>side</td>
@@ -5679,7 +5728,7 @@ Rate limit:20 times/2 seconds
 <td>1open long,2close short,3open short 4 close long</td>
 </tr>
 <tr>
-<td>side</td>
+<td>openType</td>
 <td>int</td>
 <td>true</td>
 <td>order direction 1open long,2close short,3open short 4 close long</td>

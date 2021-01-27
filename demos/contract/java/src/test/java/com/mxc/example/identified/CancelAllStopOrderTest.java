@@ -8,6 +8,9 @@ import com.mxc.contract.demo.request.identified.StopOrderCancelAllReq;
 public class CancelAllStopOrderTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.cancelAllStopOrders(new StopOrderCancelAllReq()).isSuccess());
+        StopOrderCancelAllReq stopOrderCancelAllReq = new StopOrderCancelAllReq();
+        stopOrderCancelAllReq.setSymbol(symbol);
+        stopOrderCancelAllReq.setPositionId(1L);
+        System.out.println(privateApi.cancelAllStopOrders(stopOrderCancelAllReq));
     }
 }

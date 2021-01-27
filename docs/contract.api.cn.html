@@ -1412,13 +1412,13 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>start</td>
 <td>long</td>
 <td>true</td>
-<td>开始时间戳，单位S</td>
+<td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
 <td>true</td>
-<td>结束时间戳，单位S</td>
+<td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
 
@@ -1533,13 +1533,13 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>start</td>
 <td>long</td>
 <td>true</td>
-<td>开始时间戳</td>
+<td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
 <td>true</td>
-<td>结束时间戳</td>
+<td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
 
@@ -1654,13 +1654,13 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>start</td>
 <td>long</td>
 <td>true</td>
-<td>开始时间戳</td>
+<td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
 <td>true</td>
-<td>结束时间戳</td>
+<td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
 
@@ -3578,6 +3578,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价</td>
 </tr>
 <tr>
+<td>dealAvgPrice</td>
+<td>decimal</td>
+<td>成交均价</td>
+</tr>
+<tr>
 <td>dealVol</td>
 <td>decimal</td>
 <td>成交数量</td>
@@ -5288,25 +5293,25 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>leverage</td>
 <td>int</td>
 <td>false</td>
-<td>杠杆倍数,开仓的时候杠杆倍数必须传入</td>
+<td>杠杆倍数，逐仓时杠杆倍数必须传入</td>
 </tr>
 <tr>
 <td>side</td>
 <td>int</td>
 <td>true</td>
-<td>订单方向 1开多,2平空,3开空,4平多</td>
+<td>订单方向 1开多，2平空，3开空，4平多</td>
 </tr>
 <tr>
 <td>type</td>
 <td>int</td>
 <td>true</td>
-<td>订单类型,1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消,5:市价单,6:市价转现价</td>
+<td>订单类型，1：限价单，2：Post Only只做Maker，3：立即成交或立即取消，4：全部成交或者全部取消，5：市价单，6：市价转现价</td>
 </tr>
 <tr>
 <td>openType</td>
 <td>int</td>
 <td>true</td>
-<td>开仓类型,1:逐仓,2:全仓</td>
+<td>开仓类型，1：逐仓，2：全仓</td>
 </tr>
 <tr>
 <td>externalOid</td>
@@ -5402,31 +5407,31 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>leverage</td>
 <td>int</td>
 <td>false</td>
-<td>杠杆倍数,开仓的时候杠杆倍数必须传入</td>
+<td>杠杆倍数，逐仓时杠杆倍数必须传入</td>
 </tr>
 <tr>
 <td>side</td>
 <td>int</td>
 <td>true</td>
-<td>订单方向 1开多,2平空,3开空,4平多</td>
+<td>订单方向 1开多，2平空，3开空，4平多</td>
 </tr>
 <tr>
 <td>type</td>
 <td>int</td>
 <td>true</td>
-<td>订单类型,1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消,5:市价单,6:市价转现价</td>
+<td>订单类型，1：限价单，2：Post Only只做Maker，3：立即成交或立即取消，4：全部成交或者全部取消，5：市价单，6：市价转现价</td>
 </tr>
 <tr>
 <td>openType</td>
 <td>int</td>
 <td>true</td>
-<td>开仓类型,1:逐仓,2:全仓</td>
+<td>开仓类型，1：逐仓，2：全仓</td>
 </tr>
 <tr>
 <td>externalOid</td>
 <td>string</td>
 <td>false</td>
-<td>外部订单号,如果已存在，返回已存在的订单id</td>
+<td>外部订单号，如果已存在，返回已存在的订单id</td>
 </tr>
 <tr>
 <td>stopLossPrice</td>
@@ -5476,12 +5481,28 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <blockquote>
 <p>响应示例</p>
 </blockquote>
-<pre class="highlight plaintext"><code>[
-  1,
-  2,
-  3
-]
-</code></pre>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+ </span><span class="s2">"success"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"code"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"data"</span><span class="p">:[</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">101716841474621953</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">2040</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"order not exist"</span><span class="w">
+ </span><span class="p">},</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">108885377779302912</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">2041</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"order state cannot be cancelled"</span><span class="w">
+ </span><span class="p">},</span><span class="w">
+ </span><span class="p">{</span><span class="w">
+ </span><span class="s2">"orderId"</span><span class="p">:</span><span class="mi">108886241042563584</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+ </span><span class="s2">"errorMsg"</span><span class="p">:</span><span class="s2">"success"</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+ </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 <p>撤销之前下的未完成订单，每次最多可撤50个单。</p>
 
 <ul>
@@ -5514,7 +5535,29 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 
 <p><strong>响应参数:</strong></p>
 
-<p>公共参数,success: true成功,false失败</p>
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderId</td>
+<td>long</td>
+<td>订单id</td>
+</tr>
+<tr>
+<td>errorMsg</td>
+<td>string</td>
+<td>错误原因</td>
+</tr>
+<tr>
+<td>errorCode</td>
+<td>int</td>
+<td>错误码，非0即是撤单失败</td>
+</tr>
+</tbody></table>
 <h2 id='2e36f6e694'>根据外部订单号取消订单</h2>
 <blockquote>
 <p>参数示例</p>
@@ -5673,7 +5716,7 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>price</td>
 <td>decimal</td>
 <td>false</td>
-<td>执行价,市价时可不传</td>
+<td>执行价，市价时可不传</td>
 </tr>
 <tr>
 <td>vol</td>
@@ -5684,20 +5727,20 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <tr>
 <td>leverage</td>
 <td>int</td>
-<td>true</td>
-<td>杠杆倍数,开仓必传</td>
+<td>false</td>
+<td>杠杆倍数，逐仓时杠杆倍数必须传入</td>
 </tr>
 <tr>
 <td>side</td>
 <td>int</td>
 <td>true</td>
-<td>1开多,2平空,3开空,4平多</td>
+<td>1开多，2平空，3开空，4平多</td>
 </tr>
 <tr>
 <td>openType</td>
 <td>int</td>
 <td>true</td>
-<td>订单方向 1开多,2平空,3开空,4平多</td>
+<td>订单方向 1开多，2平空，3开空，4平多</td>
 </tr>
 <tr>
 <td>triggerPrice</td>
@@ -5709,25 +5752,25 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>triggerType</td>
 <td>int</td>
 <td>true</td>
-<td>触发类型,1:大于等于，2:小于等于</td>
+<td>触发类型，1：大于等于，2：小于等于</td>
 </tr>
 <tr>
 <td>executeCycle</td>
 <td>int</td>
 <td>true</td>
-<td>执行周期,1: 24小时,2: 7天</td>
+<td>执行周期，1：24小时，2：7天</td>
 </tr>
 <tr>
 <td>orderType</td>
 <td>int</td>
 <td>true</td>
-<td>订单类型,1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消,5:市价单</td>
+<td>订单类型，1：限价单，2：Post Only只做Maker，3：立即成交或立即取消，4：全部成交或者全部取消，5：市价单</td>
 </tr>
 <tr>
 <td>trend</td>
 <td>int</td>
 <td>true</td>
-<td>触发价格类型,1:最新价，2:合理价，3:指数价</td>
+<td>触发价格类型，1：最新价，2：合理价，3：指数价</td>
 </tr>
 </tbody></table>
 
@@ -5825,7 +5868,7 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>symbol</td>
 <td>string</td>
 <td>false</td>
-<td>合约名,传入symbol只取消该合约下的订单，不传取消所有合约下的订单</td>
+<td>合约名，传入symbol只取消该合约下的订单，不传取消所有合约下的订单</td>
 </tr>
 </tbody></table>
 

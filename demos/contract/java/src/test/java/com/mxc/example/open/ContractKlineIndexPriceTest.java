@@ -2,7 +2,7 @@ package com.mxc.example.open;
 
 import com.mxc.contract.demo.request.open.ContractKlineIndexPriceReq;
 import com.mxc.contract.demo.response.Result;
-import com.mxc.contract.demo.response.open.ContractKlineIndexPriceResp;
+import com.mxc.contract.demo.response.open.ContractKlineDTO;
 import org.springframework.beans.BeanUtils;
 
 public class ContractKlineIndexPriceTest extends BasePublicApiTest {
@@ -10,7 +10,7 @@ public class ContractKlineIndexPriceTest extends BasePublicApiTest {
     public void test() {
         ContractKlineIndexPriceReq req = new ContractKlineIndexPriceReq();
         BeanUtils.copyProperties(getContractKlineDto(), req);
-        Result<ContractKlineIndexPriceResp> contractKlineIndexPrice = publicApi.getContractKlineIndexPrice(req);
-        System.out.println(contractKlineIndexPrice.getData());
+        Result<ContractKlineDTO> contractKlineIndexPrice = publicApi.getContractKlineIndexPrice(req);
+        System.out.println(contractKlineIndexPrice);
     }
 }

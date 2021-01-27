@@ -8,6 +8,9 @@ import com.mxc.contract.demo.request.identified.HistoryPositionsReq;
 public class HistoryPositionsTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getHistoryPositions(new HistoryPositionsReq()).getData());
+        HistoryPositionsReq historyPositionsReq = new HistoryPositionsReq();
+        historyPositionsReq.setSymbol(symbol);
+        historyPositionsReq.setType(1);
+        System.out.println(privateApi.getHistoryPositions(historyPositionsReq));
     }
 }

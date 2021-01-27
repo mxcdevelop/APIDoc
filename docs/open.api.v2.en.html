@@ -395,7 +395,7 @@
 <h2 id='response-format'>Response Format</h2>
 <p>Response is of JSON format for all APIs</p>
 <h2 id='signature'>Signature</h2>
-<p>Public APIs (for market data) and private APIs (for account and order operations) are provided.<br/><br/>Signature is not required for public APIs, but access key from API key is required for every API request.<br/><br/>And for private APIs, signature is required and will be used for checking the validity of each request.<br/><br/>Please refer to <a href="#signature-method">Signature Method</a> for detail</p>
+<p>Public APIs (for market data) and private APIs (for account and order operations) are provided.<br/><br/>Signature is not required for public APIs.<br/><br/>And for private APIs, signature is required and will be used for checking the validity of each request.<br/><br/>Please refer to <a href="#signature-method">Signature Method</a> for detail</p>
 <h2 id='time-security'>Time Security</h2><pre class="highlight plaintext"><code> if (req_time &gt; (server_time + 2 ) || req_time &lt; (server_time - recv_window)) {
    // reject request     
  }else{

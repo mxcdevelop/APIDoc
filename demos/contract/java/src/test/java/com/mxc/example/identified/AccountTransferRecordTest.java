@@ -8,6 +8,10 @@ import com.mxc.contract.demo.request.identified.AccountTransferRecordReq;
 public class AccountTransferRecordTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.getAccountTransferRecord(new AccountTransferRecordReq()).getData());
+        AccountTransferRecordReq req = new AccountTransferRecordReq();
+        req.setCurrency(currency);
+        req.setState("WAIT");
+        req.setType("IN");
+        System.out.println(privateApi.getAccountTransferRecord(req));
     }
 }

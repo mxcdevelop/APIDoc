@@ -19,7 +19,6 @@ public class BatchSubmitOrdersTest extends BasePrivateApiTest{
         submitOrderReq.setSide(1);
         submitOrderReq.setType(1);
         submitOrderReq.setOpenType(1);
-
-        System.out.println(privateApi.submitBatchOrder(Lists.newArrayList(submitOrderReq)).isSuccess());
+        System.out.println(privateApi.submitBatchOrder(Lists.newArrayList(submitOrderReq)));
     }
 }

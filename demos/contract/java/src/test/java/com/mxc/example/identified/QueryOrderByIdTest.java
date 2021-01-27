@@ -6,6 +6,6 @@ package com.mxc.example.identified;
 public class QueryOrderByIdTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getOderByOrderId(System.currentTimeMillis()).getData());
+        System.out.println(privateApi.getOderByOrderId(1L));
     }
 }

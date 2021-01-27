@@ -7,6 +7,6 @@ public class ContractIndexPriceTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<ContractIndexPriceResp> contractIndexPrice = publicApi.getContractIndexPrice(symbol);
-        System.out.println(contractIndexPrice.getData());
+        System.out.println(contractIndexPrice);
     }
 }

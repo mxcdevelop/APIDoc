@@ -8,6 +8,6 @@ public class ContractSupportCurrenciesTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<List<String>> supportCurrencies = publicApi.getSupportCurrencies();
-        System.out.println(supportCurrencies.getData());
+        System.out.println(supportCurrencies);
     }
 }

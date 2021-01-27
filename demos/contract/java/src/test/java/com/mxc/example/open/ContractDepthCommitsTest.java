@@ -9,6 +9,6 @@ public class ContractDepthCommitsTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<List<ContractDepthCommitsRespDTO>> contractDepthCommits = publicApi.getContractDepthCommits(symbol, 1);
-        System.out.println(contractDepthCommits.getData());
+        System.out.println(contractDepthCommits);
     }
 }

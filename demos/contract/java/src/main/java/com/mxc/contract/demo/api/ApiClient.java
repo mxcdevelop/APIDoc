@@ -30,7 +30,7 @@ public class ApiClient {
     public static <T> Result<T> get(String url, SignatureUtils.SignVo signVo, TypeReference<Result<T>> typeReference) {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader(signVo));
         ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        return JSONObject.parseObject(result.getBody(), typeReference);
+         return JSONObject.parseObject(result.getBody(), typeReference);
     }
 
 

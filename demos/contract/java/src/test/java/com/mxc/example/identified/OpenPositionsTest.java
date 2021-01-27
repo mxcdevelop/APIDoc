@@ -6,7 +6,7 @@ package com.mxc.example.identified;
 public class OpenPositionsTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.getOpenPositions(null).getData());
-        System.out.println(privateApi.getOpenPositions(symbol).getData());
+        System.out.println(privateApi.getOpenPositions(null));
+        System.out.println(privateApi.getOpenPositions(symbol));
     }
 }

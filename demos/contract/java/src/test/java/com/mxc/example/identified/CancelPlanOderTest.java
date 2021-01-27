@@ -12,6 +12,6 @@ public class CancelPlanOderTest extends BasePrivateApiTest{
         CancelOrderReqDTO dto = new CancelOrderReqDTO();
         dto.setSymbol(symbol);
         dto.setOrderId("123");
-        System.out.println(privateApi.cancelPlanOrder(Lists.newArrayList(dto)).isSuccess());
+        System.out.println(privateApi.cancelPlanOrder(Lists.newArrayList(dto)));
     }
 }

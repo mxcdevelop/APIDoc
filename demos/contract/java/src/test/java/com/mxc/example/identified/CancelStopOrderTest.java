@@ -11,6 +11,6 @@ public class CancelStopOrderTest extends BasePrivateApiTest{
     public void test() {
         StopOrderCancelDTO stopOrderCancelDTO = new StopOrderCancelDTO();
         stopOrderCancelDTO.setStopPlanOrderId(123L);
-        System.out.println(privateApi.cancelStopOrders(Lists.newArrayList(stopOrderCancelDTO)).isSuccess());
+        System.out.println(privateApi.cancelStopOrders(Lists.newArrayList(stopOrderCancelDTO)));
     }
 }

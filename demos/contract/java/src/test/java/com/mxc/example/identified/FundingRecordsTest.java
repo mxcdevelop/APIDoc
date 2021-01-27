@@ -8,6 +8,9 @@ import com.mxc.contract.demo.request.identified.FundingRecordReq;
 public class FundingRecordsTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getFundingRecords(new FundingRecordReq()).getData());
+        FundingRecordReq fundingRecordReq = new FundingRecordReq();
+        fundingRecordReq.setSymbol(symbol);
+        fundingRecordReq.setPositionId(1);
+        System.out.println(privateApi.getFundingRecords(fundingRecordReq));
     }
 }

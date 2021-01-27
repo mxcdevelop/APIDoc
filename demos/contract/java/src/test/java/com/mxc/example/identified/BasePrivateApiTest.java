@@ -13,7 +13,7 @@ import java.util.Calendar;
 @RunWith(JUnit4.class)
 public abstract class BasePrivateApiTest {
     //FIXME replace with your keys
-    PrivateApi privateApi = new PrivateApi("https://contract.mxc.com", "mxcU1TzSmRDW1o5AsE", "428813b3c76e49c68b2e7379f25c439d");
+    PrivateApi privateApi = new PrivateApi("https://contract.mxc.com", "", "");
 
     public String symbol = "BTC_USDT";
     public String currency = "USDT";

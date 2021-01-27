@@ -9,8 +9,8 @@ public class HistoryOrdersTest extends BasePrivateApiTest{
     @Override
     public void test() {
         HistoryOrdersReq ordersReq = new HistoryOrdersReq();
-        System.out.println(privateApi.getHistoryOrders(new HistoryOrdersReq()).getData());
         ordersReq.setSymbol(symbol);
-        System.out.println(privateApi.getHistoryOrders(new HistoryOrdersReq()).getData());
+        ordersReq.setStates("1");
+        System.out.println(privateApi.getHistoryOrders(ordersReq));
     }
 }

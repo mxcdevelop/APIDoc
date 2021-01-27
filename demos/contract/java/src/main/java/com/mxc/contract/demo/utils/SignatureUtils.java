@@ -1,10 +1,13 @@
 package com.mxc.contract.demo.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,11 +16,20 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class SignatureUtils {
+
+    public static String requestParamOfGet(Object param) {
+        Assert.notNull(param);
+        String json = JSONObject.toJSONString(param);
+        Map<String, String> paramMap = JSONObject.parseObject(json, new TypeReference<LinkedHashMap<String, String>>() {
+        });
+        return getRequestParamString(paramMap);
+    }
 
     /**
      * 获取get请求参数字符串

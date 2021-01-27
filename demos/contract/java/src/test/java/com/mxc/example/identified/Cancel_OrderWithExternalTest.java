@@ -11,6 +11,6 @@ public class Cancel_OrderWithExternalTest extends BasePrivateApiTest{
         CancelOrderWithExternalReq req = new CancelOrderWithExternalReq();
         req.setSymbol(symbol);
         req.setExternalOid("123");
-        System.out.println(privateApi.cancelWithExternal(new CancelOrderWithExternalReq()).isSuccess());
+        System.out.println(privateApi.cancelWithExternal(req));
     }
 }

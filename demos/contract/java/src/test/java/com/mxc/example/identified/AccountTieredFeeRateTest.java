@@ -6,6 +6,6 @@ package com.mxc.example.identified;
 public class AccountTieredFeeRateTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getTieredFeeRate(symbol).getData());
+        System.out.println(privateApi.getTieredFeeRate(symbol));
     }
 }

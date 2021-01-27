@@ -7,11 +7,13 @@ import com.mxc.contract.demo.request.identified.*;
 import com.mxc.contract.demo.response.Result;
 import com.mxc.contract.demo.response.identified.*;
 import com.mxc.contract.demo.utils.SignatureUtils;
-import com.mxc.contract.demo.utils.UrlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 
 import java.util.*;
+
+import static com.mxc.contract.demo.utils.SignatureUtils.getRequestParamString;
+import static com.mxc.contract.demo.utils.SignatureUtils.requestParamOfGet;
 
 
 public class PrivateApi {
@@ -58,7 +60,7 @@ public class PrivateApi {
      * @return
      */
     public Result<AccountTransferRecordResp> getAccountTransferRecord(AccountTransferRecordReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/account/transfer_record");
         uri = uri.concat("?").concat(param);
@@ -73,7 +75,7 @@ public class PrivateApi {
      * @return
      */
     public Result<HistoryPositionsResp> getHistoryPositions(HistoryPositionsReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/position/history_positions");
         uri = uri.concat("?").concat(param);
@@ -91,7 +93,7 @@ public class PrivateApi {
     public Result<List<OpenPositionsResp>> getOpenPositions(@Nullable String symbol) {
         Map<String, Object> params = new HashMap<>(4);
         Optional.ofNullable(symbol).map(s -> params.put("symbol", symbol));
-        String param = UrlUtils.requestParamOfGet(params);
+        String param = requestParamOfGet(params);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/position/open_positions");
         uri = StringUtils.isEmpty(param) ? uri : uri.concat("?").concat(param);
@@ -106,7 +108,7 @@ public class PrivateApi {
      * @return
      */
     public Result<FundingRecordsResp> getFundingRecords(FundingRecordReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/position/funding_records");
         uri = uri.concat("?").concat(param);
@@ -123,9 +125,9 @@ public class PrivateApi {
     public Result<OpenOrdersResp> getOpenOrders(OpenOrdersReq req) {
         String symbol = req.getSymbol();
         req.setSymbol(null);
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
-        String uri = url.concat("api/v1/private/order/open_orders");
+        String uri = url.concat("/api/v1/private/order/open_orders");
         if (!StringUtils.isEmpty(symbol)) {
             uri = uri.concat("/").concat(symbol);
         }
@@ -141,7 +143,7 @@ public class PrivateApi {
      * @return
      */
     public Result<HistoryOrdersResp> getHistoryOrders(HistoryOrdersReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/order/history_orders");
         uri = uri.concat("?").concat(param);
@@ -158,7 +160,7 @@ public class PrivateApi {
      */
     public Result<OrderRespDTO> getOderByExternalId(String symbol, String externalOid) {
         SignatureUtils.SignVo signVo = signVoOfGet(null);
-        String uri = url.concat("/api/v1/private/order/history_orders/").concat(symbol).concat("/").concat(externalOid);
+        String uri = url.concat("/api/v1/private/order/external/").concat(symbol).concat("/").concat(externalOid);
         return ApiClient.get(uri, signVo, new TypeReference<Result<OrderRespDTO>>() {
         });
     }
@@ -186,9 +188,9 @@ public class PrivateApi {
         StringBuilder sb = new StringBuilder();
         orderIds.forEach(id -> sb.append(id).append(","));
         String ids = sb.substring(0, sb.length() - 1);
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("order_ids", ids);
-        String param = UrlUtils.requestParamOfGet(map);
+        String param = getRequestParamString(map);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/order/batch_query?order_ids=" + ids);
         return ApiClient.get(uri, signVo, new TypeReference<Result<List<OrderRespDTO>>>() {
@@ -215,7 +217,7 @@ public class PrivateApi {
      * @return
      */
     public Result<OrderDealsResp> getOrderDeals(OrderDealsReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/order/order_deals");
         uri = uri.concat("?").concat(param);
@@ -230,7 +232,7 @@ public class PrivateApi {
      * @return
      */
     public Result<PlanOrdersResp> getPlanOrders(PlanOrdersReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/planorder/orders");
         uri = uri.concat("?").concat(param);
@@ -245,24 +247,11 @@ public class PrivateApi {
      * @return
      */
     public Result<StopOrdersResp> getStopOrders(StopOrdersReq req) {
-        String param = UrlUtils.requestParamOfGet(req);
+        String param = requestParamOfGet(req);
         SignatureUtils.SignVo signVo = signVoOfGet(param);
         String uri = url.concat("/api/v1/private/stoporder/orders");
         uri = uri.concat("?").concat(param);
         return ApiClient.get(uri, signVo, new TypeReference<Result<StopOrdersResp>>() {
-        });
-    }
-
-    /**
-     * 获取止盈止损订单执行明细
-     *
-     * @param stopOrderId
-     * @return
-     */
-    public Result<StopOrderDetailsResp> getStopOrderDetails(Long stopOrderId) {
-        SignatureUtils.SignVo signVo = signVoOfGet(null);
-        String uri = url.concat("/api/v1/private/stoporder/order_details/" + stopOrderId);
-        return ApiClient.get(uri, signVo, new TypeReference<Result<StopOrderDetailsResp>>() {
         });
     }
 
@@ -305,10 +294,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> changeMargin(ChangeMarginReq req) {
+    public Result<Object> changeMargin(ChangeMarginReq req) {
         String uri = url.concat("/api/v1/private/position/change_margin");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -318,10 +307,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> changeLeverage(ChangeLeverageReq req) {
+    public Result<Object> changeLeverage(ChangeLeverageReq req) {
         String uri = url.concat("/api/v1/private/position/change_leverage");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -358,10 +347,10 @@ public class PrivateApi {
      * @param orderIds 订单id列表,最大50条
      * @return
      */
-    public Result<Void> cancelOrders(List<Long> orderIds) {
+    public Result<Object> cancelOrders(List<Long> orderIds) {
         String uri = url.concat("/api/v1/private/order/cancel");
         SignatureUtils.SignVo signVo = signVoOfPost(orderIds);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -371,10 +360,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> cancelWithExternal(CancelOrderWithExternalReq req) {
+    public Result<Object> cancelWithExternal(CancelOrderWithExternalReq req) {
         String uri = url.concat("/api/v1/private/order/cancel_with_external");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -384,7 +373,7 @@ public class PrivateApi {
      * @param symbol 合约名,传入symbol只取消该合约下的订单，不传取消所有合约下的订单
      * @return
      */
-    public Result<Void> cancelAllOrders(@Nullable String symbol) {
+    public Result<Object> cancelAllOrders(@Nullable String symbol) {
         String uri = url.concat("/api/v1/private/order/cancel_all");
         Map<String, Object> param = null;
         if (!StringUtils.isEmpty(symbol)) {
@@ -392,7 +381,7 @@ public class PrivateApi {
             param.put("symbol", symbol);
         }
         SignatureUtils.SignVo signVo = signVoOfPost(param);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -402,10 +391,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> changeRiskLevel(ChangeRiskLevelReq req) {
+    public Result<Object> changeRiskLevel(ChangeRiskLevelReq req) {
         String uri = url.concat("/api/v1/private/account/change_risk_level");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -428,10 +417,10 @@ public class PrivateApi {
      * @param reqDTOList
      * @return
      */
-    public Result<Void> cancelPlanOrder(List<CancelOrderReqDTO> reqDTOList) {
+    public Result<Object> cancelPlanOrder(List<CancelOrderReqDTO> reqDTOList) {
         String uri = url.concat("/api/v1/private/planorder/cancel");
         SignatureUtils.SignVo signVo = signVoOfPost(reqDTOList);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -441,7 +430,7 @@ public class PrivateApi {
      * @param symbol
      * @return
      */
-    public Result<Void> cancelAllPlanOrder(String symbol) {
+    public Result<Object> cancelAllPlanOrder(String symbol) {
         String uri = url.concat("/api/v1/private/planorder/cancel_all");
         Map<String, Object> param = null;
         if (!StringUtils.isEmpty(symbol)) {
@@ -449,7 +438,7 @@ public class PrivateApi {
             param.put("symbol", symbol);
         }
         SignatureUtils.SignVo signVo = signVoOfPost(param);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -459,10 +448,10 @@ public class PrivateApi {
      * @param reqDTOList 取消订单列表,最大50条
      * @return
      */
-    public Result<Void> cancelStopOrders(List<StopOrderCancelDTO> reqDTOList) {
+    public Result<Object> cancelStopOrders(List<StopOrderCancelDTO> reqDTOList) {
         String uri = url.concat("/api/v1/private/stoporder/cancel");
         SignatureUtils.SignVo signVo = signVoOfPost(reqDTOList);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -472,10 +461,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> cancelAllStopOrders(StopOrderCancelAllReq req) {
+    public Result<Object> cancelAllStopOrders(StopOrderCancelAllReq req) {
         String uri = url.concat("/api/v1/private/stoporder/cancel_all");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -485,10 +474,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> stopOrderChangePrice(StoporderChangePriceReq req) {
+    public Result<Object> stopOrderChangePrice(StoporderChangePriceReq req) {
         String uri = url.concat("/api/v1/private/stoporder/change_price");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 
@@ -498,10 +487,10 @@ public class PrivateApi {
      * @param req
      * @return
      */
-    public Result<Void> stopOrderChangePlanPriceReq(StopOrderChangePlanPriceReq req) {
+    public Result<Object> stopOrderChangePlanPriceReq(StopOrderChangePlanPriceReq req) {
         String uri = url.concat("/api/v1/private/stoporder/change_plan_price");
         SignatureUtils.SignVo signVo = signVoOfPost(req);
-        return ApiClient.post(uri, signVo, new TypeReference<Result<Void>>() {
+        return ApiClient.post(uri, signVo, new TypeReference<Result<Object>>() {
         });
     }
 

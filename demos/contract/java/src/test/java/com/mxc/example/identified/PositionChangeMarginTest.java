@@ -14,6 +14,6 @@ public class PositionChangeMarginTest extends BasePrivateApiTest {
         changeMarginReq.setPositionId(1L);
         changeMarginReq.setType("ADD");
         changeMarginReq.setAmount(new BigDecimal("1000"));
-        System.out.println(privateApi.changeMargin(new ChangeMarginReq()).isSuccess());
+        System.out.println(privateApi.changeMargin(changeMarginReq));
     }
 }

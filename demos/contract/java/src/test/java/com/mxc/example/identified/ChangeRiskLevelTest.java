@@ -12,6 +12,6 @@ public class ChangeRiskLevelTest extends BasePrivateApiTest {
         changeRiskLevelReq.setSymbol(symbol);
         changeRiskLevelReq.setLevel(1);
         changeRiskLevelReq.setPositionType(1);
-        System.out.println(privateApi.changeRiskLevel(new ChangeRiskLevelReq()).isSuccess());
+        System.out.println(privateApi.changeRiskLevel(changeRiskLevelReq));
     }
 }

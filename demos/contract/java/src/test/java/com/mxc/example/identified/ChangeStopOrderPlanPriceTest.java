@@ -14,6 +14,6 @@ public class ChangeStopOrderPlanPriceTest extends BasePrivateApiTest {
         planPriceReq.setStopPlanOrderId(123L);
         planPriceReq.setTakeProfitPrice(new BigDecimal("100"));
         planPriceReq.setStopLossPrice(new BigDecimal("80"));
-        System.out.println(privateApi.stopOrderChangePlanPriceReq(planPriceReq).isSuccess());
+        System.out.println(privateApi.stopOrderChangePlanPriceReq(planPriceReq));
     }
 }

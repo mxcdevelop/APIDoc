@@ -11,6 +11,6 @@ public class PositionChangeLeverageTest extends BasePrivateApiTest {
         ChangeLeverageReq req = new ChangeLeverageReq();
         req.setPositionId(1L);
         req.setLeverage(100);
-        System.out.println(privateApi.changeLeverage(req).isSuccess());
+        System.out.println(privateApi.changeLeverage(req));
     }
 }

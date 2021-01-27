@@ -6,6 +6,6 @@ package com.mxc.example.identified;
 public class AccountAssetsTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getAccountAssets().getData());
+        System.out.println(privateApi.getAccountAssets());
     }
 }

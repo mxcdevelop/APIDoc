@@ -8,6 +8,9 @@ import com.mxc.contract.demo.request.identified.PlanOrdersReq;
 public class ListPlanOrdersTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.getPlanOrders(new PlanOrdersReq()).getData());
+        PlanOrdersReq planOrdersReq = new PlanOrdersReq();
+        planOrdersReq.setSymbol(symbol);
+        planOrdersReq.setStates("1");
+        System.out.println(privateApi.getPlanOrders(planOrdersReq));
     }
 }

@@ -8,6 +8,9 @@ import com.mxc.contract.demo.request.identified.StopOrdersReq;
 public class ListStopOrdersTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.getStopOrders(new StopOrdersReq()).getData());
+        StopOrdersReq stopOrdersReq = new StopOrdersReq();
+        stopOrdersReq.setSymbol(symbol);
+        stopOrdersReq.setFinished(1);
+        System.out.println(privateApi.getStopOrders(stopOrdersReq));
     }
 }

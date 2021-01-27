@@ -6,6 +6,6 @@ package com.mxc.example.identified;
 public class OrderDealDetailsByIdTest extends BasePrivateApiTest{
     @Override
     public void test() {
-        System.out.println(privateApi.getDealDetailById(1L).getData());
+        System.out.println(privateApi.getDealDetailById(104188559245713920L));
     }
 }

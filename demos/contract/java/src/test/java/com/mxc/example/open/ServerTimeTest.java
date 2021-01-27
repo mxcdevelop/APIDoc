@@ -8,6 +8,6 @@ public class ServerTimeTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<Long> systemTime = publicApi.getSystemTime();
-        System.out.println(systemTime.getData());
+        System.out.println(systemTime);
     }
 }

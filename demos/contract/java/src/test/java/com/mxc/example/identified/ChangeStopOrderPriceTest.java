@@ -14,6 +14,6 @@ public class ChangeStopOrderPriceTest extends BasePrivateApiTest{
         changePriceReq.setOrderId(123L);
         changePriceReq.setStopLossPrice(new BigDecimal("100"));
         changePriceReq.setStopLossPrice(new BigDecimal("80"));
-        System.out.println(privateApi.stopOrderChangePrice(new StoporderChangePriceReq()).isSuccess());
+        System.out.println(privateApi.stopOrderChangePrice(changePriceReq));
     }
 }

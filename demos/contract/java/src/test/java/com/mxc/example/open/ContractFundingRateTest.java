@@ -8,6 +8,6 @@ public class ContractFundingRateTest extends BasePublicApiTest {
     @Override
     public void test() {
         Result<ContractFundingRateResp> contractFundingRate = publicApi.getContractFundingRate(symbol);
-        System.out.println(contractFundingRate.getData());
+        System.out.println(contractFundingRate);
     }
 }

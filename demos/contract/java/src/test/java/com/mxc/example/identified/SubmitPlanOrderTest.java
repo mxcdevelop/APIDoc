@@ -13,7 +13,7 @@ public class SubmitPlanOrderTest extends BasePrivateApiTest {
         PlanOrderReq planOrderReq = new PlanOrderReq();
         planOrderReq.setSymbol(symbol);
         planOrderReq.setVol(new BigDecimal("1"));
-        planOrderReq.setLeverage(10);
+        planOrderReq.setLeverage(40);
         planOrderReq.setSide(1);
         planOrderReq.setOpenType(1);
         planOrderReq.setTriggerPrice(new BigDecimal("100"));
@@ -21,7 +21,7 @@ public class SubmitPlanOrderTest extends BasePrivateApiTest {
         planOrderReq.setExecuteCycle(1);
         planOrderReq.setOrderType(1);
         planOrderReq.setTrend(1);
-
-        System.out.println(privateApi.submitPlanOrder(planOrderReq).isSuccess());
+        planOrderReq.setPrice(new BigDecimal("100"));
+        System.out.println(privateApi.submitPlanOrder(planOrderReq));
     }
 }

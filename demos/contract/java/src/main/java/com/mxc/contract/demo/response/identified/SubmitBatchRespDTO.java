@@ -8,12 +8,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 public class SubmitBatchRespDTO {
-    private String symbol;
-    private BigDecimal price;
-    private BigDecimal vol;
-    private Integer leverage;
-    private Integer side;
-    private Integer type;
-    private Integer openType;
     private String externalOid;
+    private Long orderId;
+    private String errorMsg;
+    private Integer errorCode;
 }

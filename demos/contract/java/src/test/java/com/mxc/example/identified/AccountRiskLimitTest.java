@@ -6,6 +6,6 @@ package com.mxc.example.identified;
 public class AccountRiskLimitTest extends BasePrivateApiTest {
     @Override
     public void test() {
-        System.out.println(privateApi.getAccountRiskLimit(symbol).getData());
+        System.out.println(privateApi.getAccountRiskLimit(symbol));
     }
 }
