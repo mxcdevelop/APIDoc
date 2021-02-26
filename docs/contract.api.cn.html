@@ -399,6 +399,9 @@
                     <a href="#c9b1eae804" class="toc-h2 toc-link" data-title="数据交互命令详解">数据交互命令详解</a>
                   </li>
                   <li>
+                    <a href="#0c28b0ae85" class="toc-h2 toc-link" data-title="订阅过滤">订阅过滤</a>
+                  </li>
+                  <li>
                     <a href="#a6ff2d9336" class="toc-h2 toc-link" data-title="公共频道">公共频道</a>
                       <ul class="toc-list-h3">
                           <li>
@@ -1348,7 +1351,7 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <pre class="highlight plaintext"><code>curl "https://contract.mxc.com/api/v1/contract/kline/BTC_USDT?interval=Min15&amp;start=1609992674000&amp;end=1609992694000"
 </code></pre>
 <blockquote>
-<p>响应时间</p>
+<p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
@@ -1405,19 +1408,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1，不填时默认Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
@@ -1462,6 +1465,12 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>时间窗口</td>
 </tr>
 </tbody></table>
+
+<p>注意：</p>
+
+<p>1、单次请求的最大数据量是2000。如果您选择的开始/结束时间和时间粒度导致超过单次请求的最大数据量，您的请求将只会返回2000个数据。如果您希望在更大的时间范围内获取足够精细的数据，则需要使用多个开始/结束范围进行多次请求。</p>
+
+<p>2、如果只提供了开始时间，则查询开始时间到系统当前时间的数据。如果只提供了结束时间，则返回离结束时间最近的2000条数据。如果开始时间和结束时间均未提供，则查询离系统当前时间最近的2000条数据。</p>
 <h2 id='0d0c80f2e5'>获取指数价格蜡烛图数据</h2>
 <blockquote>
 <p>请求示例</p>
@@ -1526,19 +1535,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1，不填时默认Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
@@ -1583,6 +1592,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>时间窗口</td>
 </tr>
 </tbody></table>
+
+<p>注意：
+1、单次请求的最大数据量是2000。如果您选择的开始/结束时间和时间粒度导致超过单次请求的最大数据量，您的请求将只会返回2000个数据。如果您希望在更大的时间范围内获取足够精细的数据，则需要使用多个开始/结束范围进行多次请求。</p>
+
+<p>2、如果只提供了开始时间，则查询开始时间到系统当前时间的数据。如果只提供了结束时间，则返回离结束时间最近的2000条数据。如果开始时间和结束时间均未提供，则查询离系统当前时间最近的2000条数据。</p>
 <h2 id='6d5c879c72'>获取合理价格蜡烛图数据</h2>
 <blockquote>
 <p>请求示例</p>
@@ -1647,19 +1661,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>间隔: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1，不填时默认Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>开始时间戳，单位秒</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>结束时间戳，单位秒</td>
 </tr>
 </tbody></table>
@@ -1704,6 +1718,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>时间窗口</td>
 </tr>
 </tbody></table>
+
+<p>注意：
+1、单次请求的最大数据量是2000。如果您选择的开始/结束时间和时间粒度导致超过单次请求的最大数据量，您的请求将只会返回2000个数据。如果您希望在更大的时间范围内获取足够精细的数据，则需要使用多个开始/结束范围进行多次请求。</p>
+
+<p>2、如果只提供了开始时间，则查询开始时间到系统当前时间的数据。如果只提供了结束时间，则返回离结束时间最近的2000条数据。如果开始时间和结束时间均未提供，则查询离系统当前时间最近的2000条数据。</p>
 <h2 id='2fdd066e43'>获取成交数据</h2>
 <blockquote>
 <p>请求示例</p>
@@ -6093,6 +6112,138 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <p>1分钟以内未收到客户端ping，将断开该客户端连接，建议10~20秒发送一次ping</p>
 
 <p>发送ping消息及服务端返回见右侧</p>
+<h2 id='0c28b0ae85'>订阅过滤</h2>
+<blockquote>
+<p>取消默认推送示例</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"subscribe"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"login"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"apiKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mxcU1TzSmRDW1o5AsE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8c957a757ea31672eca05cb652d26bab7f46a41364adb714dda5475264aff120"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"reqTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1611038237237"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>只要资产</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"asset"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>只要ADL等级</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"adl.level"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>只要所有的成交单</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"order.deal"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rules"</span><span class="p">:[]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>或者</p>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"order.deal"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>只要单个合约的成交单</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"order.deal"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rules"</span><span class="p">:[</span><span class="w">
+                    </span><span class="s2">"BTC_USDT"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>混合使用</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"method"</span><span class="p">:</span><span class="s2">"personal.filter"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"param"</span><span class="p">:{</span><span class="w">
+        </span><span class="s2">"filters"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"order"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rules"</span><span class="p">:[</span><span class="w">
+                    </span><span class="s2">"BTC_USDT"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"order.deal"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rules"</span><span class="p">:[</span><span class="w">
+                    </span><span class="s2">"EOS_USDT"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"BTC_USDT"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"position"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"rules"</span><span class="p">:[</span><span class="w">
+                    </span><span class="s2">"EOS_USDT"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"BTC_USDT"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"filter"</span><span class="p">:</span><span class="s2">"asset"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>登录之后会推送所有私有数据：order订单、order.deal成交单、position持仓、plan.order计划委托单、stop.order止盈止损单、stop.planorder止盈止损计划委托单、risk.limit风险限额、adl.level ADL等级、asset资产</p>
+
+<p>1、如果要取消默认推送，登录时新加参数： <code>&quot;subscribe&quot;:false，默认为true</code>;</p>
+
+<p>2、登录之后通过发送 <code>personal.filter</code> 事件来过滤自己需要的数据，如果想要恢复推送所有数据，可发送： <code>{&quot;method&quot;:&quot;personal.filter&quot;}</code> 或者 <code>{&quot;method&quot;:&quot;personal.filter&quot;,&quot;param&quot;:{&quot;filters&quot;:[]}}</code></p>
+
+<p>3、filter可用key：order、order.deal、position、plan.order、stop.order、stop.planorder、risk.limit、adl.level、asset 固定值，不可更改，若有错误会提示</p>
+
+<p>其中asset和adl.level不支持过滤单个币种或者单个合约，其他均可以过滤单个合约</p>
+
+<p>后面发送的filter事件会覆盖前面的</p>
 <h2 id='a6ff2d9336'>公共频道</h2><h3 id='tickers'>Tickers</h3>
 <blockquote>
 <p>订阅</p>

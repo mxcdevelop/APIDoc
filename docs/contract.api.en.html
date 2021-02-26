@@ -1396,19 +1396,19 @@ Rate limit:20 times/2 seconds
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1,default: Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>start timestamp,seconds</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>end timestamp,seconds</td>
 </tr>
 </tbody></table>
@@ -1453,6 +1453,12 @@ Rate limit:20 times/2 seconds
 <td>time window</td>
 </tr>
 </tbody></table>
+
+<p>Attention:</p>
+
+<p>1、The maximum data in a single request is 2000 pieces. If your choice of start/end time and granularity of time results in more than the maximum volume of data in a single request, your request will only return 2000 pieces. If you want to get sufficiently fine-grained data over a larger time range, you need to make several times requests.</p>
+
+<p>2、If only the start time is provided, then query the data from the start time to the current system time. If only the end time is provided, the 2000 pieces of data closest to the end time are returned. If neither start time nor end time is provided, the 2000 pieces of data closest to the current time in the system are queried.</p>
 <h2 id='get-k-line-data-of-the-index-price'>Get K-line data of the index price</h2>
 <blockquote>
 <p>Request</p>
@@ -1517,19 +1523,19 @@ Rate limit:20 times/2 seconds
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1,default: Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>start timestamp,seconds</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>end timestamp,seconds</td>
 </tr>
 </tbody></table>
@@ -1574,6 +1580,12 @@ Rate limit:20 times/2 seconds
 <td>time window</td>
 </tr>
 </tbody></table>
+
+<p>Attention:</p>
+
+<p>1、The maximum data in a single request is 2000 pieces. If your choice of start/end time and granularity of time results in more than the maximum volume of data in a single request, your request will only return 2000 pieces. If you want to get sufficiently fine-grained data over a larger time range, you need to make several times requests.</p>
+
+<p>2、If only the start time is provided, then query the data from the start time to the current system time. If only the end time is provided, the 2000 pieces of data closest to the end time are returned. If neither start time nor end time is provided, the 2000 pieces of data closest to the current time in the system are queried.</p>
 <h2 id='get-k-line-data-of-the-fair-price'>Get K-line data of the fair price</h2>
 <blockquote>
 <p>Request</p>
@@ -1638,19 +1650,19 @@ Rate limit:20 times/2 seconds
 <tr>
 <td>interval</td>
 <td>string</td>
-<td>true</td>
-<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1</td>
+<td>false</td>
+<td>interval: Min1、Min5、Min15、Min30、Min60、Hour4、Hour8、Day1、Week1、Month1,default: Min1</td>
 </tr>
 <tr>
 <td>start</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>start timestamp,seconds</td>
 </tr>
 <tr>
 <td>end</td>
 <td>long</td>
-<td>true</td>
+<td>false</td>
 <td>end timestamp,seconds</td>
 </tr>
 </tbody></table>
@@ -1695,6 +1707,12 @@ Rate limit:20 times/2 seconds
 <td>time window</td>
 </tr>
 </tbody></table>
+
+<p>Attention:</p>
+
+<p>1、The maximum data in a single request is 2000 pieces. If your choice of start/end time and granularity of time results in more than the maximum volume of data in a single request, your request will only return 2000 pieces. If you want to get sufficiently fine-grained data over a larger time range, you need to make several times requests.</p>
+
+<p>2、If only the start time is provided, then query the data from the start time to the current system time. If only the end time is provided, the 2000 pieces of data closest to the end time are returned. If neither start time nor end time is provided, the 2000 pieces of data closest to the current time in the system are queried.</p>
 <h2 id='get-contract-transaction-data'>Get contract transaction data</h2>
 <blockquote>
 <p>Request</p>
