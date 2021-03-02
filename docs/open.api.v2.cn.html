@@ -339,9 +339,6 @@
                   <li>
                     <a href="#09991ca64a" class="toc-h2 toc-link" data-title="按交易对撤销订单">按交易对撤销订单</a>
                   </li>
-                  <li>
-                    <a href="#98210fe966" class="toc-h2 toc-link" data-title="订单查询(单订单状态查询)">订单查询(单订单状态查询)</a>
-                  </li>
               </ul>
           </li>
       </ul>
@@ -377,6 +374,12 @@
 <td>/open/api/v2/order/cancel_by_symbol</td>
 <td>新增</td>
 <td>按交易对撤单</td>
+</tr>
+<tr>
+<td>2021-03-01</td>
+<td>/open/api/v2/order/list</td>
+<td>修改</td>
+<td>入参states由非必填改为必填，且只能单状态查询；入参start_time修改为默认查询最近7天，最多查询30天；修复入参start_time时间不准确的情况</td>
 </tr>
 </tbody></table>
 <h1 id='2d07d50c97'>接入说明</h1><h2 id='url'>接入URL</h2>
@@ -1653,7 +1656,7 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <td>string</td>
 <td>否</td>
 <td>起始时间</td>
-<td></td>
+<td>默认查询最近7天，最多查询30天</td>
 </tr>
 <tr>
 <td>limit</td>
@@ -1672,9 +1675,9 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <tr>
 <td>states</td>
 <td>string</td>
-<td>否</td>
-<td>查询订单状态(多个以英文逗号分隔)</td>
-<td></td>
+<td>是</td>
+<td>查询订单状态</td>
+<td>NEW：未成交；FILLED：已成交；PARTIALLY_FILLED：部分成交；CANCELED：已撤单；PARTIALLY_CANCELED：部分撤单</td>
 </tr>
 </tbody></table>
 
@@ -1738,8 +1741,6 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <td>客户订单id</td>
 </tr>
 </tbody></table>
-
-<p>注意：该接口将逐步过渡至[订单查询(单订单状态查询)接口]</p>
 <h2 id='90376e83a0'>查询订单</h2>
 <blockquote>
 <p>响应示例</p>
@@ -2150,119 +2151,6 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <aside class="notice">
 请求返回表示服务端接收到了对应订单的撤单请求，并不表示已经撤单完成
 </aside>
-<h2 id='98210fe966'>订单查询(单订单状态查询)</h2>
-<ul>
-<li><strong>GET</strong> <code>/open/api/v2/order/single_state/list</code></li>
-</ul>
-
-<p>参数：</p>
-
-<table><thead>
-<tr>
-<th>参数名</th>
-<th>数据类型</th>
-<th>是否必须</th>
-<th>说明</th>
-<th>取值范围</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>symbol</td>
-<td>string</td>
-<td>是</td>
-<td>交易对名称</td>
-<td></td>
-</tr>
-<tr>
-<td>start_time</td>
-<td>string</td>
-<td>否</td>
-<td>起始时间</td>
-<td></td>
-</tr>
-<tr>
-<td>limit</td>
-<td>string</td>
-<td>否</td>
-<td>返回条数</td>
-<td>1~1000，默认值50</td>
-</tr>
-<tr>
-<td>trade_type</td>
-<td>string</td>
-<td>否</td>
-<td>交易类型</td>
-<td>BID，ASK</td>
-</tr>
-<tr>
-<td>states</td>
-<td>string</td>
-<td>是</td>
-<td>订单状态</td>
-<td>NEW：未成交；FILLED：已成交；PARTIALLY_FILLED：部分成交；CANCELED：已撤单；PARTIALLY_CANCELED：部分撤单</td>
-</tr>
-</tbody></table>
-
-<p>响应：</p>
-
-<table><thead>
-<tr>
-<th>参数名</th>
-<th>数据类型</th>
-<th>说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>symbol</td>
-<td>string</td>
-<td>交易对名称</td>
-</tr>
-<tr>
-<td>id</td>
-<td>string</td>
-<td>订单id</td>
-</tr>
-<tr>
-<td>price</td>
-<td>string</td>
-<td>挂单价格</td>
-</tr>
-<tr>
-<td>quantity</td>
-<td>string</td>
-<td>挂单数量</td>
-</tr>
-<tr>
-<td>deal_quantity</td>
-<td>string</td>
-<td>成交数量</td>
-</tr>
-<tr>
-<td>deal_amount</td>
-<td>string</td>
-<td>成交金额</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>string</td>
-<td>下单时间</td>
-</tr>
-<tr>
-<td>state</td>
-<td>string</td>
-<td>订单状态</td>
-</tr>
-<tr>
-<td>type</td>
-<td>string</td>
-<td>订单类型</td>
-</tr>
-<tr>
-<td>client_order_id</td>
-<td>string</td>
-<td>客户订单id</td>
-</tr>
-</tbody></table>
 
       </div>
       <div class="dark-box">

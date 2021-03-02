@@ -339,9 +339,6 @@
                   <li>
                     <a href="#cancel-orders-by-symbol" class="toc-h2 toc-link" data-title="Cancel Orders By Symbol">Cancel Orders By Symbol</a>
                   </li>
-                  <li>
-                    <a href="#order-query-single-order-status-query" class="toc-h2 toc-link" data-title="Order query (single order status query)">Order query (single order status query)</a>
-                  </li>
               </ul>
           </li>
       </ul>
@@ -377,6 +374,12 @@
 <td>/open/api/v2/order/cancel_by_symbol</td>
 <td>Add</td>
 <td>New API for canceling orders</td>
+</tr>
+<tr>
+<td>2021-03-01</td>
+<td>/open/api/v2/order/list</td>
+<td>change</td>
+<td>Parameter states change to the mandatory than optional, and only single statu query supported; Parameter start_time default queries in last 7 days, maximum is 30 days; Fixed the situation of incorrect time about parameter start_time</td>
 </tr>
 </tbody></table>
 <h1 id='integration-guide'>Integration guide</h1><h2 id='access-urls'>Access URLs</h2>
@@ -1649,7 +1652,7 @@ For each batch request, the parameter client_order_id should be consistent, mean
 <td>string</td>
 <td>N</td>
 <td>start time</td>
-<td></td>
+<td>the default is the last 7 days, and the maximum query is 30 days.</td>
 </tr>
 <tr>
 <td>limit</td>
@@ -1668,9 +1671,9 @@ For each batch request, the parameter client_order_id should be consistent, mean
 <tr>
 <td>states</td>
 <td>string</td>
-<td>N</td>
-<td>state to be quired(states should be separated by comma)</td>
-<td></td>
+<td>Y</td>
+<td>state to be quired</td>
+<td>NEW：Unfilled ；FILLED：Filled；PARTIALLY_FILLED：Partially filled；CANCELED：Canceled；PARTIALLY_CANCELED：Partially canceled</td>
 </tr>
 </tbody></table>
 
@@ -1734,8 +1737,6 @@ For each batch request, the parameter client_order_id should be consistent, mean
 <td>client order id</td>
 </tr>
 </tbody></table>
-
-<p>Note: This endpoint will gradually transfer to the Order Query (single order status query) endpoint .</p>
 <h2 id='query-orders'>Query Orders</h2>
 <blockquote>
 <p>Response example</p>
@@ -2134,119 +2135,6 @@ Either order_ids or client_order_ids have to be picked as parameter. When both o
 <aside class="notice">
 When client recieves response from server, it only means the cancelling request has been accepted, doesn't mean the cancellation is finished
 </aside>
-<h2 id='order-query-single-order-status-query'>Order query (single order status query)</h2>
-<ul>
-<li><strong>GET</strong> <code>/open/api/v2/order/single_state/list</code></li>
-</ul>
-
-<p>Parameters:</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Data Type</th>
-<th>Mandatory</th>
-<th>Description</th>
-<th>Range｜</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>symbol</td>
-<td>string</td>
-<td>True</td>
-<td>Trading pair</td>
-<td></td>
-</tr>
-<tr>
-<td>start_time</td>
-<td>string</td>
-<td>False</td>
-<td>Start time</td>
-<td></td>
-</tr>
-<tr>
-<td>limit</td>
-<td>string</td>
-<td>False</td>
-<td>Return content</td>
-<td>1~1000，Default 50</td>
-</tr>
-<tr>
-<td>trade_type</td>
-<td>string</td>
-<td>False</td>
-<td>Trading Status</td>
-<td>BID，ASK</td>
-</tr>
-<tr>
-<td>states</td>
-<td>string</td>
-<td>True</td>
-<td>Order Status</td>
-<td>NEW：Unfilled ；FILLED：Filled；PARTIALLY_FILLED：Partially filled；CANCELED：Canceled；PARTIALLY_CANCELED：Partially canceled</td>
-</tr>
-</tbody></table>
-
-<p>Response:</p>
-
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Data Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>symbol</td>
-<td>string</td>
-<td>Trading pair</td>
-</tr>
-<tr>
-<td>id</td>
-<td>string</td>
-<td>Order id</td>
-</tr>
-<tr>
-<td>price</td>
-<td>string</td>
-<td>Order price</td>
-</tr>
-<tr>
-<td>quantity</td>
-<td>string</td>
-<td>Order amount</td>
-</tr>
-<tr>
-<td>deal_quantity</td>
-<td>string</td>
-<td>Filled amount</td>
-</tr>
-<tr>
-<td>deal_amount</td>
-<td>string</td>
-<td>Filled total amount of money</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>string</td>
-<td>Order time</td>
-</tr>
-<tr>
-<td>state</td>
-<td>string</td>
-<td>Order Status</td>
-</tr>
-<tr>
-<td>type</td>
-<td>string</td>
-<td>Order type</td>
-</tr>
-<tr>
-<td>client_order_id</td>
-<td>string</td>
-<td>Client order id</td>
-</tr>
-</tbody></table>
 
       </div>
       <div class="dark-box">
