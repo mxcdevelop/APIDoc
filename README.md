@@ -14,7 +14,7 @@ Please visit the following links for the API documents and demos
 
 ### WebSocket doc
 
-- [https://github.com/mxcdevelop/APIDoc/blob/master/websocket/websocket-api.md](https://github.com/mxcdevelop/APIDoc/blob/master/websocket/websocket-api.md)
+- [https://github.com/mxcdevelop/APIDoc/tree/master/websocket/spot/websocket-api.md](https://github.com/mxcdevelop/APIDoc/tree/master/websocket/spot/websocket-api.md)
 
 ### REST API demos
 
