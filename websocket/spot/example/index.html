@@ -115,12 +115,12 @@
         }
 
         function getDepth() {
-            socket.emit('get.depth', {"symbol": "VDS_USDT"});
+            socket.emit('get.depth', {"symbol": "BTC_USDT"});
         }
 
         function getKline() {
             socket.emit("get.kline", {
-                "symbol": "VDS_USDT",
+                "symbol": "BTC_USDT",
                 "interval": "Min30",
                 "start": 1561107500000,
                 "end": 1561453160000
@@ -128,15 +128,15 @@
         }
 
         function subKline() {
-            socket.emit("sub.kline", {"symbol": "VDS_USDT", "interval": "Min30"});
+            socket.emit("sub.kline", {"symbol": "BTC_USDT", "interval": "Min30"});
         }
 
         function getDeal() {
-            socket.emit("get.deal", {"symbol": "VDS_USDT"});
+            socket.emit("get.deal", {"symbol": "BTC_USDT"});
         }
 
         function subSymbol() {
-            socket.emit('sub.symbol', {"symbol": "VDS_USDT"});
+            socket.emit('sub.symbol', {"symbol": "BTC_USDT"});
         }
 
 

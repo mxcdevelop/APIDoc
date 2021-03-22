@@ -24,7 +24,7 @@ response **rs.kline**
 
 ```javascript
 {
-    "symbol":"VDS_USDT",	//	交易对
+    "symbol":"BTC_USDT",	//	交易对
     "interval":"Min30",		//	K线间隔时间	目前只支持 Min1、Min5、Min15、Min30、Min60、Day1、Month1
     "start":1561107500000,	//	K线起始时间
     "end":1561453160000		//	K线结束时间
@@ -33,7 +33,7 @@ response **rs.kline**
 **Response Payload:**
 ```javascript
 {
-    "symbol":"VDS_USDT",	// 交易对
+    "symbol":"BTC_USDT",	// 交易对
     "data":{
         "q":[				// 这根K线期间成交额
             25710.17
@@ -66,14 +66,14 @@ response **push.kline**
 **Request Payload:**  
 ```javascript
 {
-    "symbol":"VDS_USDT",
+    "symbol":"BTC_USDT",
     "interval":"Min30"
 }
 ```
 **Response Payload:**
 ```javascript
 {
-    "symbol":"VDS_USDT",	// 交易对
+    "symbol":"BTC_USDT",	// 交易对
     "data":{
         "q":[				// 这根K线期间成交额
             25710.17,		
@@ -113,7 +113,7 @@ response **rs.deal**
 **Request Payload:** 
 ```javascript 
 {
-    "symbol":"VDS_USDT"	//	交易对
+    "symbol":"BTC_USDT"	//	交易对
 }
 ```
 **Response Payload**
@@ -138,7 +138,7 @@ response **push.symbol**
 **Request Payload:** 
 ```javascript 
 {
-    "symbol":"VDS_USDT"	//	交易对
+    "symbol":"BTC_USDT"	//	交易对
 }
 ```
 **Response Payload**
@@ -171,7 +171,7 @@ response **push.symbol**
 	            }
 	        ]
     },
-    "symbol":"VDS_USDT"				//交易对
+    "symbol":"BTC_USDT"				//交易对
 }
 ```
 
