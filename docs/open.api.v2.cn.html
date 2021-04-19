@@ -214,6 +214,20 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#5ea2e0cde2" class="toc-h1 toc-link" data-title="简介">简介</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#api" class="toc-h2 toc-link" data-title="什么是API？">什么是API？</a>
+                  </li>
+                  <li>
+                    <a href="#ae76626c05" class="toc-h2 toc-link" data-title="使用流程">使用流程</a>
+                  </li>
+                  <li>
+                    <a href="#rest-api" class="toc-h2 toc-link" data-title="接口类型 REST API">接口类型 REST API</a>
+                  </li>
+                  <li>
+                    <a href="#api-v1-api-v2" class="toc-h2 toc-link" data-title="API V1或API V2">API V1或API V2</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#185368440e" class="toc-h1 toc-link" data-title="更新日志">更新日志</a>
@@ -244,6 +258,14 @@
                   </li>
                   <li>
                     <a href="#8e3023a1c8" class="toc-h2 toc-link" data-title="签名方法">签名方法</a>
+                      <ul class="toc-list-h3">
+                          <li>
+                            <a href="#1b3050eb41" class="toc-h3 toc-link" data-title="方式一（同合约，推荐使用）">方式一（同合约，推荐使用）</a>
+                          </li>
+                          <li>
+                            <a href="#3c07319e17" class="toc-h3 toc-link" data-title="方式二（原签名方法，将逐步废弃）">方式二（原签名方法，将逐步废弃）</a>
+                          </li>
+                      </ul>
                   </li>
                   <li>
                     <a href="#e08c1d4f9a" class="toc-h2 toc-link" data-title="错误码">错误码</a>
@@ -341,13 +363,58 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#713fd96fb2" class="toc-h1 toc-link" data-title="资产">资产</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#263e170b4c" class="toc-h2 toc-link" data-title="获取充币地址">获取充币地址</a>
+                  </li>
+                  <li>
+                    <a href="#6537e8c86d" class="toc-h2 toc-link" data-title="充值记录查询">充值记录查询</a>
+                  </li>
+                  <li>
+                    <a href="#13ad6add05" class="toc-h2 toc-link" data-title="提币地址列表查询">提币地址列表查询</a>
+                  </li>
+                  <li>
+                    <a href="#8c588b24a2" class="toc-h2 toc-link" data-title="提现记录查询">提现记录查询</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='5ea2e0cde2'>简介</h1>
-<p>欢迎使用MXC API！本文档为您提供了REST API的相关信息，帮助您获取市场行情，管理账户信息，并进行交易等  </p>
+<p>欢迎使用MXC API！本文档为您提供了REST API的相关信息，帮助您获取市场行情，管理账户信息，并进行交易等。</p>
+<h2 id='api'>什么是API？</h2>
+<p>API是应用程序接口（Application Programming Interface），缩写为API，是一种结算接口，它定义多个应用程序之间的交互，以及可以进行的调用（call）或请求（request）的种类，如何进行调用或发出请求，应使用的数据格式，应遵循的惯例等。API文档中描述了应用程序如何与我们的交易所进行交互。</p>
+<h2 id='ae76626c05'>使用流程</h2>
+<p>步骤：开发者如需使用API，请先 <a href="https://www.mxc.la/ucenter/openapi" target="_blank">创建APIKey</a> ，然后根据此文档详情进行开发交易，使用过程中如有问题或者建议请及时反馈。 </p>
+
+<ul>
+<li>请参考 <a href="https://support.mxc-exchange.com/hc/zh-cn/articles/360056373151" target="_blank">这个页面</a> 来设置API Key。</li>
+<li>设置API Key的同时，为了安全，建议设置IP访问白名单。</li>
+<li>永远不要把你的API key/secret告诉给任何人。</li>
+</ul>
+<h2 id='rest-api'>接口类型 REST API</h2>
+<p>REST，即Representational State Transfer的缩写，是目前较为流行的基于HTTP的一种通信机制。它结构清晰、符合标准、易于理解、扩展方便，正得到越来越多网站的采用。其优点如下：</p>
+
+<ul>
+<li>在RESTful架构中，每一个URL代表一种资源；</li>
+<li>客户端和服务器之间，传递这种资源的某种表现层；</li>
+<li>建议开发者使用Rest API进行币币交易或者资产提现等操作；</li>
+<li>客户端通过四个HTTP指令，对服务器端资源进行操作，实现“表现层状态转化”；</li>
+</ul>
+<h2 id='api-v1-api-v2'>API V1或API V2</h2>
+<p>我们建议所有用户在API的V2上构建其应用程序。使用V2具有以下优点：</p>
+
+<ul>
+<li>相对API V1，API V2签名的安全性和合理性更好。</li>
+<li>提高了特定端点/通道的性能。</li>
+<li>长期支持，V1 API已不再维护，将来会在某个时候被弃用。</li>
+<li>我们的官方客户库提供了更广泛的支持。</li>
+</ul>
 <h1 id='185368440e'>更新日志</h1>
 <table><thead>
 <tr>
@@ -448,6 +515,99 @@
 Secret key仅在申请时展示，请做好记录留存
 </aside>
 <h2 id='8e3023a1c8'>签名方法</h2>
+<p>签名方法兼容两种方式：</p>
+<h3 id='1b3050eb41'>方式一（同合约，推荐使用）</h3>
+<blockquote>
+<p>java示例</p>
+</blockquote>
+<pre class="highlight java tab-java"><code><span class="cm">/**
+ * 获取get请求参数字符串
+ *
+ * @param param get/delete请求参数map
+ * @return
+ */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getRequestParamString</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">param</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">MapUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">param</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="mi">1024</span><span class="o">);</span>
+    <span class="n">SortedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeMap</span><span class="o">&lt;&gt;(</span><span class="n">param</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">())</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="sc">'='</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">urlEncode</span><span class="o">(</span><span class="n">value</span><span class="o">)).</span><span class="na">append</span><span class="o">(</span><span class="sc">'&amp;'</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">sb</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">urlEncode</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">URLEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">).</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"\\+"</span><span class="o">,</span> <span class="s">"%20"</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">UnsupportedEncodingException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"UTF-8 encoding not supported!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * 签名
+ */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">sign</span><span class="o">(</span><span class="n">SignVo</span> <span class="n">signVo</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">signVo</span><span class="o">.</span><span class="na">getRequestParam</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">signVo</span><span class="o">.</span><span class="na">setRequestParam</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getAccessKey</span><span class="o">()</span> <span class="o">+</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getReqTime</span><span class="o">()</span> <span class="o">+</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getRequestParam</span><span class="o">();</span>
+    <span class="k">return</span> <span class="nf">actualSignature</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getSecretKey</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">actualSignature</span><span class="o">(</span><span class="n">String</span> <span class="n">inputStr</span><span class="o">,</span> <span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Mac</span> <span class="n">hmacSha256</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">hmacSha256</span> <span class="o">=</span> <span class="n">Mac</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="s">"HmacSHA256"</span><span class="o">);</span>
+        <span class="n">SecretKeySpec</span> <span class="n">secKey</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="nf">SecretKeySpec</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">),</span> <span class="s">"HmacSHA256"</span><span class="o">);</span>
+        <span class="n">hmacSha256</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">secKey</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchAlgorithmException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"No such algorithm: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InvalidKeyException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Invalid key: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hmacSha256</span><span class="o">.</span><span class="na">doFinal</span><span class="o">(</span><span class="n">inputStr</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">));</span>
+    <span class="k">return</span> <span class="n">Hex</span><span class="o">.</span><span class="na">encodeHexString</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Getter</span>
+<span class="nd">@Setter</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SignVo</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">reqTime</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">accessKey</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">secretKey</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">requestParam</span><span class="o">;</span> <span class="c1">//get请求参数根据字典顺序排序,使用&amp;拼接字符串,post为json字符串</span>
+<span class="o">}</span>
+</code></pre>
+<ol>
+<li><p>对于公共接口,不需要签名。</p></li>
+<li><p>对于私有接口,需要在header中传入ApiKey、Request-Time、Signature、Content-Type 必须指定为application/json、Recv-Window(可选)参数,Signature为签名字符串,签名规则如下:</p></li>
+</ol>
+
+<p>1)签名时需要先获得请求参数字符串，无参时为&quot;&quot;：</p>
+
+<p>对于GET/DELETE请求，按字典序拼接业务参数以&amp;间隔，并最终获得签名目标串（在批量操作的API中，若参数值中有逗号等特殊符号，这些符号在签名时需要做URL encode）。</p>
+
+<p>对于POST请求，签名参数为json字符串（无需进行字典排序）。</p>
+
+<p>2)获得参数字符串后，再拼接签名目标串，规则为：accessKey+时间戳+获取到的参数字符串</p>
+
+<p>3)使用HMAC SHA256算法对目标串进行签名，并最终将签名作为参数携带到header中</p>
+
+<p>注意：</p>
+
+<p>1)参与签名的业务参数为null时，不参与签名，对于path参数，也不参与签名；注意get请求将参数拼接至url上时，如果参数为null， 后台解析时，会解析成&quot;&quot;，固当POST请求，某参数为null时，不要传该参数，或者签名时，将该参数的值设置为&quot;&quot;，否则会出现验签失败。</p>
+
+<p>2)请求时将签名时用到的Request-Time的值放入header的Request-Time参数中，获得的签名字符串放入header的Signature参数中，将APIKEY的Access Key放在header的ApiKey参数中，其余业务参数按正常传递即可。</p>
+
+<p>3）获得的签名字符串不需要进行base64进行编码。</p>
+<h3 id='3c07319e17'>方式二（原签名方法，将逐步废弃）</h3>
 <blockquote>
 <pre class="highlight plaintext"><code></code></pre></blockquote>
 <pre class="highlight plaintext"><code>GET
@@ -710,6 +870,11 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <td>state</td>
 <td>string</td>
 <td>交易对状态，当前是否可以进行交易</td>
+</tr>
+<tr>
+<td>etf_mark</td>
+<td>integer</td>
+<td>Etf标识，0代表不是ETF，正负整数代表是ETF</td>
 </tr>
 </tbody></table>
 <h2 id='97e5358548'>当前系统时间</h2>
@@ -2151,6 +2316,527 @@ api_key=mxcV9JCC8iu8zpaiWC&amp;req_time=1572936038
 <aside class="notice">
 请求返回表示服务端接收到了对应订单的撤单请求，并不表示已经撤单完成
 </aside>
+<h1 id='713fd96fb2'>资产</h1>
+<p>当前仅开放读取充提信息相关接口，后续会开放提现接口（仍需开通可联系在线客服）。</p>
+<h2 id='263e170b4c'>获取充币地址</h2>
+<p>此节点用于查询特定币种在其所在区块链中的充币地址，母子用户均可用。</p>
+
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/deposit/address/list</code></li>
+</ul>
+
+<aside>
+限速规则: 20次/2秒
+</aside>
+
+<p><strong>需要权限:</strong> 提币读</p>
+
+<p><strong>请求参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>ture</td>
+<td>币种</td>
+</tr>
+</tbody></table>
+
+<p><strong>响应参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>int</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>string</td>
+<td>链名称</td>
+</tr>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>充币地址</td>
+</tr>
+</tbody></table>
+
+<p>注意：
+1、私有接口，需要签名认证；
+2、只返回已生成的地址；</p>
+<h2 id='6537e8c86d'>充值记录查询</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/deposit/list</code></li>
+</ul>
+
+<aside>
+限速规则: 20次/2秒
+</aside>
+
+<p><strong>需要权限:</strong> 提币读</p>
+
+<p><strong>请求参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>false</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>false</td>
+<td>状态</td>
+</tr>
+<tr>
+<td>start_time</td>
+<td>long</td>
+<td>false</td>
+<td>开始时间，单位ms，默认只查询最近1天</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>long</td>
+<td>false</td>
+<td>结束时间，单位ms</td>
+</tr>
+<tr>
+<td>page_num</td>
+<td>number</td>
+<td>false</td>
+<td>页数，默认1</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td>number</td>
+<td>false</td>
+<td>条数，默认20，最大50</td>
+</tr>
+</tbody></table>
+
+<p><strong>响应参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>actual_amount</td>
+<td>number</td>
+<td>到账数量</td>
+</tr>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>充值地址</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>number</td>
+<td>充值数量</td>
+</tr>
+<tr>
+<td>confirmations</td>
+<td>number</td>
+<td>区块确认数</td>
+</tr>
+<tr>
+<td>require_confirmations</td>
+<td>number</td>
+<td>最小区块确认数</td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>number</td>
+<td>发起提现时间</td>
+</tr>
+<tr>
+<td>explorer_url</td>
+<td>string</td>
+<td>区块浏览器地址</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>string</td>
+<td>手续费</td>
+</tr>
+<tr>
+<td>member_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>状态</td>
+</tr>
+<tr>
+<td>txid</td>
+<td>string</td>
+<td>交易hash</td>
+</tr>
+<tr>
+<td>update_time</td>
+<td>string</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>wallet_type</td>
+<td>string</td>
+<td>钱包类型</td>
+</tr>
+<tr>
+<td>current_page</td>
+<td>number</td>
+<td>当前页</td>
+</tr>
+<tr>
+<td>current_result</td>
+<td>number</td>
+<td>当前页条数</td>
+</tr>
+<tr>
+<td>total_result</td>
+<td>int</td>
+<td>总条数</td>
+</tr>
+<tr>
+<td>total_page</td>
+<td>int</td>
+<td>总页数</td>
+</tr>
+</tbody></table>
+
+<p>注意：通过单次查询可检索的范围最大为10天，通过多次平移窗口查询，最多可检索到过往180天的记录。</p>
+<h2 id='13ad6add05'>提币地址列表查询</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/address/list</code></li>
+</ul>
+
+<aside>
+限速规则: 20次/2秒
+</aside>
+
+<p><strong>需要权限:</strong> 提币读</p>
+
+<p><strong>请求参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>false</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>page_num</td>
+<td>number</td>
+<td>false</td>
+<td>页数，默认1</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td>number</td>
+<td>false</td>
+<td>条数，默认20，最大50</td>
+</tr>
+</tbody></table>
+
+<p><strong>响应参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>string</td>
+<td>链名称</td>
+</tr>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>地址</td>
+</tr>
+<tr>
+<td>address_tab</td>
+<td>string</td>
+<td>地址标签</td>
+</tr>
+<tr>
+<td>current_page</td>
+<td>number</td>
+<td>当前页</td>
+</tr>
+<tr>
+<td>current_result</td>
+<td>number</td>
+<td>当前页条数</td>
+</tr>
+<tr>
+<td>total_result</td>
+<td>int</td>
+<td>总条数</td>
+</tr>
+<tr>
+<td>total_page</td>
+<td>int</td>
+<td>总页数</td>
+</tr>
+</tbody></table>
+<h2 id='8c588b24a2'>提现记录查询</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/withdraw/list</code></li>
+</ul>
+
+<aside>
+限速规则: 20次/2秒
+</aside>
+
+<p><strong>需要权限:</strong> 提币读</p>
+
+<p><strong>请求参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>false</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>withdraw_id</td>
+<td>string</td>
+<td>false</td>
+<td>提现ID</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>false</td>
+<td>状态</td>
+</tr>
+<tr>
+<td>start_time</td>
+<td>long</td>
+<td>false</td>
+<td>开始时间，单位ms，默认只查询最近1天</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>long</td>
+<td>false</td>
+<td>结束时间，单位ms</td>
+</tr>
+<tr>
+<td>page_num</td>
+<td>number</td>
+<td>false</td>
+<td>页数，默认1</td>
+</tr>
+<tr>
+<td>page_size</td>
+<td>number</td>
+<td>false</td>
+<td>条数，默认20，最大50</td>
+</tr>
+</tbody></table>
+
+<p><strong>响应参数:</strong></p>
+
+<table><thead>
+<tr>
+<th>参数名</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>string</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>actual_amount</td>
+<td>number</td>
+<td>到账数量</td>
+</tr>
+<tr>
+<td>actual_fee</td>
+<td>number</td>
+<td>手续费</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>number</td>
+<td>提现数量</td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>number</td>
+<td>发起提现时间</td>
+</tr>
+<tr>
+<td>explorer_url</td>
+<td>string</td>
+<td>区块浏览器地址</td>
+</tr>
+<tr>
+<td>fee</td>
+<td>string</td>
+<td>手续费</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>提现ID</td>
+</tr>
+<tr>
+<td>member_id</td>
+<td>string</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>string</td>
+<td>提现备注</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>状态</td>
+</tr>
+<tr>
+<td>txid</td>
+<td>string</td>
+<td>交易hash</td>
+</tr>
+<tr>
+<td>update_time</td>
+<td>string</td>
+<td>更新时间</td>
+</tr>
+<tr>
+<td>wallet_type</td>
+<td>string</td>
+<td>钱包类型</td>
+</tr>
+<tr>
+<td>current_page</td>
+<td>number</td>
+<td>当前页</td>
+</tr>
+<tr>
+<td>current_result</td>
+<td>number</td>
+<td>当前页条数</td>
+</tr>
+<tr>
+<td>total_result</td>
+<td>int</td>
+<td>总条数</td>
+</tr>
+<tr>
+<td>total_page</td>
+<td>int</td>
+<td>总页数</td>
+</tr>
+</tbody></table>
+
+<p>注意：通过单次查询可检索的范围最大为10天，通过多次平移窗口查询，最多可检索到过往180天的记录。</p>
 
       </div>
       <div class="dark-box">

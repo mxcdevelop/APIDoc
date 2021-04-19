@@ -486,6 +486,12 @@
 <td>新增</td>
 <td>合约API发布</td>
 </tr>
+<tr>
+<td>2021-03-30</td>
+<td>*</td>
+<td>修改</td>
+<td>调整如下接口访问路径及数据返回格式（原路径仍支持，但会逐步废弃）：获取用户所有历史订单、获取用户当前未结束订单、获取用户历史持仓信息、获取止盈止损订单列表、获取计划委托订单列表、获取用户所有订单成交明细</td>
+</tr>
 </tbody></table>
 <h1 id='2d07d50c97'>接入说明</h1><h2 id='url'>接入url</h2>
 <blockquote>
@@ -587,20 +593,27 @@
 <span class="o">}</span>
 </code></pre>
 <ol>
-<li>对于公共接口,不需要签名</li>
-<li>对于私有接口,需要在header中传入ApiKey、Request-Time、Signature、Recv-Window(可选)参数,Signature为签名字符串,签名规则如下:</li>
+<li><p>对于公共接口,不需要签名。</p></li>
+<li><p>对于私有接口,需要在header中传入ApiKey、Request-Time、Signature、Content-Type 必须指定为application/json、Recv-Window(可选)参数,Signature为签名字符串,签名规则如下:</p></li>
 </ol>
 
-<p>1)签名时需要先获得请求参数字符串，无参时为&quot;&quot;；对于get请求，按字典序拼接业务参数以&amp;间隔，并最终获得签名目标串（在批量操作的API中，若参数值中有逗号等特殊符号，这些符号在签名时需要做URL encode），对于post请求，签名参数为json字符串；</p>
+<p>1)签名时需要先获得请求参数字符串，无参时为&quot;&quot;：</p>
+
+<p>对于GET/DELETE请求，按字典序拼接业务参数以&amp;间隔，并最终获得签名目标串（在批量操作的API中，若参数值中有逗号等特殊符号，这些符号在签名时需要做URL encode）。</p>
+
+<p>对于POST请求，签名参数为json字符串（无需进行字典排序）。</p>
 
 <p>2)获得参数字符串后，再拼接签名目标串，规则为：accessKey+时间戳+获取到的参数字符串</p>
 
-<p>3)要求使用HMAC SHA256算法对目标串进行签名，并最终将签名作为参数携带到header中</p>
+<p>3)使用HMAC SHA256算法对目标串进行签名，并最终将签名作为参数携带到header中</p>
 
-<p>4)参与签名的业务参数为null时，不参与签名，对于path参数，也不参与签名；注意get请求将参数拼接至url上时，如果参数为null，
-    后台解析时，会解析成&quot;&quot;，固当get请求，某参数为null时，不要传该参数，或者签名时，将该参数的值设置为&quot;&quot;，否则会出现验签失败！</p>
+<p>注意：</p>
 
-<p>5)请求时将签名时用到的Request-Time的值放入header的Request-Time参数中，获得的签名字符串放入header的Signature参数中，将APIKEY的Access Key放在header的ApiKey参数中，其余业务参数按正常传递即可</p>
+<p>1)参与签名的业务参数为null时，不参与签名，对于path参数，也不参与签名；注意get请求将参数拼接至url上时，如果参数为null， 后台解析时，会解析成&quot;&quot;，固当POST请求，某参数为null时，不要传该参数，或者签名时，将该参数的值设置为&quot;&quot;，否则会出现验签失败。</p>
+
+<p>2)请求时将签名时用到的Request-Time的值放入header的Request-Time参数中，获得的签名字符串放入header的Signature参数中，将APIKEY的Access Key放在header的ApiKey参数中，其余业务参数按正常传递即可。</p>
+
+<p>3）获得的签名字符串不需要进行base64进行编码。</p>
 <h2 id='6da7f3b22a'>时间安全</h2>
 <p>所有签名接口均需要传入header参数Request-Time，即以毫秒表示的时间戳字符串，服务端接收到请求后会验证请求发出的时间
 范围。若接受请求时，收到的req_time小于或大于服务端时间10秒（默认值）以上（该时间窗口值可以通过发送可选header参数
@@ -608,7 +621,7 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <h2 id='api-key'>创建API key</h2>
 <p>用户可以在MXC站点个人中心，创建API key，其包括两个部分，Access keyAPI的访问秘钥，Secret key对应的秘钥，用于签名计算及验证。</p>
 
-<p>您可以点击 <a href="https://www.mxc.ai/ucenter/openapi">这里</a> 创建API Key。</p>
+<p>您可以点击 <a href="https://www.mxc.la/ucenter/openapi" target="_blank">这里</a> 创建API Key。</p>
 
 <p>创建 API Key 时可以选择绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。（强烈建议绑定 IP 地址）</p>
 
@@ -2648,42 +2661,36 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">139</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">954449</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XLM_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"positionType"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"holdVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"frozenVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"closeVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">81</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"holdAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1901</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1901</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"closeAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.19139</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"liquidatePrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1977</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"oim"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"im"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"holdFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"realised"</span><span class="p">:</span><span class="w"> </span><span class="mf">-1.2303</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1608200893000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1608200928000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"autoAddIm"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"positionType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"holdVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frozenVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"closeVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"holdAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"openAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"closeAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"liquidatePrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"oim"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"im"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"holdFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"realised"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"adlLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"autoAddIm"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/position/history_positions</code></li>
+<li><strong>GET</strong> <code>api/v1/private/position/list/history_positions</code></li>
 </ul>
 
 <p><strong>需要权限:</strong> 合约交易读取权限</p>
@@ -2738,29 +2745,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 </tr>
 </thead><tbody>
 <tr>
-<td>pageSize</td>
-<td>int</td>
-<td>页面大小</td>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
 </tr>
 <tr>
-<td>totalCount</td>
-<td>int</td>
-<td>总条数</td>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
 </tr>
 <tr>
-<td>totalPage</td>
-<td>int</td>
-<td>总页数</td>
-</tr>
-<tr>
-<td>currentPage</td>
-<td>int</td>
-<td>当前页</td>
-</tr>
-<tr>
-<td>resultList</td>
-<td>list</td>
-<td>数据结果集</td>
+<td><data></td>
+<td>array</td>
+<td></td>
 </tr>
 <tr>
 <td>positionId</td>
@@ -2771,11 +2768,6 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>symbol</td>
 <td>string</td>
 <td>合约名</td>
-</tr>
-<tr>
-<td>holdVol</td>
-<td>decimal</td>
-<td>持仓数量</td>
 </tr>
 <tr>
 <td>positionType</td>
@@ -2793,19 +2785,14 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>仓位状态,1持仓中2系统代持3已平仓</td>
 </tr>
 <tr>
+<td>holdVol</td>
+<td>decimal</td>
+<td>持仓数量</td>
+</tr>
+<tr>
 <td>frozenVol</td>
 <td>decimal</td>
 <td>冻结量</td>
-</tr>
-<tr>
-<td>closeVol</td>
-<td>decimal</td>
-<td>平仓量</td>
-</tr>
-<tr>
-<td>holdAvgPrice</td>
-<td>decimal</td>
-<td>持仓均价</td>
 </tr>
 <tr>
 <td>closeAvgPrice</td>
@@ -2843,6 +2830,16 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>已实现盈亏</td>
 </tr>
 <tr>
+<td>adlLevel</td>
+<td>int</td>
+<td>adl等级</td>
+</tr>
+<tr>
+<td>leverage</td>
+<td>int</td>
+<td>杠杆倍数</td>
+</tr>
+<tr>
 <td>createTime</td>
 <td>date</td>
 <td>创建时间</td>
@@ -2851,6 +2848,16 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>updateTime</td>
 <td>date</td>
 <td>修改时间</td>
+</tr>
+<tr>
+<td>autoAddIm</td>
+<td>boolean</td>
+<td>是否自动追加保证金</td>
+</tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <h2 id='721eaacc0f'>获取用户当前持仓</h2>
@@ -3180,45 +3187,42 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102015160335561728"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"dealAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"dealVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6144</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"takerFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"makerFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"externalOid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"_m_15fa604ce3d341ff900094c04f2baca7"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"usedMargin"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609992710000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609992709000</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dealAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dealVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"takerFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"makerFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"externalOid"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"usedMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"stopLossPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"takeProfitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/order/open_orders/{symbol}</code></li>
+<li><strong>GET</strong> <code>api/v1/private/order/list/open_orders/{symbol}</code></li>
 </ul>
 
 <p><strong>需要权限:</strong> 合约交易读取权限</p>
@@ -3267,29 +3271,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 </tr>
 </thead><tbody>
 <tr>
-<td>pageSize</td>
-<td>int</td>
-<td>页面大小</td>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
 </tr>
 <tr>
-<td>totalCount</td>
-<td>int</td>
-<td>总条数</td>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
 </tr>
 <tr>
-<td>totalPage</td>
-<td>int</td>
-<td>总页数</td>
-</tr>
-<tr>
-<td>currentPage</td>
-<td>int</td>
-<td>当前页</td>
-</tr>
-<tr>
-<td>resultList</td>
-<td>list</td>
-<td>数据结果集</td>
+<td><data></td>
+<td>array</td>
+<td></td>
 </tr>
 <tr>
 <td>orderId</td>
@@ -3337,6 +3331,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>1:限价单,2:Post Only只做Maker,3:立即成交或立即取消,4:全部成交或者全部取消，5:市价单,6:市价转现价</td>
 </tr>
 <tr>
+<td>dealAvgPrice</td>
+<td>decimal</td>
+<td>成交均价</td>
+</tr>
+<tr>
 <td>dealVol</td>
 <td>decimal</td>
 <td>成交数量</td>
@@ -3345,11 +3344,6 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>orderMargin</td>
 <td>decimal</td>
 <td>委托保证金</td>
-</tr>
-<tr>
-<td>usedMargin</td>
-<td>decimal</td>
-<td>已经使用的保证金</td>
 </tr>
 <tr>
 <td>takerFee</td>
@@ -3382,14 +3376,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>订单状态,1:待报,2未完成,3已完成,4已撤销,5无效</td>
 </tr>
 <tr>
+<td>externalOid</td>
+<td>string</td>
+<td>外部订单号</td>
+</tr>
+<tr>
 <td>errorCode</td>
 <td>int</td>
 <td>错误code,0:正常，1：参数错误，2：账户余额不足，3：仓位不存在，4：仓位可用持仓不足，5：多仓时， 委托价小于了强平价，空仓时， 委托价大于了强平价，6：开多时， 强平价大于了合理价，开空时， 强平价小于了合理价 ,7:超过风险限额限制，8：系统撤销</td>
 </tr>
 <tr>
-<td>externalOid</td>
-<td>string</td>
-<td>外部订单号</td>
+<td>usedMargin</td>
+<td>decimal</td>
+<td>已经使用的保证金</td>
 </tr>
 <tr>
 <td>createTime</td>
@@ -3401,51 +3400,63 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>date</td>
 <td>修改时间</td>
 </tr>
+<tr>
+<td>stopLossPrice</td>
+<td>decimal</td>
+<td>止损价</td>
+</tr>
+<tr>
+<td>takeProfitPrice</td>
+<td>decimal</td>
+<td>止盈价</td>
+</tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
+</tr>
 </tbody></table>
 <h2 id='20fe1788a5'>获取用户所有历史订单</h2>
 <blockquote>
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">369</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">185</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102015160335561728"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"dealAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"dealVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6144</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"takerFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"makerFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"externalOid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"_m_15fa604ce3d341ff900094c04f2baca7"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"usedMargin"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609992710000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609992709000</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dealAvgPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dealVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"takerFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"makerFee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"externalOid"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"usedMargin"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"stopLossPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"takeProfitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/order/history_orders</code></li>
+<li><strong>GET</strong> <code>api/v1/private/order/list/history_orders</code></li>
 </ul>
 
 <p><strong>需要权限:</strong> 合约交易读取权限</p>
@@ -3524,29 +3535,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 </tr>
 </thead><tbody>
 <tr>
-<td>pageSize</td>
-<td>int</td>
-<td>页面大小</td>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
 </tr>
 <tr>
-<td>totalCount</td>
-<td>int</td>
-<td>总条数</td>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
 </tr>
 <tr>
-<td>totalPage</td>
-<td>int</td>
-<td>总页数</td>
-</tr>
-<tr>
-<td>currentPage</td>
-<td>int</td>
-<td>当前页</td>
-</tr>
-<tr>
-<td>resultList</td>
-<td>list</td>
-<td>数据结果集</td>
+<td><data></td>
+<td>array</td>
+<td></td>
 </tr>
 <tr>
 <td>orderId</td>
@@ -3609,11 +3610,6 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>委托保证金</td>
 </tr>
 <tr>
-<td>usedMargin</td>
-<td>decimal</td>
-<td>已经使用的保证金</td>
-</tr>
-<tr>
 <td>takerFee</td>
 <td>decimal</td>
 <td>买单手续费</td>
@@ -3654,6 +3650,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>外部订单号</td>
 </tr>
 <tr>
+<td>usedMargin</td>
+<td>decimal</td>
+<td>已经使用的保证金</td>
+</tr>
+<tr>
 <td>createTime</td>
 <td>date</td>
 <td>创建时间</td>
@@ -3662,6 +3663,21 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>updateTime</td>
 <td>date</td>
 <td>修改时间</td>
+</tr>
+<tr>
+<td>stopLossPrice</td>
+<td>decimal</td>
+<td>止损价</td>
+</tr>
+<tr>
+<td>takeProfitPrice</td>
+<td>decimal</td>
+<td>止盈价</td>
+</tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <h2 id='402ff42189'>根据外部号查询订单</h2>
@@ -4296,48 +4312,28 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"159272214"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">1217.3</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0073038</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609991676000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102010826310907392"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"taker"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"159272400"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">1205.1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0072306</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609991819000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.1218032</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102011427073647104"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"taker"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"feeCurrency"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"isTaker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"category"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"opponentOrderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/order/order_deals</code></li>
+<li><strong>GET</strong> <code>api/v1/private/order/list/order_deals</code></li>
 </ul>
 
 <aside class="notice">
@@ -4396,29 +4392,19 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 </tr>
 </thead><tbody>
 <tr>
-<td>pageSize</td>
-<td>int</td>
-<td>页面大小</td>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
 </tr>
 <tr>
-<td>totalCount</td>
-<td>int</td>
-<td>总条数</td>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
 </tr>
 <tr>
-<td>totalPage</td>
-<td>int</td>
-<td>总页数</td>
-</tr>
-<tr>
-<td>currentPage</td>
-<td>int</td>
-<td>当前页</td>
-</tr>
-<tr>
-<td>resultList</td>
-<td>list</td>
-<td>数据结果集</td>
+<td><data></td>
+<td>array</td>
+<td></td>
 </tr>
 <tr>
 <td>id</td>
@@ -4480,61 +4466,45 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>long</td>
 <td>成交时间时间</td>
 </tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
+</tr>
 </tbody></table>
 <h2 id='4ad461b2b2'>获取计划委托订单列表</h2>
 <blockquote>
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">62</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88224061192253440"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BCH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"triggerPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">289.05</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">289.05</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"triggerType"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"executeCycle"</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"trend"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88277375720207872"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1606704655000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1606717366000</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88214342356527616"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"triggerPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">583.25</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">583.25</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"triggerType"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"executeCycle"</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"trend"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1606702338000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1606704512000</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"side"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"triggerPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"openType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"triggerType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"executeCycle"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"trend"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/planorder/orders</code></li>
+<li><strong>GET</strong> <code>api/v1/private/planorder/list/orders</code></li>
 </ul>
 
 <aside class="notice">
@@ -4564,6 +4534,18 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>状态,1:未触发,2:已取消,3:已执行,4:已失效,5:执行失败;多个用 &#39;,&#39; 隔开</td>
 </tr>
 <tr>
+<td>start_time</td>
+<td>long</td>
+<td>false</td>
+<td>开始时间，开始时间和结束时间的跨度一次最大只能查90天，不传时间默认返回最近7天的数据</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>long</td>
+<td>false</td>
+<td>结束时间，开始时间和结束时间的跨度一次最大只能查90天</td>
+</tr>
+<tr>
 <td>page_num</td>
 <td>int</td>
 <td>true</td>
@@ -4586,6 +4568,21 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <th>说明</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td><data></td>
+<td>array</td>
+<td></td>
+</tr>
 <tr>
 <td>id</td>
 <td>int</td>
@@ -4671,43 +4668,43 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>long</td>
 <td>修改时间</td>
 </tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
+</tr>
 </tbody></table>
 <h2 id='00e25daf6a'>获取止盈止损订单列表</h2>
 <blockquote>
 <p>响应示例</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"totalPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"currentPage"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"resultList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">47657</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"102043093053830144"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETH_USDT"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1396695"</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"stopLossPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">1220</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"takeProfitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"triggerSide"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"positionType"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"realityVol"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609999369000</span><span class="p">,</span><span class="w">
-                </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1609999369000</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"positionId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"stopLossPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"takeProfitPrice"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"triggerSide"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"positionType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"vol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"realityVol"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"placeOrderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"errorCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"createTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <ul>
-<li><strong>GET</strong> <code>api/v1/private/stoporder/orders</code></li>
+<li><strong>GET</strong> <code>api/v1/private/stoporder/list/orders</code></li>
 </ul>
 
 <aside class="notice">
@@ -4737,6 +4734,18 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>终态标识:0:未完成，1:已完成</td>
 </tr>
 <tr>
+<td>start_time</td>
+<td>long</td>
+<td>false</td>
+<td>开始时间，开始时间和结束时间的跨度一次最大只能查90天，不传时间默认返回最近7天的数据</td>
+</tr>
+<tr>
+<td>end_time</td>
+<td>long</td>
+<td>false</td>
+<td>结束时间，开始时间和结束时间的跨度一次最大只能查90天</td>
+</tr>
+<tr>
 <td>page_num</td>
 <td>int</td>
 <td>true</td>
@@ -4759,6 +4768,21 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <th>说明</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>code</td>
+<td>integer</td>
+<td>状态码</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>错误描述（如有）</td>
+</tr>
+<tr>
+<td><data></td>
+<td>array</td>
+<td></td>
+</tr>
 <tr>
 <td>id</td>
 <td>long</td>
@@ -4843,6 +4867,11 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>updateTime</td>
 <td>long</td>
 <td>修改时间</td>
+</tr>
+<tr>
+<td></data></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <h2 id='d80e6649fb'>获取止盈止损订单执行明细</h2>

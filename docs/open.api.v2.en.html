@@ -214,6 +214,20 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#what-is-api" class="toc-h2 toc-link" data-title="What is API？">What is API？</a>
+                  </li>
+                  <li>
+                    <a href="#instructions" class="toc-h2 toc-link" data-title="Instructions">Instructions</a>
+                  </li>
+                  <li>
+                    <a href="#interface-type-rest-api" class="toc-h2 toc-link" data-title="Interface type REST API">Interface type REST API</a>
+                  </li>
+                  <li>
+                    <a href="#api-v1-or-api-v2" class="toc-h2 toc-link" data-title="API V1 or API V2">API V1 or API V2</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#change-log" class="toc-h1 toc-link" data-title="Change log">Change log</a>
@@ -244,6 +258,14 @@
                   </li>
                   <li>
                     <a href="#signature-method" class="toc-h2 toc-link" data-title="Signature Method">Signature Method</a>
+                      <ul class="toc-list-h3">
+                          <li>
+                            <a href="#method-1-with-contract-recommended" class="toc-h3 toc-link" data-title="Method 1 (with contract, recommended)">Method 1 (with contract, recommended)</a>
+                          </li>
+                          <li>
+                            <a href="#method-2-the-original-signature-method-will-be-abandoned-gradually" class="toc-h3 toc-link" data-title="Method 2 (the original signature method will be abandoned gradually)">Method 2 (the original signature method will be abandoned gradually)</a>
+                          </li>
+                      </ul>
                   </li>
                   <li>
                     <a href="#error-code" class="toc-h2 toc-link" data-title="Error Code">Error Code</a>
@@ -341,13 +363,58 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#asset" class="toc-h1 toc-link" data-title="Asset">Asset</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-deposit-address" class="toc-h2 toc-link" data-title="Get Deposit Address">Get Deposit Address</a>
+                  </li>
+                  <li>
+                    <a href="#query-deposit-records" class="toc-h2 toc-link" data-title="Query Deposit Records">Query Deposit Records</a>
+                  </li>
+                  <li>
+                    <a href="#query-withdraw-address-list" class="toc-h2 toc-link" data-title="Query Withdraw Address List">Query Withdraw Address List</a>
+                  </li>
+                  <li>
+                    <a href="#query-withdraw-records" class="toc-h2 toc-link" data-title="Query Withdraw Records">Query Withdraw Records</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to MXC API! Information related to the REST API of MXC is provided here, to help you to access market data, and to manage your account.   </p>
+<p>Welcome to use MXC API! This document provides you with REST API related information to help you obtain market information, manage account information, and conduct trading.</p>
+<h2 id='what-is-api'>What is API？</h2>
+<p>API is an Application Programming Interface, abbreviated as API, which is a settlement interface. It defines the interaction between multiple applications, the types of calls or requests that can be made, how to make calls or requests, the data format that should be used, the conventions that should be followed, etc. The API document describes how the application interacts with our exchange.</p>
+<h2 id='instructions'>Instructions</h2>
+<p>Step: if the developer needs to use the API, please first <a href="https://www.mxc.com/ucenter/openapi" target="_blank">create APIKey</a> and then carry out the development of trading according to the details of this document. If you have any problems or suggestions in the process of using it, please let us know in time.</p>
+
+<ul>
+<li>Please refer to <a href="https://support.mxc-exchange.com/hc/en-001/articles/360055933652" target="_blank">this page</a> to set the API Key.</li>
+<li>When setting API key, it is recommended to set IP access whitelist for security.</li>
+<li>Never tell anyone your API key/secret.</li>
+</ul>
+<h2 id='interface-type-rest-api'>Interface type REST API</h2>
+<p>REST, the abbreviation of Representational State Transfer, is a popular communication mechanism based on HTTP. Its structure is clear, standard, easy to understand, easy to expand, and is being adopted by more and more websites. Its advantages are as follows:</p>
+
+<ul>
+<li>Each URL represents a resource in RESTful structure;</li>
+<li>Some presentation layer of the resource is passed between the client and the server;</li>
+<li>It is suggested that developers use Rest API for currency trading or asset withdrawal;</li>
+<li>The client uses four HTTP instructions to operate the server-side resources to achieve &quot;Representational State Transfer&quot;;</li>
+</ul>
+<h2 id='api-v1-or-api-v2'>API V1 or API V2</h2>
+<p>We recommend that all users build their applications on V2 of the API. Using V2 has the following advantages:</p>
+
+<ul>
+<li>Compared with API V1, the security and rationality of API V2 signature are better.</li>
+<li>Improved performance for particular endpoints / channels.</li>
+<li>Long-term support, V1 API is no longer maintained and will be abandoned at some time in the future.</li>
+<li>Our official customer base provides a wider range of support.</li>
+</ul>
 <h1 id='change-log'>Change log</h1>
 <table><thead>
 <tr>
@@ -448,6 +515,99 @@
 Secret key will ONLY be displayed in the page when API key is generated, please make records accordingly
 </aside>
 <h2 id='signature-method'>Signature Method</h2>
+<p>The signature method is compatible with both methods.</p>
+<h3 id='method-1-with-contract-recommended'>Method 1 (with contract, recommended)</h3>
+<blockquote>
+<p>java example</p>
+</blockquote>
+<pre class="highlight java tab-java"><code><span class="cm">/**
+ * Gets the get request parameter string
+ *
+ * @param param get/delete Request parameters map
+ * @return
+ */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">getRequestParamString</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">param</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">MapUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">param</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="mi">1024</span><span class="o">);</span>
+    <span class="n">SortedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeMap</span><span class="o">&lt;&gt;(</span><span class="n">param</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">StringUtils</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">())</span> <span class="o">?</span> <span class="s">""</span> <span class="o">:</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+        <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">key</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="sc">'='</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">urlEncode</span><span class="o">(</span><span class="n">value</span><span class="o">)).</span><span class="na">append</span><span class="o">(</span><span class="sc">'&amp;'</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">sb</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">sb</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">urlEncode</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">URLEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">).</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"\\+"</span><span class="o">,</span> <span class="s">"%20"</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">UnsupportedEncodingException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"UTF-8 encoding not supported!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * signature
+ */</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">sign</span><span class="o">(</span><span class="n">SignVo</span> <span class="n">signVo</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">signVo</span><span class="o">.</span><span class="na">getRequestParam</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">signVo</span><span class="o">.</span><span class="na">setRequestParam</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getAccessKey</span><span class="o">()</span> <span class="o">+</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getReqTime</span><span class="o">()</span> <span class="o">+</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getRequestParam</span><span class="o">();</span>
+    <span class="k">return</span> <span class="nf">actualSignature</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">signVo</span><span class="o">.</span><span class="na">getSecretKey</span><span class="o">());</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">actualSignature</span><span class="o">(</span><span class="n">String</span> <span class="n">inputStr</span><span class="o">,</span> <span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Mac</span> <span class="n">hmacSha256</span><span class="o">;</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">hmacSha256</span> <span class="o">=</span> <span class="n">Mac</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="s">"HmacSHA256"</span><span class="o">);</span>
+        <span class="n">SecretKeySpec</span> <span class="n">secKey</span> <span class="o">=</span>
+                <span class="k">new</span> <span class="nf">SecretKeySpec</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">),</span> <span class="s">"HmacSHA256"</span><span class="o">);</span>
+        <span class="n">hmacSha256</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">secKey</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchAlgorithmException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"No such algorithm: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InvalidKeyException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Invalid key: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="kt">byte</span><span class="o">[]</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hmacSha256</span><span class="o">.</span><span class="na">doFinal</span><span class="o">(</span><span class="n">inputStr</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">));</span>
+    <span class="k">return</span> <span class="n">Hex</span><span class="o">.</span><span class="na">encodeHexString</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Getter</span>
+<span class="nd">@Setter</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SignVo</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">reqTime</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">accessKey</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">secretKey</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">requestParam</span><span class="o">;</span> <span class="c1">//get the request parameters are sorted in dictionary order, with &amp; concatenated strings, POST should be a JSON string</span>
+<span class="o">}</span>
+</code></pre>
+<ol>
+<li><p>Signature is not required for public endpoint.</p></li>
+<li><p>For private endpoint, ApiKey, Request-Time, Signature and Content-Type need to be passed into the header, must be specified as application / JSON, Recv-Window (optional) parameters, Signature is a signature string. The signature rules are as follows:</p>
+
+<p>1) When signing, you need to get the request parameter string first. It is &quot;&quot; if there is no parameter:</p>
+
+<p>For GET/DELETE requests, the service parameters are spliced in dictionary order with &amp; interval, and finally the signature target string is obtained (in the API of batch operation, if there are special symbols such as comma in the parameter value, these symbols need to be URL encoded when signing).</p>
+
+<p>For POST requests, the signature parameter is a JSON string (dictionary sorting is not required).</p>
+
+<p>2) After obtaining the parameter string, the signature target string is spliced. The rule is: accessKey + timestamp + obtained parameter string.</p>
+
+<p>3) The HMAC SHA256 algorithm is used to sign the target string, and finally the signature is passed into the header as a parameter.</p></li>
+</ol>
+
+<p>Note：</p>
+
+<p>1) When the service parameter participating in the signature is null, it does not participate in the signature. For the path parameter, it does not participate in the signature; note that when get request stitches the parameter and pass it in the URL, if the parameter is null, it will be parsed into &quot;&quot; in the background parsing, fixed post request, when the parameter is null, do not pass the parameter, or set the value of the parameter to &quot;&quot; when signing, otherwise signature verification will fail.</p>
+
+<p>2) When requesting, put the value of Request-Time used in signing into the Request-Time parameter of the header, put the obtained signature string into the signature parameter of the header, put the Access Key of APIKEY into the ApiKey parameter of the header, and pass the other service parameters.</p>
+
+<p>3) The obtained signature string does not need to be base64 encoded.</p>
+<h3 id='method-2-the-original-signature-method-will-be-abandoned-gradually'>Method 2 (the original signature method will be abandoned gradually)</h3>
 <blockquote>
 <p>Signing target of a GET or DELETE request</p>
 </blockquote>
@@ -706,6 +866,11 @@ For GET or DEELTE requests, all reqeust parameters will be included in the signa
 <td>state</td>
 <td>string</td>
 <td>symbol status, whether available for trading</td>
+</tr>
+<tr>
+<td>etf_mark</td>
+<td>integer</td>
+<td>Etf identification, 0 represents not ETF, and positive and negative integers represent ETF</td>
 </tr>
 </tbody></table>
 <h2 id='current-system-time'>Current System Time</h2>
@@ -2135,6 +2300,527 @@ Either order_ids or client_order_ids have to be picked as parameter. When both o
 <aside class="notice">
 When client recieves response from server, it only means the cancelling request has been accepted, doesn't mean the cancellation is finished
 </aside>
+<h1 id='asset'>Asset</h1>
+<p>Only the endpoint handling the reading of deposit and withdrawal information is open currently, the withdrawal endpoint will be made available soon (Please contact the online customer service if you wish to access it now).</p>
+<h2 id='get-deposit-address'>Get Deposit Address</h2>
+<p>This endpoint is used to query the address of a specific currency in its block chain, which is available for both parent-account and  sub-account .</p>
+
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/deposit/address/list</code></li>
+</ul>
+
+<aside>
+Rate Limit : 20times/2s
+</aside>
+
+<p><strong>API Permission:</strong> Read</p>
+
+<p><strong>Request Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type  </th>
+<th>Mandatory </th>
+<th>  Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>  true </td>
+<td>Crypto currency</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type</th>
+<th>Description </th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code </td>
+<td>int </td>
+<td>Status code</td>
+</tr>
+<tr>
+<td>message </td>
+<td>string </td>
+<td>Misdescription (If there has )）</td>
+</tr>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>chain </td>
+<td>string </td>
+<td>Block chain name</td>
+</tr>
+<tr>
+<td>address </td>
+<td>string  </td>
+<td>Deposit address</td>
+</tr>
+</tbody></table>
+
+<p>Note:
+ 1, Signature certification is required for the private endpoint ;
+ 2. Only return the generated address;</p>
+<h2 id='query-deposit-records'>Query Deposit Records</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/deposit/list</code></li>
+</ul>
+
+<aside>
+Rate Limit : 20times/2s
+</aside>
+
+<p><strong>API Permission:</strong> Read</p>
+
+<p><strong>Request Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type  </th>
+<th>Mandatory </th>
+<th>  Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>false </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>state </td>
+<td>string </td>
+<td>false </td>
+<td>Status </td>
+</tr>
+<tr>
+<td>start_time </td>
+<td>long </td>
+<td>false </td>
+<td>The start time, unit:ms, defult:1 day.</td>
+</tr>
+<tr>
+<td>end_time </td>
+<td>long </td>
+<td>false </td>
+<td>The ending time, unit:ms</td>
+</tr>
+<tr>
+<td>page_num </td>
+<td>number </td>
+<td>false </td>
+<td>Number of pages, default 1</td>
+</tr>
+<tr>
+<td>page_size </td>
+<td>number </td>
+<td>false </td>
+<td>Size of pages, default 20, maximum 50</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type</th>
+<th>Description </th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code </td>
+<td>integer </td>
+<td>Status code</td>
+</tr>
+<tr>
+<td>message </td>
+<td>string </td>
+<td> Misdescription (If there has )</td>
+</tr>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>actual_amount </td>
+<td>number </td>
+<td>The actual received  amount</td>
+</tr>
+<tr>
+<td>address </td>
+<td>string </td>
+<td>Deposit  address</td>
+</tr>
+<tr>
+<td>amount </td>
+<td>number </td>
+<td>Deposit  amount</td>
+</tr>
+<tr>
+<td>confirmations </td>
+<td>number </td>
+<td>Confirmation of blocks</td>
+</tr>
+<tr>
+<td>require_confirmations </td>
+<td>number </td>
+<td>Minimum confirmation of blocks</td>
+</tr>
+<tr>
+<td>create_time </td>
+<td>number </td>
+<td>Initiate withdraw time</td>
+</tr>
+<tr>
+<td>explorer_url </td>
+<td>string </td>
+<td>Block browser address</td>
+</tr>
+<tr>
+<td>fee  </td>
+<td>string </td>
+<td>Fee</td>
+</tr>
+<tr>
+<td>member_id  </td>
+<td>string </td>
+<td>UserID</td>
+</tr>
+<tr>
+<td>state </td>
+<td>string </td>
+<td>Status</td>
+</tr>
+<tr>
+<td>txid </td>
+<td>string </td>
+<td>Trading hash</td>
+</tr>
+<tr>
+<td>update_time </td>
+<td>string </td>
+<td>Update time</td>
+</tr>
+<tr>
+<td>wallet_type </td>
+<td>string </td>
+<td>The wallet type</td>
+</tr>
+<tr>
+<td>current_page </td>
+<td>number </td>
+<td>The current page</td>
+</tr>
+<tr>
+<td>current_result </td>
+<td>number </td>
+<td>Size of the current page</td>
+</tr>
+<tr>
+<td>total_result </td>
+<td>number </td>
+<td>The total size</td>
+</tr>
+<tr>
+<td>total_page </td>
+<td>number </td>
+<td>The total pages</td>
+</tr>
+</tbody></table>
+
+<p>Note: A single query can retrieve a maximum range of 10 days, and maximum retrieve records is the last 180 days.</p>
+<h2 id='query-withdraw-address-list'>Query Withdraw Address List</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/address/list</code></li>
+</ul>
+
+<aside>
+Rate Limit : 20times/2s
+</aside>
+
+<p><strong>API Permission:</strong>Read</p>
+
+<p><strong>Request Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type  </th>
+<th>Mandatory </th>
+<th>  Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>false </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>page_num </td>
+<td>number </td>
+<td>false </td>
+<td>Number of pages, default 1</td>
+</tr>
+<tr>
+<td>page_size </td>
+<td>number </td>
+<td>false </td>
+<td>Size of pages, default 20, maximum 50</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type</th>
+<th>Description </th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code </td>
+<td>integer </td>
+<td>Status code</td>
+</tr>
+<tr>
+<td>message </td>
+<td>string </td>
+<td> Misdescription (If there has )）</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>string</td>
+<td>Block chain name</td>
+</tr>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>address </td>
+<td>string </td>
+<td>Address </td>
+</tr>
+<tr>
+<td>address_tab </td>
+<td>string </td>
+<td>Address tags</td>
+</tr>
+<tr>
+<td>current_page </td>
+<td>number </td>
+<td>The current page</td>
+</tr>
+<tr>
+<td>current_result </td>
+<td>number </td>
+<td>Size of the current page</td>
+</tr>
+<tr>
+<td>total_result </td>
+<td>number </td>
+<td>The total size</td>
+</tr>
+<tr>
+<td>total_page </td>
+<td>number </td>
+<td>The total pages</td>
+</tr>
+</tbody></table>
+<h2 id='query-withdraw-records'>Query Withdraw Records</h2>
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/asset/withdraw/list</code></li>
+</ul>
+
+<aside>
+Rate Limit : 20times/2s
+</aside>
+
+<p><strong>API Permission:</strong>Read</p>
+
+<p><strong>Request Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type  </th>
+<th>Mandatory </th>
+<th>  Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>false </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>withdraw_id </td>
+<td>string </td>
+<td>false </td>
+<td>Withdraw ID</td>
+</tr>
+<tr>
+<td>state </td>
+<td>string </td>
+<td>false </td>
+<td>Status</td>
+</tr>
+<tr>
+<td>start_time </td>
+<td>long </td>
+<td>false </td>
+<td>The start time, unit:ms, defult:1 day.</td>
+</tr>
+<tr>
+<td>end_time </td>
+<td>long </td>
+<td>false </td>
+<td>The ending time, unit:ms</td>
+</tr>
+<tr>
+<td>page_num </td>
+<td>number </td>
+<td>false </td>
+<td>Number of pages, default 1</td>
+</tr>
+<tr>
+<td>page_size </td>
+<td>number </td>
+<td>false </td>
+<td>Size of pages, default 20, maximum 50</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type</th>
+<th>Description </th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code </td>
+<td>integer </td>
+<td>Status code</td>
+</tr>
+<tr>
+<td>message </td>
+<td>string </td>
+<td> Misdescription (If there has )</td>
+</tr>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>actual_amount </td>
+<td>number </td>
+<td>The actual received amount</td>
+</tr>
+<tr>
+<td>actual_fee </td>
+<td>number </td>
+<td>Withdraw fee</td>
+</tr>
+<tr>
+<td>amount </td>
+<td>number </td>
+<td>Withdraw amount</td>
+</tr>
+<tr>
+<td>create_time </td>
+<td>number </td>
+<td>Initiate withdraw time</td>
+</tr>
+<tr>
+<td>explorer_url </td>
+<td>string </td>
+<td>Block browser address</td>
+</tr>
+<tr>
+<td>fee  </td>
+<td>string </td>
+<td>Fee</td>
+</tr>
+<tr>
+<td>id </td>
+<td>string </td>
+<td>Withdraw ID</td>
+</tr>
+<tr>
+<td>member_id  </td>
+<td>string </td>
+<td>UserID</td>
+</tr>
+<tr>
+<td>remark </td>
+<td>string </td>
+<td>Withdraw notes </td>
+</tr>
+<tr>
+<td>state </td>
+<td>string </td>
+<td>Status</td>
+</tr>
+<tr>
+<td>txid </td>
+<td>string </td>
+<td>Trading hash</td>
+</tr>
+<tr>
+<td>update_time </td>
+<td>string </td>
+<td>Update time</td>
+</tr>
+<tr>
+<td>wallet_type </td>
+<td>string </td>
+<td>The wallet type</td>
+</tr>
+<tr>
+<td>current_page </td>
+<td>number </td>
+<td>The current page</td>
+</tr>
+<tr>
+<td>current_result </td>
+<td>number </td>
+<td>Size of the current page</td>
+</tr>
+<tr>
+<td>total_result </td>
+<td>number </td>
+<td>The total size</td>
+</tr>
+<tr>
+<td>total_page </td>
+<td>number </td>
+<td>The total pages</td>
+</tr>
+</tbody></table>
+
+<p>Note: A single query can retrieve a maximum range of 10 days, and maximum retrieve records is the last 180 days.</p>
 
       </div>
       <div class="dark-box">
