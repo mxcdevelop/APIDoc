@@ -321,6 +321,9 @@
                   <li>
                     <a href="#candlestick-data" class="toc-h2 toc-link" data-title="Candlestick Data">Candlestick Data</a>
                   </li>
+                  <li>
+                    <a href="#get-currency-information" class="toc-h2 toc-link" data-title="Get currency information">Get currency information</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -1320,6 +1323,110 @@ Period starts from the current 00:00 of UTC+8, and with maximum length of 24 hou
 <td>trading volume in the pricing currency</td>
 </tr>
 </tbody></table>
+<h2 id='get-currency-information'>Get currency information</h2>
+<p>This endpoint returns a list of currency details.</p>
+
+<ul>
+<li><strong>GET</strong> <code>/open/api/v2/market/coin/list</code></li>
+</ul>
+
+<aside>
+Rate Limit : 20times/2s
+</aside>
+
+<p><strong>API Permission:</strong> Read(for public )</p>
+
+<p><strong>Request Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type  </th>
+<th>Mandatory </th>
+<th>  Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>  false </td>
+<td>Crypto currency</td>
+</tr>
+</tbody></table>
+
+<p><strong>Response Parameters:</strong></p>
+
+<table><thead>
+<tr>
+<th>Parameter </th>
+<th>Data Type</th>
+<th>Description </th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code </td>
+<td>int </td>
+<td>Status code</td>
+</tr>
+<tr>
+<td>message </td>
+<td>string </td>
+<td>  Misdescription (If there has )</td>
+</tr>
+<tr>
+<td>currency </td>
+<td>string </td>
+<td>Crypto currency</td>
+</tr>
+<tr>
+<td>full_name </td>
+<td>string </td>
+<td>Crypto currency name</td>
+</tr>
+<tr>
+<td>chain </td>
+<td>string </td>
+<td>Block chain name</td>
+</tr>
+<tr>
+<td>precision </td>
+<td>string </td>
+<td>Currency precision</td>
+</tr>
+<tr>
+<td>is_withdraw_enabled </td>
+<td>string </td>
+<td>Withdrawable  or not</td>
+</tr>
+<tr>
+<td>is_deposit_enabled </td>
+<td>string </td>
+<td>Deposit or not </td>
+</tr>
+<tr>
+<td>deposit_minConfirm  </td>
+<td>number  </td>
+<td>Minimum confirmation of blocks</td>
+</tr>
+<tr>
+<td>withdraw_limit_max  </td>
+<td>number  </td>
+<td>Maximum withdraw amount in each request</td>
+</tr>
+<tr>
+<td>withdraw_limit_min </td>
+<td>number  </td>
+<td>Minimum withdraw amount in each request </td>
+</tr>
+<tr>
+<td>fee </td>
+<td>string  </td>
+<td>Withdraw fee</td>
+</tr>
+</tbody></table>
+
+<p>Note: 
+the hidden currencies and off shelve currencies does not display; </p>
 <h1 id='account-information'>Account Information</h1><h2 id='balance'>Balance</h2>
 <blockquote>
 <p>Resposne example</p>
