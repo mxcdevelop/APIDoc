@@ -210,7 +210,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-0f661c53.png" class="logo" alt="Logo" />
+      <img src="images/logo-fa0e69f5.png" class="logo" alt="Logo" />
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#update-log" class="toc-h1 toc-link" data-title="Update log">Update log</a>
@@ -614,7 +614,7 @@
 <h2 id='time-security'>Time security</h2>
 <p>All APIs that require signature process need to fill in header parameter of Request-time, which is timestamp in milliseconds, when receives the request, the system verifies the time range from which the request was issued. The request is considered invalid if the received req_time is less or more than 10 seconds (the default value) (the time window can be adjusted by sending an optional header parameter <code>recv-window</code> with a maximum value of 60, <code>recv_window</code> of 30 seconds or more is not recommended)</p>
 <h2 id='create-api-key'>Create API key</h2>
-<p>Users can <a href="https://www.mxc.com/ucenter/openapi" target="_blank">create API key</a> in the personal center of MXC, which is used for signature calculation and authentication, an API key is consist of two parts, secret key of Access keyAPI and secret key corresponding to Secret key.</p>
+<p>Users can <a href="https://www.mexc.com/ucenter/openapi" target="_blank">create API key</a> in the personal center of MEXC, which is used for signature calculation and authentication, an API key is consist of two parts, secret key of Access keyAPI and secret key corresponding to Secret key.</p>
 <h1 id='market-endpoints'>Market endpoints</h1>
 <p>The API endpoint under the [Market endpoints] module doesn&#39;t require authentication.</p>
 <h2 id='get-the-server-time'>Get the server time</h2>
@@ -5350,6 +5350,12 @@ Rate limit:20 times/2 seconds
 <td>open type,1:isolated,2:cross</td>
 </tr>
 <tr>
+<td>positionId</td>
+<td>long</td>
+<td>false</td>
+<td>position Id，It is recommended to fill in this parameter when closing a position</td>
+</tr>
+<tr>
 <td>externalOid</td>
 <td>string</td>
 <td>false</td>
@@ -5462,6 +5468,12 @@ Rate limit:1/2 seconds
 <td>int</td>
 <td>true</td>
 <td>open type,1:isolated,2:cross</td>
+</tr>
+<tr>
+<td>positionId</td>
+<td>long</td>
+<td>false</td>
+<td>position Id，It is recommended to fill in this parameter when closing a position</td>
 </tr>
 <tr>
 <td>externalOid</td>

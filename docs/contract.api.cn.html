@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>MXC CONTRACT API</title>
+    <title>MEXC CONTRACT API</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -210,7 +210,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-0f661c53.png" class="logo" alt="Logo" />
+      <img src="images/logo-fa0e69f5.png" class="logo" alt="Logo" />
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#185368440e" class="toc-h1 toc-link" data-title="更新日志">更新日志</a>
@@ -619,9 +619,9 @@
 范围。若接受请求时，收到的req_time小于或大于服务端时间10秒（默认值）以上（该时间窗口值可以通过发送可选header参数
 Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_window），则认为该请求无效</p>
 <h2 id='api-key'>创建API key</h2>
-<p>用户可以在MXC站点个人中心，创建API key，其包括两个部分，Access keyAPI的访问秘钥，Secret key对应的秘钥，用于签名计算及验证。</p>
+<p>用户可以在MEXC站点个人中心，创建API key，其包括两个部分，Access keyAPI的访问秘钥，Secret key对应的秘钥，用于签名计算及验证。</p>
 
-<p>您可以点击 <a href="https://www.mxc.la/ucenter/openapi" target="_blank">这里</a> 创建API Key。</p>
+<p>您可以点击 <a href="https://www.mexc.la/ucenter/openapi" target="_blank">这里</a> 创建API Key。</p>
 
 <p>创建 API Key 时可以选择绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。（强烈建议绑定 IP 地址）</p>
 
@@ -5359,6 +5359,12 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>开仓类型，1：逐仓，2：全仓</td>
 </tr>
 <tr>
+<td>positionId</td>
+<td>long</td>
+<td>false</td>
+<td>仓位id，平仓时建议传入该参数</td>
+</tr>
+<tr>
 <td>externalOid</td>
 <td>string</td>
 <td>false</td>
@@ -5471,6 +5477,12 @@ Recv-Window来自定义，其最大值为60，不推荐使用30秒以上的recv_
 <td>int</td>
 <td>true</td>
 <td>开仓类型，1：逐仓，2：全仓</td>
+</tr>
+<tr>
+<td>positionId</td>
+<td>long</td>
+<td>false</td>
+<td>仓位id，平仓时建议传入该参数</td>
 </tr>
 <tr>
 <td>externalOid</td>
